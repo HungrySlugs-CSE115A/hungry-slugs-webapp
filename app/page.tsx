@@ -1,50 +1,26 @@
-/** @jsxImportSource react */
-"use client";  // This marks the component for client-side execution
+"use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-import React, { useEffect, useState } from 'react';
-import { db } from './config/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-
-interface BreakfastItem {
-  id: string;
-  name: string;
-  description?: string;
-}
-
-export default function Page() {
-  const [data, setData] = useState<BreakfastItem[]>([]);
-
+export default function Home() {
+  const [message, setMessage] = useState("");
   useEffect(() => {
-    const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "Breakfast Foods"));
-      const items: BreakfastItem[] = [];
-      querySnapshot.forEach((doc) => {
-        const item = {
-          id: doc.id,
-          ...doc.data(),
-        } as BreakfastItem;
-        items.push(item);
+    axios
+      .get("http://localhost:8000/myapi/hello-world/")
+      .then((response) => {
+        setMessage(response.data.message);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      setData(items);
-    };
-
-    fetchData();
   }, []);
 
   return (
-    <div>
-      <h1>Breakfast Menu</h1>
-      {data.length > 0 ? (
-        <ul>
-          {data.map((item) => (
-            <li key={item.id}>
-              {item.name} {item.description ? `- ${item.description}` : ""}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No items found.</p>
-      )}
-    </div>
+    <main>
+      <div>
+        <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
+        <p className="text-xl">{message}</p>
+      </div>
+    </main>
   );
 }
