@@ -41,3 +41,6 @@ next-env.d.ts
 
 # secrets
 private
+
+# Python
+backend/*/__pycache__

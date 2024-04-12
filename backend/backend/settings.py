@@ -10,9 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from ast import Is
 from pathlib import Path
-from manage import DJANGO_SECRET_KEY, IS_DEV
+import os
+import sys
+
+parentDir = os.path.dirname(os.path.abspath(__file__))
+secondParentDir = os.path.dirname(parentDir)
+thirdParentDir = os.path.dirname(secondParentDir)
+sys.path.append(thirdParentDir)
+
+from private.private_settings import DJANGO_SECRET_KEY, IS_DEV
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
