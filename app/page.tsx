@@ -5,7 +5,7 @@
 "use client"; // This pragma is crucial for using useEffect and other client-side features
 
 import React, { useEffect, useState } from 'react';
-import { db } from './config/firebase';  // Adjust the path as necessary
+import { db } from './config/firebase';  
 import { doc, getDoc } from 'firebase/firestore';
 
 export default function Page() {
