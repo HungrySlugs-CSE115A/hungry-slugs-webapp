@@ -44,3 +44,4 @@ private
 
 # Python
 backend/**/__pycache__
+backend/**/**/__pycache__
