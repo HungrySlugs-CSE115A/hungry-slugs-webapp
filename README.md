@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Running Code
+
+* Make sure that you have all the python dependencies installed in the requirements.txt
+* Make sure to install JS dependencies with `bun i` or `npm i`
+* you then will have to have two terminals to run backend and frontend
+* the backend is run with: `python backend/manage.py runserver`
+* the frontend is run one of the commands below
+
 ## Getting Started
 
 First, run the development server:
