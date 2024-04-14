@@ -11,15 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import os
-import sys
+import secrets
 
-parentDir = os.path.dirname(os.path.abspath(__file__))
-secondParentDir = os.path.dirname(parentDir)
-thirdParentDir = os.path.dirname(secondParentDir)
-sys.path.append(thirdParentDir)
-
-from private.private_settings import DJANGO_SECRET_KEY, IS_DEV
+# Add a default value for IS_DEV in case it's not defined in secrets
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = DJANGO_SECRET_KEY
+SECRET_KEY = getattr(secrets, "DJANGO_SECRET_KEY", "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = IS_DEV
+DEBUG = getattr(secrets, "IS_DEV", False)
 
 ALLOWED_HOSTS = []
 
