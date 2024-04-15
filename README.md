@@ -8,7 +8,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 * you then will have to have two terminals to run backend and frontend
 * the backend is run with: `python backend/manage.py runserver`
 * the frontend is run one of the commands below in the Getting Started
-* Also, if you have nix installed with flakes you can skip most of the environment setup steps and use `nix develop --impure` to setup your dev environment
+* Also, if you have nix installed with flakes you can skip most of the environment setup steps and use `nix develop` to setup your dev environment
 
 ## Getting Started
 
