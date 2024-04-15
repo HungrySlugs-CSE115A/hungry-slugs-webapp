@@ -7,7 +7,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 * Make sure to install JS dependencies with `bun i` or `npm i`
 * you then will have to have two terminals to run backend and frontend
 * the backend is run with: `python backend/manage.py runserver`
-* the frontend is run one of the commands below
+* the frontend is run one of the commands below in the Getting Started
+* Also, if you have nix installed with flakes you can skip the environment setup steps and use `nix develop --impure` to setup your dev environment
 
 ## Getting Started
 
