@@ -36,8 +36,8 @@ yarn-error.log*
 next-env.d.ts
 
 # development environment
-.devenv
 .direnv
+_build
 
 # secrets
 private
