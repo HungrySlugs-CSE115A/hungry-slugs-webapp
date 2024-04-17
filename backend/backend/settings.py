@@ -14,8 +14,6 @@ from pathlib import Path
 
 from private.private_settings import DJANGO_SECRET_KEY, IS_DEV
 
-# Add a default value for IS_DEV in case it's not defined in secrets
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent # extra parent added to get out of the top backend folder
 
