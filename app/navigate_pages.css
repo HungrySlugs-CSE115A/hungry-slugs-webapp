@@ -1,0 +1,30 @@
+.navigation-bar {
+    background-color: #333;
+    padding: 10px;
+}
+
+.navigation-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navigation-list li {
+    display: inline;
+}
+
+.navigation-list li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.navigation-list li a:hover {
+    background-color: #555;
+}
+
+.navigation-list button {
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+}

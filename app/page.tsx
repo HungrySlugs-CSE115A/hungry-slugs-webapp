@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import NavigationBar from './navigate_pages'; // Import NavigationBar component
+import { BrowserRouter as Router} from 'react-router-dom';
 
 export default function Home() {
   const [dh_name, set_dh_name] = useState("");
@@ -24,17 +26,20 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <div>
-        <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
-        <h2 className="text-xl">name: {dh_name}</h2>
-        <p>Breakfast Meals:</p>
-        <ul>
-          {meals.map((meal, i) => (
-            <li key={meal[i]}>{meal}</li>
-          ))}
-        </ul>
-      </div>
-    </main>
+    <Router> 
+      <main>
+        <NavigationBar /> {/* Render the NavigationBar component */}
+        <div>
+          <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
+          <h2 className="text-xl">name: {dh_name}</h2>
+          <p>Breakfast Meals:</p>
+          <ul>
+            {meals.map((meal, i) => (
+              <li key={meal[i]}>{meal}</li>
+            ))}
+          </ul>
+        </div>
+      </main>
+    </Router>
   );
 }
