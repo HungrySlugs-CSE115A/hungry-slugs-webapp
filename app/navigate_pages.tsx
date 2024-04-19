@@ -5,20 +5,25 @@ import './navigate_pages.css';
 const NavigationBar: React.FC = () => {
   const navigate = useNavigate();
 
-  const navigateToPage = () => {
+  const navigateToHome = () => {
     navigate('/'); // Navigate to the root URL
+  };
+
+  const navigateToPage = (url: string) => {
+    navigate(url); // Navigate to the specified URL
   };
 
   // Array of pages with name and URL
   const pages = [
       { name: 'Home', url: '/home' },
-      { name: 'C9/C10', url: '/c9c10' },
+      { name: 'College Nine/John R. Lewis ', url: '/c9c10' },
       { name: 'Cowell/Stevenson', url: '/cowell_stevenson' },
-      { name: 'RCC/Oakes', url: '/rcc_oakes' },
-      { name: 'Crown/Merill', url: '/crown_merill' },
+      { name: 'Crown/Merrill', url: '/crown_merrill' },
       { name: 'Porter/Kresge', url: '/porter_kresge' },
+      { name: 'Rachel Carson/Oakes', url: '/rcc_oakes' },
       { name: 'Global Village Cafe', url: '/global_village' },
       { name: 'Oakes Cafe', url: '/oakes_cafe' },
+      { name: 'Owl\'s Nest Cafe', url: '/owls_nest' },
       { name: 'Stevenson Coffee House', url: '/coffee_house' },
   ];
 
@@ -27,11 +32,10 @@ const NavigationBar: React.FC = () => {
       <ul className="navigation-list">
         {pages.map((page, index) => (
           <li key={index}>
-            {/* Use navigateToPage function onClick for the "Home" button */}
             {page.name === 'Home' ? (
-              <button onClick={() => navigateToPage()}>{page.name}</button>
+              <button onClick={navigateToHome}>{page.name}</button>
             ) : (
-              <a href={page.url}>{page.name}</a>
+              <button onClick={() => navigateToPage(page.url)}>{page.name}</button>
             )}
           </li>
         ))}

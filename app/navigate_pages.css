@@ -1,30 +1,41 @@
 .navigation-bar {
-    background-color: #333;
-    padding: 10px;
+  background-color: #11163ede;
+  padding: 10px;
+  height: 80px; 
+  display: flex; 
+  text-align: center;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
 }
 
 .navigation-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
 
 .navigation-list li {
-    display: inline;
+  display: inline;
 }
 
 .navigation-list li a {
-    color: white;
-    text-decoration: none;
-    padding: 10px;
-}
-
-.navigation-list li a:hover {
-    background-color: #555;
+  text-decoration: none;
+  padding: 10px;
 }
 
 .navigation-list button {
-  color: white;
+  color: rgb(244, 249, 252);
   text-decoration: none;
-  padding: 10px;
+  padding: 1px;
+  margin: 3px; 
+  height: 28px;
+  width: 230px; 
+  cursor: pointer;
+  box-sizing: border-box; 
+  font-size: 17px; 
+}
+
+.navigation-list button:hover {
+  background-color: #0a0335b2;
 }
