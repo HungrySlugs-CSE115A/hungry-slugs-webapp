@@ -20,12 +20,18 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
     navigate('/settings'); // Navigate to the Settings page
   };
 
+  const navigateToLogin = () => {
+    onClose(); // Close the side menu when navigating
+    navigate('/login'); // Navigate to the Login page
+  };
+
   return (
     <div className="side-menu">
       <button className="menu-button" onClick={onClose}>X</button>
       <div className="menu-items">
         <button className="menu-item" onClick={navigateToProfile}>Profile</button>
         <button className="menu-item" onClick={navigateToSettings}>Settings</button>
+        <button className="menu-item" onClick={navigateToLogin}>Log Out</button>
       </div>
     </div>
   );
@@ -46,6 +52,16 @@ const Settings = () => {
   return (
     <div style={{ width: '100vw', height: '100vh', backgroundColor: '#fff' }}>
       <h1>Settings Page containing the user's information idk</h1>
+      {/* Add any additional content for the Settings page here */}
+    </div>
+  );
+};
+
+// Define a new component for the Logout/Login page
+const Login = () => {
+  return (
+    <div style={{ width: '100vw', height: '100vh', backgroundColor: '#fff' }}>
+      <h1>Log In page </h1>
       {/* Add any additional content for the Settings page here */}
     </div>
   );
@@ -111,6 +127,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/profile" element={<Profile/>} />
         <Route path="/settings" element={<Settings/>} />
+        <Route path="/login" element={<Login/>} />
       </Routes>
     </div>
   );
