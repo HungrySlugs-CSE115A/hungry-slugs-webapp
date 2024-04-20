@@ -39,3 +39,39 @@
 .navigation-list button:hover {
   background-color: #0a0335b2;
 }
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Initially hide the side menu */
+  width: 600px;
+  height: 100%;
+  background-color: #fff; /* Adjust background color as needed */
+  transition: left 0.3s ease; /* Add smooth transition effect */
+  z-index: 999; /* Ensure the menu is above other content */
+}
+
+.menu-button {
+  margin: 10px;
+  color: #f8de5a
+}
+
+.menu-items {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.menu-item {
+  margin: 5px;
+  padding: 10px;
+  width: 100%; /* Ensure buttons fill the width */
+  border: none;
+  background-color: #f0f0f0; /* Adjust background color as needed */
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #dcdcdc; /* Change background color on hover */
+}
