@@ -45,3 +45,9 @@ private
 # Python
 __pycache__/
 *.py[cod]
+
+# Lock files
+bun.lockb
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
