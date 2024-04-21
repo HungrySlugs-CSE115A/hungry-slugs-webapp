@@ -28,7 +28,7 @@ class DiningHall:
         except requests.exceptions.RequestException as e:  # This is the correct syntax
             raise SystemExit(e)
 
-        html_text = response.text
+        html_text = response.text #id imagine this is data from the website
         soup = BeautifulSoup(html_text, "html.parser")
 
         name = soup.find_all("div", class_="headlocation")
