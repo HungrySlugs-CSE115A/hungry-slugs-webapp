@@ -1,8 +1,5 @@
 "use client";
-import { SearchParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
-import { useSearchParams } from "next/navigation";
-import { stringify } from "querystring";
-import React from "react"
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 

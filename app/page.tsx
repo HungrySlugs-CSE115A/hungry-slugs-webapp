@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link"
-import React from 'react';
 
 interface Meals {
   "Breakfast": Array<string>;
@@ -14,7 +13,6 @@ interface Meals {
 interface DiningHall {
   name: string;
   meals: Meals;
-
 }
 
 
@@ -64,7 +62,7 @@ export default function Home() {
   }, []);
 
 
-  return (
+  return (  
     <main>
       <div>
         <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
