@@ -43,12 +43,19 @@
 .side-menu {
   position: fixed;
   top: 0;
-  left: -250px; /* Initially hide the side menu */
-  width: 600px;
-  height: 100%;
-  background-color: #fff; /* Adjust background color as needed */
-  transition: left 0.3s ease; /* Add smooth transition effect */
-  z-index: 999; /* Ensure the menu is above other content */
+  left: 0;
+  bottom: 0;
+  width: 120px;
+  background-color: #ffffff;
+}
+
+.side-menu-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-menu-items button {
+  margin-bottom: 8px;
 }
 
 .menu-button {
