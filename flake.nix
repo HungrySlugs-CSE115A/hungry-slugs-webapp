@@ -3,7 +3,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
   };
-  outputs = { nixpkgs, systems, ... }:
+  outputs =
+    { nixpkgs, systems, ... }:
     let
       forEachSystem = nixpkgs.lib.genAttrs (import systems);
     in
@@ -11,13 +12,13 @@
       devShells = forEachSystem (system: {
         default =
           let
-            pkgs = import nixpkgs {
-              inherit system;
-            };
-            my-python = pkgs.python3.withPackages (ps: with ps; [
-              black
-              pip
-            ]);
+            pkgs = import nixpkgs { inherit system; };
+            my-python = pkgs.python3.withPackages (
+              ps: with ps; [
+                black
+                pip
+              ]
+            );
           in
           pkgs.mkShell {
             buildInputs = [
@@ -36,8 +37,7 @@
 
               # Python
               my-python
-
-              pkgs.krb5
+              pkgs.krb5 # package dependency
             ];
 
             shellHook = ''
@@ -51,5 +51,13 @@
             '';
           };
       });
+
+      formatter = forEachSystem (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        pkgs.nixfmt-rfc-style
+      );
     };
 }
