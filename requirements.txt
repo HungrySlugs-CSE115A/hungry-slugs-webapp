@@ -7,3 +7,7 @@ djangorestframework>=3.15.1
 # Webscraping Dependencies
 beautifulsoup4>=4.12.3
 requests>=2.31.0
+
+# Database Dependencies
+pymongo[srv]>=3.12
+dnspython

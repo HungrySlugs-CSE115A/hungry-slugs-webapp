@@ -1,26 +1,28 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import axios from "axios";
+import Link from "next/link"
 
-// Define HomeContentProps type
-type HomeContentProps = {
-  dhName: string;
-  meals: string[];
-};
+interface DiningHall {
+  name: string;
+  meals: any;
 
-// Define HomeContent component with explicit types
-const HomeContent: React.FC<HomeContentProps> = ({ dhName, meals }) => (
-  <>
-    <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
-    <h2 className="text-xl">name: {dhName}</h2>
-    <p>Breakfast Meals:</p>
-    <ul>
-      {meals.map((meal, i) => (
-        <li key={i}>{meal}</li>
-      ))}
-    </ul>
-  </>
-);
+}
+
+
+function ButtonLink(props: any) {
+  return (
+    <div className="underline text-blue-600">
+      <Link href={{
+        pathname: `/${encodeURIComponent(props.number)}`,
+        query: {
+          name: props.name
+        }
+      }}>{props.button_name}</Link>
+    </div>
+  );
+}
+
 
 export default function Home() {
   const [dhs_names, set_dhs] = useState([]);
@@ -35,7 +37,10 @@ export default function Home() {
     axios
       .get("http://localhost:8000/myapi/dining-halls/")
       .then((response) => {
-        const dhs: Array<DiningHall> = response.data["Dining Halls"];
+        const dhs: Array<DiningHall> = response.data["dining_halls"];
+
+        console.log(dhs);
+
         const result: string[] = [];
         dhs.forEach((value: DiningHall, index: number) => {
           result.push(dhs[index].name);
@@ -54,11 +59,22 @@ export default function Home() {
   }, []);
 
 
-
-return (
+  return (
     <main>
       <div>
+        {/* Title */}
+        <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
+        {/* Display All of the dinning hall names as links */}
+        <ul>
+
+          {dhs_names.map((dh, i) => (
+            <li key={i}>
+              <ButtonLink button_name={dh} name={dh} />
+            </li>
+          ))}
+
+        </ul>
       </div>
     </main>
-);
+  );
 }
