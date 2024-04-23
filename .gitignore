@@ -37,7 +37,9 @@ next-env.d.ts
 
 # development environment
 .direnv
+.devenv
 _build
+.venv
 
 # secrets
 private
