@@ -13,6 +13,13 @@ class FoodOptions:
     def get_all_dhs(self) -> dict[str, DiningHall]:
         return self.dining_halls
 
+    # covert each dining hall object to json
+    def jsonify_dining_halls(self) -> list[dict]:
+        res = []
+        for dh in self.dining_halls.values():
+            res.append(dh.jsonify())
+        return res
+
     def __retrieve_data(self) -> dict[str, DiningHall]:
         try:
             response = requests.get(self.main_url, verify=False)
