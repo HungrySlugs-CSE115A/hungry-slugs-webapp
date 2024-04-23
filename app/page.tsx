@@ -16,6 +16,7 @@ interface DiningHall {
 }
 
 
+
 function ButtonLink(props: any) {
   return (
     <div className="underline text-blue-600">
@@ -23,6 +24,7 @@ function ButtonLink(props: any) {
         pathname: `/${encodeURIComponent(props.number)}`,
         query: {
           name: props.name
+          
         }
       }}>{props.button_name}</Link>
     </div>
@@ -32,7 +34,6 @@ function ButtonLink(props: any) {
 
 export default function Home() {
   const [dhs_names, set_dhs] = useState([]);
-  const [dh_name, set_dh_name] = useState("");
   const [meals, set_meals] = useState([]);
 
 
@@ -49,7 +50,7 @@ export default function Home() {
           result.push(dhs[index].name);
         })
         set_dhs(result);
-        const a_dh = dhs[0];
+        const a_dh = dhs[0]; //pass in the value of each dining hall. 
         set_dh_name(a_dh["name"]);
         const meal_time = a_dh["meals"];
         const breakfast = meal_time["Breakfast"];

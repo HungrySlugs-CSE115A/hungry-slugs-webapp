@@ -1,11 +1,14 @@
 import requests
+import certifi
 from bs4 import BeautifulSoup
 
 
 class DiningHall:
     def __init__(self, url: str) -> None:
         self.name = ""
-        self.meals = {"Breakfast": [], "Lunch": [], "Dinner": [], "Late Night": []}
+        #self.meals = {"Breakfast": [], "Lunch": [], "Dinner": [], "Late Night": []}
+        self.meals = {}
+        self.meal_times = {}
         self.__retrieve_data(url)
 
     def get_name(self) -> str:
@@ -24,26 +27,38 @@ class DiningHall:
         }
 
         try:
-            response = requests.get(url, cookies=cookies, verify=False)
+            response = requests.get(url, cookies=cookies, verify = "backend/myapi/webscraper/cf-prd-app-1-ucsc-edu.pem")
         except requests.exceptions.RequestException as e:  # This is the correct syntax
             raise SystemExit(e)
 
         html_text = response.text #id imagine this is data from the website
         soup = BeautifulSoup(html_text, "html.parser")
 
-        name = soup.find_all("div", class_="headlocation")
+        name = soup.find_all("div", class_="headlocation")  #gets the name of the dinign hall using "headlocation" tag/div?
         if name:
-            self.name = name[0].get_text()
+            self.name = name[0].get_text() #get_text returns the text in the tag
+            print(self.name)
 
+        #find the meal headers
+
+        meal_time_per_dh = soup.find_all("div", class_="shortmenumeals")  #gets the name of the dinign hall using "headlocation" tag/div?
+        if meal_time_per_dh:
+            for i in meal_time_per_dh:
+                self.meal_times[i.get_text()] = [] #creates dictionary for each dh ie Crown: [] Cowell: []
+                #print( i.get_text() ) #get_text returns the text in the tag   
+            
+        self.meals = self.meal_times
         mt_index = -1
-        for element in soup.find_all(
-            "div", {"class": ["shortmenurecipes", "shortmenumeals"]}
+        for element in soup.find_all( #element stores the instances of each meal
+            "div", {"class": ["shortmenurecipes", "shortmenumeals"]} #gets the breakfast lunch dinenr
         ):
-            meal_times = list(self.meals.keys())
-            if element.get_text() in meal_times:
+            meal_times = list(self.meals.keys()) #currently just "Breakfast": [], "Lunch": [], "Dinner": [], "Late Night": []
+            if element.get_text() in meal_times: #if the element is part of the breakfast lunch dinner, 
                 mt_index += 1
             else:
                 self.meals[meal_times[mt_index]].append(element.get_text(strip=True))
+            
+        
 
     def __str__(self) -> str:
         result = f"{self.name}\n"

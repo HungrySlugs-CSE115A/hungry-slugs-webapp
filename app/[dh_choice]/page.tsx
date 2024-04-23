@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-interface Meals{
-  "Breakfast": Array<string>;
-  "Lunch": Array<string>;
-  "Dinner": Array<string>;
-  "Late Night": Array<string>;
+
+interface DiningHall {
+  name: string;
+}
+
+function name_to_dh_number(dhName: string, dhArray: Array<DiningHall>){
+  let n = dhArray.map(e => e.name).indexOf(dhName)
+  return  n; //returns the index of the dining hall passed in
 }
 
 export default function Page({searchParams, }:{searchParams:{
@@ -22,20 +25,20 @@ export default function Page({searchParams, }:{searchParams:{
       .get("http://localhost:8000/myapi/dining-halls/")
       .then((response) => {
         const dhs = response.data["Dining Halls"];
-        const a_dh = dhs[0]; 
-        const meal_time = a_dh["meals"];
-        const breakfast = meal_time["Dinner"];
-
+        const a_dh = dhs[name_to_dh_number(searchParams.name, dhs)]; //getting meals from dh that doesnt have meals will throw error
+        //alert(a_dh);
+        console.log (a_dh);
+        
+        const meal_time = a_dh["meals"]; //meal time keys?
+        const breakfast = meal_time[Object.keys(meal_time)[0]]; //Object.keys(meal_time)[0] gets the first mealtime
         set_meals(breakfast);
+        //console.log(meals)
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
   
-  const test = ["test", "fuck"];
-  //const foods = searchParams.meals;
-
 
   return (
 
@@ -51,5 +54,6 @@ export default function Page({searchParams, }:{searchParams:{
         </ul>
       </div>
     </main> //create button to go to each dning hall hvac to pass data through button
+
     );
 }
