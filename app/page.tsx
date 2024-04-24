@@ -23,8 +23,7 @@ function ButtonLink(props: any) {
       <Link href={{
         pathname: `/${encodeURIComponent(props.number)}`,
         query: {
-          name: props.name
-          
+          name: props.name  
         }
       }}>{props.button_name}</Link>
     </div>
