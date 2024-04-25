@@ -33,7 +33,6 @@
               lib.makeLibraryPath [
                 libffi
                 openssl
-                stdenv.cc.cc
               ];
           in
           pkgs.mkShell {
