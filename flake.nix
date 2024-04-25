@@ -64,21 +64,25 @@
               pkgs.nodePackages.typescript-language-server
             ];
 
-            shellHook = ''
-              # Allow the use of wheels.
-              SOURCE_DATE_EPOCH=$(date +%s)
-              VENV_PATH=$(pwd)/.venv
-              # Augment the dynamic linker path
-              export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${lib-path}"
+            shellHook =
+              let
+                python_virtualenv_folder_name = "venv";
+              in
+              ''
+                # Allow the use of wheels.
+                SOURCE_DATE_EPOCH=$(${pkgs.coreutils}/bin/date +%s)
+                VENV_PATH=$(${pkgs.coreutils}/bin/pwd)/${python_virtualenv_folder_name}
+                # Augment the dynamic linker path
+                export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${lib-path}"
 
-              # Setup the virtual environment if it doesn't already exist.
-              if test ! -d $VENV_PATH; then
-                python -m venv $VENV_PATH
-              fi
-              $VENV_PATH/bin/pip install -U -r requirements.txt
-              source $VENV_PATH/bin/activate
-              export PYTHONPATH=$VENV_PATH/${myPython.sitePackages}/:$PYTHONPATH
-            '';
+                # Setup the virtual environment if it doesn't already exist.
+                if ${pkgs.coreutils}/bin/test ! -d $VENV_PATH; then
+                  ${myPython}/bin/python -m venv $VENV_PATH
+                fi
+                $VENV_PATH/bin/pip install -U -r requirements.txt
+                source $VENV_PATH/bin/activate
+                export PYTHONPATH=$VENV_PATH/${myPython.sitePackages}/:$PYTHONPATH
+              '';
           };
       });
 
