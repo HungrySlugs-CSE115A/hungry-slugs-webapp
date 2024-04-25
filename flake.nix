@@ -4,7 +4,7 @@
     systems.url = "github:nix-systems/default";
   };
   outputs =
-    { nixpkgs, systems, ... }@inputs:
+    { nixpkgs, systems, ... }:
     let
       forEachSystem = nixpkgs.lib.genAttrs (import systems);
     in
