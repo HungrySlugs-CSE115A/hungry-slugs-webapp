@@ -9,5 +9,5 @@ beautifulsoup4>=4.12.3
 requests>=2.31.0
 
 # Database Dependencies
-pymongo[snappy,gssapi,srv,tls]>=3.12
+pymongo[srv]>=3.12
 dnspython

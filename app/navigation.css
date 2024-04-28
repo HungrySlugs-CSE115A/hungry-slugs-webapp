@@ -1,0 +1,84 @@
+.navigation-bar {
+  background-color: #11163ede;
+  padding: 10px;
+  height: 80px; 
+  display: flex; 
+  text-align: center;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.navigation-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.navigation-list li {
+  display: inline;
+}
+
+.navigation-list li a {
+  text-decoration: none;
+  padding: 10px;
+}
+
+.navigation-list button {
+  color: rgb(244, 249, 252);
+  text-decoration: none;
+  padding: 1px;
+  margin: 3px; 
+  height: 28px;
+  width: 230px; 
+  cursor: pointer;
+  box-sizing: border-box; 
+  font-size: 17px; 
+}
+
+.navigation-list button:hover {
+  background-color: #0a0335b2;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 120px;
+  background-color: #ffffff;
+}
+
+.side-menu-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-menu-items button {
+  margin-bottom: 8px;
+}
+
+.menu-button {
+  margin: 10px;
+  color: #f8de5a
+}
+
+.menu-items {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.menu-item {
+  margin: 5px;
+  padding: 10px;
+  width: 100%; /* Ensure buttons fill the width */
+  border: none;
+  background-color: #f0f0f0; /* Adjust background color as needed */
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #dcdcdc; /* Change background color on hover */
+}
