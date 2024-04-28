@@ -1,8 +1,12 @@
 import requests
-import certifi
 from bs4 import BeautifulSoup
 
-from .dining_hall import DiningHall
+if __name__ == "__main__":
+    from dining_hall import DiningHall
+else:
+    from .dining_hall import DiningHall
+
+from private.private_settings import UCSC_SSL_CERT
 
 
 class FoodOptions:
@@ -23,7 +27,7 @@ class FoodOptions:
 
     def __retrieve_data(self) -> dict[str, DiningHall]:
         try:
-            response = requests.get(self.main_url, verify = "backend/myapi/webscraper/cf-prd-app-1-ucsc-edu.pem") #err
+            response = requests.get(self.main_url, verify=UCSC_SSL_CERT)
         except requests.exceptions.RequestException as e:  # This is the correct syntax
             raise SystemExit(e)
 
@@ -35,12 +39,12 @@ class FoodOptions:
         locations = soup.find_all("li", class_="locations")
         for el in locations[:]:
             line = el.find("a")
-            dh_urls.append(self.main_url + line.get("href")) #extracts all urls
+            dh_urls.append(self.main_url + line.get("href"))  # extracts all urls
 
         dhs = {}
         for dh_url in dh_urls:
-            dining_hall = DiningHall(dh_url) #goes into each url and pulls meal data
-            dhs[dining_hall.name] = dining_hall #create instance of each dh name 
+            dining_hall = DiningHall(dh_url)  # goes into each url and pulls meal data
+            dhs[dining_hall.name] = dining_hall  # create instance of each dh name
 
         return dhs
 
