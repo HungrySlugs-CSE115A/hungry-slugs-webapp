@@ -32,7 +32,6 @@
               with pkgs;
               lib.makeLibraryPath [
                 libffi
-                openssl
               ];
           in
           pkgs.mkShell {
@@ -72,7 +71,6 @@
                 SOURCE_DATE_EPOCH=$(${pkgs.coreutils}/bin/date +%s)
                 VENV_PATH=$(${pkgs.coreutils}/bin/pwd)/${python_virtualenv_folder_name}
                 # Augment the dynamic linker path
-                export LD_PRELOAD="$LD_PRELOAD:${pkgs.glibc}/lib/libc.so.6"
                 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${lib-path}"
 
                 # Setup the virtual environment if it doesn't already exist.
