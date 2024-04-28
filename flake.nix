@@ -32,7 +32,6 @@
               with pkgs;
               lib.makeLibraryPath [
                 libffi
-                openssl
               ];
           in
           pkgs.mkShell {
