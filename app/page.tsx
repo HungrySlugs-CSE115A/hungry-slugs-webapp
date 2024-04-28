@@ -1,11 +1,10 @@
 "use client";
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
 interface DiningHall {
   name: string;
-  meals: Meals;
   meals: any;
 }
 
@@ -27,8 +26,7 @@ function ButtonLink(props: any) {
 }
 
 export default function Home() {
-  const [dhs_names, set_dhs] = useState([]);
-  const [meals, set_meals] = useState([]);
+  const [dhs_names, set_dhs_names] = useState([""]);
 
   <button id="myButton" className="float-left submit-button">
     Home
@@ -38,21 +36,20 @@ export default function Home() {
     axios
       .get("http://localhost:8000/myapi/dining-halls/")
       .then((response) => {
+        // get the data from the response
         const dhs: Array<DiningHall> = response.data["dining_halls"];
 
+        // print the data to the console
         console.log(dhs);
 
-        const result: string[] = [];
-        dhs.forEach((value: DiningHall, index: number) => {
-          result.push(dhs[index].name);
+        // extract the names of the dining halls
+        const dhs_names_temp: string[] = [];
+        dhs.forEach((value: DiningHall) => {
+          dhs_names_temp.push(value.name);
         });
-        set_dhs(result);
-        const a_dh = dhs[0]; //pass in the value of each dining hall.
-        set_dh_name(a_dh["name"]);
-        const meal_time = a_dh["meals"];
-        const breakfast = meal_time["Breakfast"];
 
-        set_meals(breakfast);
+        // set the state of the dining hall names
+        set_dhs_names(dhs_names_temp);
       })
       .catch((error) => {
         console.log(error);

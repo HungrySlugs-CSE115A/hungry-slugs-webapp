@@ -3,11 +3,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-interface Meals {
-  Breakfast: Array<string>;
-  Lunch: Array<string>;
-  Dinner: Array<string>;
-  "Late Night": Array<string>;
+interface DiningHall {
+  name: string;
+  meals: any;
+}
+
+function name_to_dh_index(dhName: string, dhArray: Array<DiningHall>) {
+  for (let i = 0; i < dhArray.length; i++) {
+    if (dhArray[i].name === dhName) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 export default function Page({
@@ -15,50 +22,66 @@ export default function Page({
 }: {
   searchParams: {
     name: string;
-    //meals: Meals;
   };
 }) {
-  const [meals, set_meals] = useState([]);
-  const [mealTime, set_meal_time] = useState("");
+  const [meal_times, set_meal_times] = useState();
 
   useEffect(() => {
     axios
       .get("http://localhost:8000/myapi/dining-halls/")
       .then((response) => {
+        // fetch the data from the response
         const dhs = response.data["dining_halls"];
-        const a_dh = dhs[name_to_dh_number(searchParams.name, dhs)]; //getting meals from dh that doesnt have meals will throw error
-        //alert(a_dh);
-        console.log(a_dh);
-        if (Object.keys(a_dh).length == 1) {
-          //trying to check if the dining hall even serves anything, I dont know if this works yet, will debug when I get the chance
-          alert("Dh does not have meals I think");
+
+        // find the dining hall with the name
+        const dh_index = name_to_dh_index(searchParams.name, dhs);
+        // if the dining hall is not found, alert the user
+        if (dh_index == -1) {
+          alert("Dh not found");
           return;
         }
 
-        const meal_time = a_dh["meals"]; //meal time keys?
-        const breakfast = meal_time[Object.keys(meal_time)[0]]; //Object.keys(meal_time)[0] gets the first mealtime
-        set_meals(breakfast);
-        set_meal_time(Object.keys(meal_time)[0]);
+        // get the dining hall with the name
+        const a_dh = dhs[dh_index];
+
+        // get the meals from the dining hall
+        set_meal_times(a_dh["meals"]);
+
+        // if the dining hall does not have any values in the meals object, alert the user
+        if (Object.keys(a_dh["meals"]).length == 0) {
+          alert("No meals found");
+          return;
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  const test = ["test", "fuck"];
-  //const foods = searchParams.meals;
-
   return (
     <main>
-      <div>
-        <h2 className="text-xl">Welcome to dining hall: {searchParams.name}</h2>
-        <p>{mealTime}:</p>
-        <ul>
-          {meals.map((meal, i) => (
-            <li key={i}>{meal}</li>
-          ))}
-        </ul>
+      <div className="container mx-auto">
+        {/* Dining Hall Name */}
+        <h2 className="text-xl">{searchParams.name}</h2>
+
+        {/* List all the meal times and their foods */}
+        {
+          // create an array of arrays of the meal times and their foods
+          meal_times &&
+            Object.entries(meal_times).map(
+              ([meal_time, foods]: Array<string | Array<string> | any>, i) => (
+                <div key={i}>
+                  <h3 className="text-lg py-5">{meal_time}</h3>
+                  <ul>
+                    {foods.map((food: string, j: number) => (
+                      <li key={j}>{food}</li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            )
+        }
       </div>
-    </main> //create button to go to each dning hall hvac to pass data through button
+    </main>
   );
 }
