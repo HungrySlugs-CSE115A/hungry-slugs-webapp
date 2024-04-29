@@ -74,7 +74,7 @@
                 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${lib-path}"
 
                 # Setup the virtual environment if it doesn't already exist.
-                if ${pkgs.coreutils}/bin/test ! -d $VENV_PATH; then
+                if [ ! -d $VENV_PATH ]; then
                   ${myPython}/bin/python -m venv $VENV_PATH
                 fi
                 $VENV_PATH/bin/pip install -U -r requirements.txt
