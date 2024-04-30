@@ -1,4 +1,3 @@
-from ast import Is
 from utils import get_db_handle, get_local_db_handle
 from private.private_settings import MONGODB_USERNAME, MONGODB_PASSWORD, MONGODB_CLUSTER, IS_DEV
 
