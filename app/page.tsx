@@ -59,9 +59,6 @@ export default function Home() {
   return (
     <main>
       <div>
-        {/* Title */}
-        <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
-        {/* Display All of the dinning hall names as links */}
         <ul>
           {dhs_names.map((dh, i) => (
             <li key={i}>
