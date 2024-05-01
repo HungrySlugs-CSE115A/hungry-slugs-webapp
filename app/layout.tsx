@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 // This is the height of the navbar which will also be used to set the padding-top of the main content
 // NOTE: you should modify this value to match the height of the navbar
-const navbarHeight: string = "50px";
+const navbarHeight: string = "60px";
 
 export default function RootLayout({
   children,
