@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 interface DiningHall {
   name: string;
@@ -25,13 +26,8 @@ function ButtonLink(props: any) {
   );
 }
 
-export default function Home() {
+function Home() {
   const [dhs_names, set_dhs_names] = useState([""]);
-
-  <button id="myButton" className="float-left submit-button">
-    Home
-  </button>;
-
   useEffect(() => {
     axios
       .get("http://localhost:8000/myapi/dining-halls/")
@@ -73,3 +69,24 @@ export default function Home() {
     </main>
   );
 }
+
+export default function Page() {
+
+
+  return (
+    <GoogleOAuthProvider clientId="1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com">
+      <Home />
+      <GoogleLogin
+        onSuccess={credentialResponse => {
+          console.log('Login Successful', credentialResponse);
+        }}
+        onError={() => {
+          console.log('Login Failed');
+        }}
+      />
+    </GoogleOAuthProvider>
+  );
+}
+
+
+
