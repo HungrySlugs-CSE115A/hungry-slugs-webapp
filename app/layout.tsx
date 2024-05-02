@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "@/components/navbar";
+import Testbar from "@/components/testbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 
 // This is the height of the navbar which will also be used to set the padding-top of the main content
 // NOTE: you should modify this value to match the height of the navbar
-const navbarHeight: string = "60px";
+const navbarHeight: string = "70px";
 
 export default function RootLayout({
   children,
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Navbar height={navbarHeight} />
         <div className="" style={{ paddingTop: navbarHeight }}>
+          
           {children}
         </div>
       </body>
