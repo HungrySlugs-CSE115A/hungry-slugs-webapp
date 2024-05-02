@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { GoogleOAuthProvider, GoogleLogin, googleLogout} from "@react-oauth/google";
 
 interface DiningHall {
   name: string;
@@ -71,7 +71,14 @@ function Home() {
 }
 
 export default function Page() {
+  useEffect(() => {
+    console.log("Page component loaded and GoogleOAuthProvider should be active");
+  }, []);
 
+  const handleLogout = () => {
+    googleLogout();
+    console.log('Logout Successful');
+  };
 
   return (
     <GoogleOAuthProvider clientId="1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com">
@@ -84,9 +91,7 @@ export default function Page() {
           console.log('Login Failed');
         }}
       />
+      <button onClick={handleLogout} className="p-2 mt-2 text-white bg-red-600 rounded">Logout</button>
     </GoogleOAuthProvider>
   );
 }
-
-
-
