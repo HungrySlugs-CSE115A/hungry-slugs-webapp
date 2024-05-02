@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .webscraper.food_options import FoodOptions
+from .webscraper.food_locations import FoodOptions
 
 from .db_functions.dining_halls import get_all_dining_halls_from_db
 
