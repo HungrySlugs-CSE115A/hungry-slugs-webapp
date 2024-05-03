@@ -28,8 +28,6 @@ export default function DhBar({ name }: { name: string }) {
                             <ButtonLink name={name}/>
                         </li>
                     </ul>
-
-
             </div>
         </div>
     );

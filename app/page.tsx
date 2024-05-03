@@ -65,30 +65,21 @@ export default function Home() {
         </h1>
 
         <h2 className="font-medium text-2xl text-[#003C6C]  flex items-center justify-center pb-5">
-          <ul className="flex flex-col  md:p-0  md:flex-row md:border-0  ">
-            <li>
-              <a href="#" className="px-10" >Dining Halls</a>
+          <ul className="flex flex-col  md:p-0  md:flex-row md:border-0 ">
+            <li className="">
+              <button className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Dining Halls</button>
             </li>
             <li>
-              <a href="#" className="px-10" >Markets</a>
+              <a href="#" className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Markets</a>
             </li>
             <li>
-              <a href="#" className="px-10" >Cafes & Other</a>{/* pr-X dicates how far off right we want.  */}
-            </li>
-
-            <li>
-              <p className="relative group">
-                <span>Test</span>
-                <span className="absolute -bottom-1 left-1/2 w-0 h-2 dark:bg-yellow-400 group-hover:w-1/2 group-hover:transition-all"></span>
-                <span className="absolute -bottom-1 right-1/2 w-0 h-2 dark:bg-yellow-400 group-hover:w-1/2 group-hover:transition-all"></span>
-              </p>
-
+              <a href="#" className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Cafes & Other</a>{/* pr-X dicates how far off right we want.  */}
             </li>
           </ul>
         </h2>
 
         <h3 className="w-full">
-          
+
           <ul className="">
             {dhs_names.map((dh, i) => (
               <li key={i}>
