@@ -19,6 +19,9 @@ def get_names_of_dining_halls(dining_halls: list[dict]) -> list[str]:
 def remove_add_dining_halls_to_db(dining_halls: list[dict]) -> None:
     # get names of dining halls
     names = get_names_of_dining_halls(dining_halls)
+    # filter out dining halls without meals or meals without foods
+    dining_halls = [dh for dh in dining_halls if len(dh["meals"]) > 0]
+    dining_halls = [dh for dh in dining_halls if len(dh["meals"].keys()[0]) > 0]
     # remove dining halls with the names
     remove_dining_halls_from_db(names)
     # add dining halls to db
