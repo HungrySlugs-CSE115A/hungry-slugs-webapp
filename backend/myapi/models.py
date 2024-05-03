@@ -8,12 +8,13 @@ dining_hall_collection = db["dining_hall"]
 
 
 # NOTE: This is temporary and will be replaced with a background task
-from .webscraper.food_options import FoodOptions
+from webscraper.food_locations import FoodLocations
+
 # Fetch dining halls
-fo = FoodOptions()
+fo = FoodLocations()
 # Get dining halls as a list of json objects
-dining_halls: list[dict] = fo.jsonify_dining_halls()
+dining_halls: list[dict] = [dh.to_dict() for dh in fo.get_locations()]
 # Add dining halls to db
 from .db_functions.dining_halls import remove_add_dining_halls_to_db
-remove_add_dining_halls_to_db(dining_halls)
 
+remove_add_dining_halls_to_db(dining_halls)

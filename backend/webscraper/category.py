@@ -1,11 +1,10 @@
 from bs4.element import Tag, ResultSet
-from bs4 import BeautifulSoup
 
-from food import Food
-from helpers import get_next_sibling, tag_to_bs4
+from webscraper.food import Food
+from webscraper.helpers import get_next_sibling
 
 
-class Category:
+class SubCategory:
     def __init__(self, name: str, html_list: list[Tag]) -> None:
         self.name = name
         self.foods: list[Food] = [Food(html) for html in html_list]
@@ -16,34 +15,34 @@ class Category:
             result += (" " * 2) + str(food) + "\n"
         return result
 
+    def to_dict(self) -> dict:
+        return {"name": self.name, "foods": [food.to_dict() for food in self.foods]}
 
-class MealTime:
+
+class Category:
     def __init__(self, name: str, html: Tag) -> None:
         self.name = name
-        self.categories: list[Category] = self.__process_data(html)
+        self.sub_categories: list[SubCategory] = self.__process_data(html)
 
-    def __process_data(self, html: Tag) -> list[Category]:
-        # convert the html to a BeautifulSoup object
-        soup = tag_to_bs4(html)
-
+    def __process_data(self, html: Tag) -> list[SubCategory]:
         # find the categories in the meal time
-        categories_data: ResultSet = soup.find_all("div", class_="shortmenucats")
+        sub_cat_data: ResultSet = html.find_all("div", class_="shortmenucats")
 
         # get the categorie names
-        if not categories_data:
+        if not sub_cat_data:
             return []
-        categories_names: list[str] = []
-        for cat in categories_data:
-            categories_names.append(cat.get_text(strip=True))
+        sub_cat_names: list[str] = []
+        for sub_cat in sub_cat_data:
+            sub_cat_names.append(sub_cat.get_text(strip=True))
 
         # get the 2nd parent of the first category
-        html_data: Tag | None = categories_data[0]
-        for i in range(2):
+        html_data: Tag | None = sub_cat_data[0]
+        for _ in range(2):
             if html_data:
                 html_data = html_data.parent
 
         # cotinue getting the next sibling until next category or None
-        categories: list[Category] = []
+        sub_categories: list[SubCategory] = []
         food_html_data: list[Tag] = []
         while True:
             # get the next sibling
@@ -59,18 +58,24 @@ class MealTime:
             # check if the next sibling is a category
             if next_sibling.find("div", class_="shortmenucats"):
                 # create the category
-                category = Category(categories_names.pop(0), food_html_data)
-                categories.append(category)
+                sub_cat = SubCategory(sub_cat_names.pop(0), food_html_data)
+                sub_categories.append(sub_cat)
                 food_html_data = []  # reset the food html data
                 continue
 
             # add the food html data
             food_html_data.append(next_sibling)
 
-        return categories
+        return sub_categories
 
     def __str__(self) -> str:
         result = f"{self.name}\n"
-        for cat in self.categories:
-            result += str(cat)
+        for sub_cat in self.sub_categories:
+            result += str(sub_cat)
         return result
+
+    def to_dict(self) -> dict:
+        return {
+            "name": self.name,
+            "sub_categories": [sub_cat.to_dict() for sub_cat in self.sub_categories],
+        }
