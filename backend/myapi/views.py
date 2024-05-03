@@ -1,7 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
-from django.db.utils import IntegrityError
 from .webscraper.food_options import FoodOptions
 
 from .db_functions.dining_halls import get_all_dining_halls_from_db
@@ -45,7 +44,5 @@ def create_user(request):
             return Response({'message': 'User created successfully'})
         else:
             return Response({'message': 'User already exists'})
-    except IntegrityError:
-        return Response({'error': 'This email is already in use.'})
     except Exception as e:
         return Response({'error': str(e)})
