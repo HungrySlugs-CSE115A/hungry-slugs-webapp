@@ -3,11 +3,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { GoogleOAuthProvider, GoogleLogin, googleLogout} from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 interface DiningHall {
   name: string;
   meals: any;
 }
+interface User {
+  name: string;
+  picture: string;
+}
+
 
 function ButtonLink(props: any) {
   return (
@@ -71,26 +77,42 @@ function Home() {
 }
 
 export default function Page() {
+  const [user, setUser] = useState<User | null>(null);
+
   useEffect(() => {
     console.log("Page component loaded and GoogleOAuthProvider should be active");
   }, []);
 
   const handleLogout = () => {
     googleLogout();
+    setUser(null); // Clear user state on logout
     console.log('Logout Successful');
+  };
+
+  const handleLoginSuccess = (credentialResponse: any) => {
+    console.log('Login Successful', credentialResponse);
+    const decoded: User = jwtDecode(credentialResponse.credential);
+    setUser({
+      name: decoded.name,
+      picture: decoded.picture
+    });
   };
 
   return (
     <GoogleOAuthProvider clientId="1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com">
       <Home />
       <GoogleLogin
-        onSuccess={credentialResponse => {
-          console.log('Login Successful', credentialResponse);
-        }}
+        onSuccess={handleLoginSuccess}
         onError={() => {
           console.log('Login Failed');
         }}
       />
+      {user && (
+        <div>
+          <img src={user.picture} alt="User profile" />
+          <h2>{user.name}</h2>
+        </div>
+      )}
       <button onClick={handleLogout} className="p-2 mt-2 text-white bg-red-600 rounded">Logout</button>
     </GoogleOAuthProvider>
   );
