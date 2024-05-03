@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "@/components/navbar";
+import Page from "@/components/login";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,9 @@ export default function RootLayout({
         <Navbar height={navbarHeight} />
         <div className="" style={{ paddingTop: navbarHeight }}>
           {children}
+
         </div>
+        <Page/>
       </body>
     </html>
   );
