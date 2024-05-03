@@ -59,7 +59,40 @@ export default function Home() {
   return (
     <main>
       <div>
-        <ul>
+        <h1 className="font-semibold py-5 text-4xl text-[#003C6C] flex items-center justify-center">
+          Locations
+        </h1>
+
+        <h2 className="font-medium text-2xl text-[#003C6C]  flex items-center justify-center">
+          <ul className="flex flex-col  md:p-0  md:flex-row md:border-0  ">
+            <li>
+              <a href="#" className="px-10" >Dining Halls</a>
+            </li>
+            <li>
+              <a href="#" className="px-10" >Markets</a>
+            </li>
+            <li>
+              <a href="#" className="px-10" >Cafes & Other</a>{/* pr-X dicates how far off right we want.  */}
+            </li>
+
+            <li>
+              <p className="relative group">
+                <span>Test</span>
+                <span className="absolute -bottom-1 left-1/2 w-0 h-2 dark:bg-yellow-400 group-hover:w-1/2 group-hover:transition-all"></span>
+                <span className="absolute -bottom-1 right-1/2 w-0 h-2 dark:bg-yellow-400 group-hover:w-1/2 group-hover:transition-all"></span>
+              </p>
+
+            </li>
+          </ul>
+        </h2>
+
+        <h3 className="flex items-center justify-center">
+          
+
+        </h3>
+
+
+        <ul className="">
           {dhs_names.map((dh, i) => (
             <li key={i}>
               <ButtonLink button_name={dh} name={dh} />
