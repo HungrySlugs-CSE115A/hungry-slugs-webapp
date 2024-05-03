@@ -8,12 +8,13 @@ from helpers import get_next_sibling
 
 from private.private_settings import UCSC_SSL_CERT
 
+
 class DiningHall:
     def __init__(self, url: str) -> None:
         self.name: str = "Error: Name not found"
-        self.meal_times: list = self.__retrieve_data(url)
+        self.meal_times: list[MealTime] = self.__retrieve_data(url)
 
-    def __retrieve_data(self, url: str) -> list:
+    def __retrieve_data(self, url: str) -> list[MealTime]:
         # Set the cookies to be empty to avoid loading nothing
         cookies = {
             "WebInaCartLocation": "",
@@ -33,12 +34,11 @@ class DiningHall:
         soup = BeautifulSoup(page.content, "html.parser")
 
         # find the name of the dining hall
-        name: Tag|None = soup.find("div", class_="headlocation")
+        name: Tag | None = soup.find("div", class_="headlocation")
 
         # if the name exists, set the name to the first element in the list
         if name:
             self.name = name.get_text(strip=True)
-            print(self.name)
 
         # find the meal time headers on the menu
         mt_data: ResultSet = soup.find_all("div", class_="shortmenumeals")
@@ -50,14 +50,14 @@ class DiningHall:
         for i in range(5):
             for j in range(len(mt_data)):
                 # get the parent of the meal time
-                parent = mt_data[j].parent 
+                parent = mt_data[j].parent
 
                 # check if the parent exists
-                if not parent: 
+                if not parent:
                     continue
 
                 # set the meal time to the parent
-                mt_data[j] = parent 
+                mt_data[j] = parent
 
         # get the tag after the meal time header (meal time data)
         for i in range(len(mt_data)):
@@ -72,17 +72,22 @@ class DiningHall:
             mt_data[i] = next_sib
 
         # create a list of meal time objects
-        meal_times: list[MealTime] = [MealTime(mt_names[i], mt_data[i]) for i in range(len(mt_names))]
+        meal_times: list[MealTime] = []
+        for i in range(len(mt_data)):
+            meal_times.append(MealTime(mt_names[i], mt_data[i]))
 
+        # return the meal times
         return meal_times
-    
+
         # if the meal times exist, add them to the meal_times dictionary
         if meal_times:
             for meal_time in meal_times:
                 self.meal_times[meal_time.get_text(strip=True)] = {}
 
         # get all the subcategories and the meal times
-        mt_subcat = soup.find_all("div", attrs={"class": ["shortmenumeals", "shortmenucats"]})
+        mt_subcat = soup.find_all(
+            "div", attrs={"class": ["shortmenumeals", "shortmenucats"]}
+        )
 
         # add all the subcategories to the meal_times dictionary
         if mt_subcat:
@@ -92,16 +97,13 @@ class DiningHall:
                 if text != self.meal_times.keys():
                     self.meal_times[text] = []
 
-
         # find all the foods and meals in one list
         # NOTE: this has to be done as
 
         mt_index = -1
         for element in soup.find_all(  # element stores the instances of each meal
             "div",
-            {
-                "class": ["shortmenumeals", "shortmenucats", "shortmenurecipes"]
-            },
+            {"class": ["shortmenumeals", "shortmenucats", "shortmenurecipes"]},
         ):
             meal_times = list(
                 self.meals.keys()
@@ -113,22 +115,15 @@ class DiningHall:
             else:
                 self.meals[meal_times[mt_index]].append(element.get_text(strip=True))
 
-    # def __str__(self) -> str:
-    #     result = f"{self.name}\n"
-    #     for meal_time in self.meals.keys():
-    #         result += f"    {meal_time}:\n"
-    #         for food in self.meals[meal_time]:
-    #             result += f"        {food}\n"
+    def __str__(self) -> str:
+        result = self.name + "\n"
+        for meal_time in self.meal_times:
+            result += str(meal_time) + "\n"
+        return result
 
-    #     result += "\n"
-    #     return result
-
-    # def __str__(self) -> str:
-    #     result = ""
-    #     for meal_time in self.meal_times:
-    #         result += " "*2 + str(meal_time)
-    #     return result
 
 if __name__ == "__main__":
-    dh = DiningHall("https://nutrition.sa.ucsc.edu/shortmenu.aspx?sName=UC+Santa+Cruz+Dining&locationNum=40&locationName=College+Nine%2fJohn+R.+Lewis+Dining+Hall&naFlag=1")
-    # print(dh)
+    dh = DiningHall(
+        "https://nutrition.sa.ucsc.edu/shortmenu.aspx?sName=UC+Santa+Cruz+Dining&locationNum=40&locationName=College+Nine%2fJohn+R.+Lewis+Dining+Hall&naFlag=1"
+    )
+    print(dh)

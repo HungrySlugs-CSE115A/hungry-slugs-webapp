@@ -1,10 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-if __name__ == "__main__":
-    from dining_hall import DiningHall
-else:
-    from .dining_hall import DiningHall
+from dining_hall import DiningHall
 
 from private.private_settings import UCSC_SSL_CERT
 
