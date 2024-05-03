@@ -1,6 +1,6 @@
 "use client";
 
-export default function Testbar({ height }: { height: string }) {
+export default function Navbar({ height }: { height: string }) {
   return (
 
       <nav className="bg-white fixed w-full  top-0 start-0  ">
@@ -10,7 +10,7 @@ export default function Testbar({ height }: { height: string }) {
               </a>
 
               <div className="" id="navbar-sticky">
-                <div className="">
+                
                     <ul className="flex flex-col  md:p-0  md:flex-row md:border-0 font-medium text-2xl  pl-10  text-[#003C6C]">
                         <li>  {/* replace the pound sign with actual link */}
                             <a href= "#" className="px-4" >Home</a> 
@@ -22,7 +22,7 @@ export default function Testbar({ height }: { height: string }) {
                             <a href= "#" className="pl-4 pr-5" >Account</a>{/* pr-X dicates how far off right we want.  */}
                         </li>
                     </ul>
-                  </div>
+                 
               </div>
           </div>
           <hr className={`h-px border-0 pt-[0.15%] dark:bg-yellow-400`}></hr>

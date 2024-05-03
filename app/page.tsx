@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import DhBar from "@/components/dh_bar_main";
 
 interface DiningHall {
   name: string;
@@ -63,7 +64,7 @@ export default function Home() {
           Locations
         </h1>
 
-        <h2 className="font-medium text-2xl text-[#003C6C]  flex items-center justify-center">
+        <h2 className="font-medium text-2xl text-[#003C6C]  flex items-center justify-center pb-5">
           <ul className="flex flex-col  md:p-0  md:flex-row md:border-0  ">
             <li>
               <a href="#" className="px-10" >Dining Halls</a>
@@ -86,11 +87,16 @@ export default function Home() {
           </ul>
         </h2>
 
-        <h3 className="flex items-center justify-center">
+        <h3 className="w-full">
           
-
+          <ul className="">
+            {dhs_names.map((dh, i) => (
+              <li key={i}>
+                <DhBar name={dh} />
+              </li>
+            ))}
+          </ul>
         </h3>
-
 
         <ul className="">
           {dhs_names.map((dh, i) => (
@@ -99,6 +105,7 @@ export default function Home() {
             </li>
           ))}
         </ul>
+
       </div>
     </main>
   );
