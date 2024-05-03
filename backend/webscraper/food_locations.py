@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from dining_hall import DiningHall
+from webscraper.dining_hall import DiningHall
 
 from private.private_settings import UCSC_SSL_CERT
 
@@ -12,7 +12,7 @@ class FoodLocations:
     def __init__(self) -> None:
         self.locations: list[DiningHall] = self.__retrieve_data()
 
-    def get_dining_halls(self) -> list[DiningHall]:
+    def get_locations(self) -> list[DiningHall]:
         return self.locations
 
     def __retrieve_data(self) -> list[DiningHall]:
@@ -51,6 +51,9 @@ class FoodLocations:
             if i < len(self.locations) - 1:
                 result += "\n"
         return result
+
+    def to_dict(self) -> dict:
+        return {"locations": [dh.to_dict() for dh in self.locations]}
 
 
 if __name__ == "__main__":

@@ -3,9 +3,23 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+interface Food {
+  name: string;
+}
+
+interface subCategory {
+  name: string;
+  foods: Array<Food>;
+}
+
+interface Category {
+  name: string;
+  sub_categories: Array<subCategory>;
+}
+
 interface DiningHall {
   name: string;
-  meals: any;
+  categories: Category;
 }
 
 function name_to_dh_index(dhName: string, dhArray: Array<DiningHall>) {
@@ -24,14 +38,14 @@ export default function Page({
     name: string;
   };
 }) {
-  const [meal_times, set_meal_times] = useState();
+  const [categories, set_categories]: [Array<Category>, any] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:8000/myapi/dining-halls/")
       .then((response) => {
         // fetch the data from the response
-        const dhs = response.data["dining_halls"];
+        const dhs = response.data["locations"];
 
         // find the dining hall with the name
         const dh_index = name_to_dh_index(searchParams.name, dhs);
@@ -44,14 +58,16 @@ export default function Page({
         // get the dining hall with the name
         const a_dh = dhs[dh_index];
 
-        // get the meals from the dining hall
-        set_meal_times(a_dh["meals"]);
+        // get the categories from the dining hall
+        set_categories(a_dh["categories"]);
 
-        // if the dining hall does not have any values in the meals object, alert the user
-        if (Object.keys(a_dh["meals"]).length == 0) {
-          alert("No meals found");
+        // if the dining hall does not have any values in the categories object, alert the user
+        if (Object.keys(a_dh["categories"]).length == 0) {
+          alert("No food categories found");
           return;
         }
+
+        console.log(a_dh);
       })
       .catch((error) => {
         console.log(error);
@@ -65,22 +81,26 @@ export default function Page({
         <h2 className="text-xl">{searchParams.name}</h2>
 
         {/* List all the meal times and their foods */}
-        {
-          // create an array of arrays of the meal times and their foods
-          meal_times &&
-            Object.entries(meal_times).map(
-              ([meal_time, foods]: Array<string | Array<string> | any>, i) => (
-                <div key={i}>
-                  <h3 className="text-lg py-5">{meal_time}</h3>
-                  <ul>
-                    {foods.map((food: string, j: number) => (
-                      <li key={j}>{food}</li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            )
-        }
+        {categories &&
+          categories.map((category: Category, i: number) => (
+            <div key={i}>
+              <h3 className="text-lg">{category.name}</h3>
+              <ul>
+                {category.sub_categories.map(
+                  (sub_category: subCategory, j: number) => (
+                    <li key={j}>
+                      <h4 className="text-md">{sub_category.name}</h4>
+                      <ul>
+                        {sub_category.foods.map((food: Food, k: number) => (
+                          <li key={k}>{food.name}</li>
+                        ))}
+                      </ul>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+          ))}
       </div>
     </main>
   );
