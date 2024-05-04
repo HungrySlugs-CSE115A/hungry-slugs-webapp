@@ -41,7 +41,7 @@ class Category:
             if html_data:
                 html_data = html_data.parent
 
-        # cotinue getting the next sibling until next category or None
+        # continue getting the next sibling until next category or None
         sub_categories: list[SubCategory] = []
         food_html_data: list[Tag] = []
         while True:
@@ -65,6 +65,7 @@ class Category:
 
             # add the food html data
             food_html_data.append(next_sibling)
+            
 
         return sub_categories
 

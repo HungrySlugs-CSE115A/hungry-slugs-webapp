@@ -7,7 +7,7 @@ from private.private_settings import UCSC_SSL_CERT
 
 
 class FoodLocations:
-    main_url = "https://nutrition.sa.ucsc.edu/"
+    main_url = "https://nutrition.sa.ucsc.edu/" 
 
     def __init__(self) -> None:
         self.locations: list[DiningHall] = self.__retrieve_data()
