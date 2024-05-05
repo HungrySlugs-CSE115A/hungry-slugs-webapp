@@ -9,6 +9,9 @@ dining_hall_collection = db["dining_hall"]
 # Food Rating Model
 foods_collection = db["food_rating"]
 
+# Users Model
+users_collection = db["users"]
+
 
 # NOTE: This is temporary and will be replaced with a background task
 from webscraper.food_locations import FoodLocations
