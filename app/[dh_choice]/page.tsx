@@ -62,7 +62,9 @@ export default function Page({
     <main>
       <div className="container mx-auto">
         {/* Dining Hall Name */}
-        <h2 className="text-xl">{searchParams.name}</h2>
+        <h1 className="font-semibold py-5 text-4xl text-[#00458C] ">
+          {searchParams.name}
+        </h1>
 
         {/* List all the meal times and their foods */}
         {
