@@ -1,11 +1,11 @@
 from bs4.element import Tag
-from webscraper.extra_food_data import food_data
 
 class Food:
     def __init__(self, html: Tag) -> None:
         self.name = "Error: Food name not found"
-        self.extra_data = "No alergies"
+        self.allergies = []
         self.__process_data(html)
+
 
 
     def __process_data(self, html: Tag) -> None:
@@ -14,11 +14,18 @@ class Food:
         name = html.find("div", class_="shortmenurecipes")
         if name:
             self.name = name.get_text(strip=True)
-            self.extra_data =  food_data(html)
+            for tags in html.find_all('img'):
+                temp = tags['src'].replace("LegendImages/", "")
+                temp = temp.replace(".gif", "")
+                self.allergies.append(temp)
 
 
     def __str__(self) -> str:
-        return self.name
+        if len(self.allergies) ==0:
+            return f'{self.name} --> No allergies'
+        else:
+            s= ", ".join( [ str(element) for element in self.allergies ] )
+            return f'{self.name} --> {s}'
 
     def to_dict(self) -> dict:
         return {"name": self.name}
