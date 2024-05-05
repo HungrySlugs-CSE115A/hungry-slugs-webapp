@@ -5,6 +5,7 @@ import axios from "axios";
 
 interface Food {
   name: string;
+  extra_data:Array<string>
 }
 
 interface subCategory {

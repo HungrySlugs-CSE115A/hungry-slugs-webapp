@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 
 interface Food {
   name: string;
+  extra_data: Array<string>
 }
 
 interface subCategory {
