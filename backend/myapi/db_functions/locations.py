@@ -1,14 +1,14 @@
-from ..models import dining_hall_collection
+from ..models import locations_collection
 
 
 def remove_dining_halls_from_db(names: list[str]) -> None:
     for name in names:
-        dining_hall_collection.delete_many({"name": name})
+        locations_collection.delete_many({"name": name})
 
 
 def add_dining_halls_to_db(dining_halls: list[dict]) -> None:
     for dh in dining_halls:
-        dining_hall_collection.insert_one(dh)
+        locations_collection.insert_one(dh)
 
 
 def get_names_of_dining_halls(dining_halls: list[dict]) -> list[str]:
@@ -28,4 +28,4 @@ def remove_add_dining_halls_to_db(dining_halls: list[dict]) -> None:
 
 
 def get_all_dining_halls_from_db() -> list[dict]:
-    return list(dining_hall_collection.find({}))
+    return list(locations_collection.find({}))

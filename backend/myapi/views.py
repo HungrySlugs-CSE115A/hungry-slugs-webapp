@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .db_functions.dining_halls import get_all_dining_halls_from_db
+from .db_functions.locations import get_all_dining_halls_from_db
 
 
 # Create your views here.
