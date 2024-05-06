@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import './accordian.css';
+
 
 interface Food {
   name: string;
@@ -32,43 +34,57 @@ function name_to_dh_index(dhName: string, dhArray: Array<DiningHall>) {
   return -1;
 }
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: {
-    name: string;
-  };
-}) {
-  const [categories, set_categories]: [Array<Category>, any] = useState([]);
+function Accordion({ category, index }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="accordion border border-gray-200 rounded mb-2">
+      <button
+        className="accordion-button w-full text-left p-3 focus:outline-none"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {category.name}
+        <span className="float-right">
+          {isOpen ? "▲" : "▼"}
+        </span>
+      </button>
+      {isOpen && (
+        <div className="accordion-collapse p-3">
+          {category.sub_categories.map((sub_category, j) => (
+            <div key={j} className="mb-2">
+              <h4 className="sub-category">{sub_category.name}</h4>
+              <ul className="pl-4">
+                {sub_category.foods.map((food, k) => (
+                  <li key={k} className="food-item">{food.name}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Page({ searchParams }) {
+  const [categories, set_categories] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:8000/myapi/dining-halls/")
       .then((response) => {
-        // fetch the data from the response
-        const dhs = response.data["locations"];
-
-        // find the dining hall with the name
+        const dhs = response.data.locations;
         const dh_index = name_to_dh_index(searchParams.name, dhs);
-        // if the dining hall is not found, alert the user
-        if (dh_index == -1) {
-          alert("Dh not found");
+        if (dh_index === -1) {
+          alert("Dining hall not found");
           return;
         }
-
-        // get the dining hall with the name
         const a_dh = dhs[dh_index];
-
-        // get the categories from the dining hall
-        set_categories(a_dh["categories"]);
-
-        // if the dining hall does not have any values in the categories object, alert the user
-        if (Object.keys(a_dh["categories"]).length == 0) {
+        set_categories(a_dh.categories);
+        if (Object.keys(a_dh.categories).length === 0) {
           alert("No food categories found");
           return;
         }
-
-
       })
       .catch((error) => {
         console.log(error);
@@ -80,31 +96,15 @@ export default function Page({
   return (
     <main>
       <div className="container mx-auto">
-        {/* Dining Hall Name */}
-        <h2 className="text-xl">{searchParams.name}</h2>
-
-        {/* List all the meal times and their foods */}
-        {categories &&
-          categories.map((category: Category, i: number) => (
-            <div key={i}>
-              <h3 className="text-lg">{category.name}</h3>
-              <ul>
-
-                {category.sub_categories.map(
-                  (sub_category: subCategory, j: number) => (
-                    <li key={j}>
-                      <h4 className="text-md">{sub_category.name}</h4>
-                      <ul>
-                        {sub_category.foods.map((food: Food, k: number) => (
-                          <li key={k}>{food.name}</li>
-                        ))}
-                      </ul>
-                    </li>
-                  )
-                )}
-              </ul>
+        <h2 className="text-2xl mb-4">{searchParams.name}</h2>
+        {categories.map((category, i) => (
+          <div key={i}>
+            {/* <h3 className="text-lg">{category.name}</h3> */}
+            <div>
+              <Accordion category={category} index={i} />
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </main>
   );
