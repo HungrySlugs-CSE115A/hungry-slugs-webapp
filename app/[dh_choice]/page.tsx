@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import './accordian.css';
 
@@ -73,6 +73,8 @@ export default function Page({ searchParams }) {
   const [filteredFoods, setFilteredFoods] = useState<Food[]>([]);
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
   const [noFoodsFound, setNoFoodsFound] = useState(false);
+  const [searchActive, setSearchActive] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     axios
@@ -150,6 +152,10 @@ export default function Page({ searchParams }) {
     }
   }
 
+  const toggleSearchActive = () => {
+    setSearchActive(!searchActive);
+  };
+
   function getCategoryName(food: Food): string {
     for (const category of categories) {
       for (const subcategory of category.sub_categories) {
@@ -161,18 +167,33 @@ export default function Page({ searchParams }) {
     return "";
   }
 
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setSearchActive(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <main>
       <div className="container mx-auto">
         <h2 className="text-2xl mb-4">{searchParams.name}</h2>
         
         {/* Search bar */}
-        <div className="search-bar">
+        <div className={`search-bar ${searchActive ? 'active' : ''}`} ref={searchRef}>
           <input
             type="text"
             placeholder="Search categories..."
             value={searchInput}
             onChange={handleSearchInputChange}
+            onClick={toggleSearchActive}
           />
           <button onClick={handleSearch}>Search</button>
         </div>
@@ -206,4 +227,3 @@ export default function Page({ searchParams }) {
     </main>
   );
 }
-
