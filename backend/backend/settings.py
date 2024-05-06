@@ -15,7 +15,9 @@ from pathlib import Path
 from private.private_settings import DJANGO_SECRET_KEY, IS_DEV
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent # extra parent added to get out of the top backend folder
+BASE_DIR = (
+    Path(__file__).resolve().parent.parent.parent
+)  # extra parent added to get out of the top backend folder
 
 
 # Quick-start development settings - unsuitable for production
@@ -113,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Los_Angeles"
 
 USE_I18N = True
 
