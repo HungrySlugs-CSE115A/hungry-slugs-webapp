@@ -106,14 +106,6 @@ function Home() {
           </ul>
         </h3>
 
-        <ul className="">
-          {dhs_names.map((dh, i) => (
-            <li key={i}>
-              <ButtonLink button_name={dh} name={dh} />
-            </li>
-          ))}
-        </ul>
-
       </div>
     </main>
   );

@@ -34,7 +34,7 @@ function name_to_dh_index(dhName: string, dhArray: Array<DiningHall>) {
   return -1;
 }
 
-function Accordion({ category, index }) {
+function Accordion({ category }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -96,40 +96,15 @@ export default function Page({ searchParams }) {
   return (
     <main>
       <div className="container mx-auto">
-<<<<<<< HEAD
-        {/* Dining Hall Name */}
-        <h1 className="font-semibold py-5 text-4xl text-[#00458C] ">
-          {searchParams.name}
-        </h1>
-
-        {/* List all the meal times and their foods */}
-        {
-          // create an array of arrays of the meal times and their foods
-          meal_times &&
-            Object.entries(meal_times).map(
-              ([meal_time, foods]: Array<string | Array<string> | any>, i) => (
-                <div key={i}>
-                  <h3 className="text-lg py-5">{meal_time}</h3>
-                  <ul>
-                    {foods.map((food: string, j: number) => (
-                      <li key={j}>{food}</li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            )
-        }
-=======
         <h2 className="text-2xl mb-4">{searchParams.name}</h2>
         {categories.map((category, i) => (
           <div key={i}>
             {/* <h3 className="text-lg">{category.name}</h3> */}
             <div>
-              <Accordion category={category} index={i} />
+              <Accordion category={category} />
             </div>
           </div>
         ))}
->>>>>>> origin
       </div>
     </main>
   );
