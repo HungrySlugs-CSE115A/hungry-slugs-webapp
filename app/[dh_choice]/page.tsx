@@ -117,39 +117,12 @@ export default function Page({ searchParams }) {
     setSearchInput(event.target.value);
   };
 
-  // const handleSearch = () => {
-  //   const dhChoice = searchParams.name;
-  //   const searchResultPageUrl = `/SearchResultPage`;
-  //   // Navigate to the search result page
-    
-  //   const allFoods: Food[] = categories.reduce((accumulator: Food[], currentCategory: Category) => {
-  //     return accumulator.concat(currentCategory.sub_categories.flatMap(subCategory => subCategory.foods));
-  //   }, []);
-  
-  //   const filtered = allFoods
-  //     .filter(food => food.name.toLowerCase().includes(searchInput.toLowerCase()))
-  //     .filter((value, index, self) => {
-  //       return self.findIndex(f => f.name === value.name) === index;
-  //     });
-  
-  //   setFilteredFoods(filtered);
-  //   setNoFoodsFound(filtered.length === 0);
-  //   if (filtered.length > 0) {
-  //     const timeOfDay = getTimeOfDay(); 
-  //     const timeIndex = categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
-  //     if (timeIndex !== -1) {
-  //       setExpandedCategory(timeIndex);
-  //     }
-  //   }
-  // };
-
   function handleSearch() {
-      const dhChoice = searchParams.name;
-      const searchResultPageUrl = `/search?diningHall=${encodeURIComponent(searchParams.name)}`;
+    const dhChoice = searchParams.name;
+    const searchResultPageUrl = `/search?diningHall=${encodeURIComponent(searchParams.name)}`;
     // Navigate to the search result page
     window.location.href = searchResultPageUrl;
     localStorage.setItem('diningHall', dhChoice);
-
   }
 
   function getTimeOfDay(): string {
@@ -165,21 +138,6 @@ export default function Page({ searchParams }) {
     } else {
       return "late night";
     }
-  }
-
-  const toggleSearchActive = () => {
-    setSearchActive(!searchActive);
-  };
-
-  function getCategoryName(food: Food): string {
-    for (const category of categories) {
-      for (const subcategory of category.sub_categories) {
-        if (subcategory.foods.some(f => f.name === food.name)) {
-          return category.name;
-        }
-      }
-    }
-    return "";
   }
 
   useEffect(() => {
@@ -201,39 +159,11 @@ export default function Page({ searchParams }) {
       <div className="container mx-auto">
         <h2 className="text-2xl mb-4">{searchParams.name}</h2>
         
-        {/* Search bar */}
-        <div className={`search-bar ${searchActive ? 'active' : ''}`} ref={searchRef}>
-          <input
-            type="text"
-            placeholder="Search categories..."
-            value={searchInput}
-            onChange={handleSearchInputChange}
-            onClick={toggleSearchActive}
-            
-          />
+        {/* Search button */}
+        <div>
           <button onClick={handleSearch}>Search</button>
-          
         </div>
-        
-        {/* Search results */}
-        {filteredFoods.length > 0 && (
-          <div>
-            <h3>Search Results:</h3>
-            <ul>
-              {filteredFoods.map((food, index) => (
-                <li key={index}>{food.name} - {getCategoryName(food)}</li>
-              ))}
-            </ul>
-          </div>
-        )}
 
-        {/* No foods found message */}
-        {noFoodsFound && (
-          <div>
-            <h3>No foods found at this dining hall.</h3>
-          </div>
-        )}
-        
         {/* Categories */}
         {categories.map((category, i) => (
           <div key={i}>
