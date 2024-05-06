@@ -5,7 +5,7 @@ import axios from "axios";
 
 interface Food {
   name: string;
-  extra_data:Array<string>
+  allergies: Array<string>
 }
 
 interface subCategory {
@@ -68,12 +68,14 @@ export default function Page({
           return;
         }
 
-        console.log(a_dh);
+
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+  console.log(categories)
+
 
   return (
     <main>
@@ -87,6 +89,7 @@ export default function Page({
             <div key={i}>
               <h3 className="text-lg">{category.name}</h3>
               <ul>
+
                 {category.sub_categories.map(
                   (sub_category: subCategory, j: number) => (
                     <li key={j}>

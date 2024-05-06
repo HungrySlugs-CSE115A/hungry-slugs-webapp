@@ -28,4 +28,5 @@ class Food:
             return f'{self.name} --> {s}'
 
     def to_dict(self) -> dict:
-        return {"name": self.name}
+        # foodObj = {self.name: self.allergies}
+        return {"name": self.name, self.name: self.allergies}

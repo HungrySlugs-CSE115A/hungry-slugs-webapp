@@ -15,7 +15,7 @@ class SubCategory:
             result += (" " * 2) + str(food) + "\n"
         return result
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict: 
         return {"name": self.name, "foods": [food.to_dict() for food in self.foods]}
 
 

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { GoogleOAuthProvider, GoogleLogin, googleLogout} from "@react-oauth/google";
+import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 
 interface Food {
