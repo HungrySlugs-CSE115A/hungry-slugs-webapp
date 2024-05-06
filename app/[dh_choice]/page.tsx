@@ -22,8 +22,6 @@ interface DiningHall {
   categories: Category[];
 }
 
-
-
 function name_to_dh_index(dhName: string, dhArray: DiningHall[]) {
   for (let i = 0; i < dhArray.length; i++) {
     if (dhArray[i].name === dhName) {
@@ -69,7 +67,6 @@ function Accordion({ category, index, isOpen }) {
   );
 }
 
-
 export default function Page({ searchParams }) {
   const [categories, set_categories] = useState<Category[]>([]);
   const [searchInput, setSearchInput] = useState('');
@@ -93,11 +90,24 @@ export default function Page({ searchParams }) {
           alert("No food categories found");
           return;
         }
+        const timeOfDay = getTimeOfDay(); 
+        const timeIndex = a_dh.categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
+        if (timeIndex !== -1) {
+          setExpandedCategory(timeIndex);
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    const timeOfDay = getTimeOfDay(); 
+    const timeIndex = categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
+    if (timeIndex !== -1) {
+      setExpandedCategory(timeIndex);
+    }
+  }, [categories]);
 
   const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(event.target.value);
@@ -117,9 +127,28 @@ export default function Page({ searchParams }) {
     setFilteredFoods(filtered);
     setNoFoodsFound(filtered.length === 0);
     if (filtered.length > 0) {
-      setExpandedCategory(0);
+      const timeOfDay = getTimeOfDay(); 
+      const timeIndex = categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
+      if (timeIndex !== -1) {
+        setExpandedCategory(timeIndex);
+      }
     }
   };
+
+  function getTimeOfDay(): string {
+    const currentTime = new Date();
+    const currentHour = currentTime.getHours();
+  
+    if (currentHour >= 7 && currentHour < 11) {
+      return "breakfast";
+    } else if (currentHour >= 11 && currentHour < 16) {
+      return "lunch";
+    } else if (currentHour >= 16 && currentHour < 19) {
+      return "dinner";
+    } else {
+      return "late night";
+    }
+  }
 
   function getCategoryName(food: Food): string {
     for (const category of categories) {
@@ -177,3 +206,4 @@ export default function Page({ searchParams }) {
     </main>
   );
 }
+
