@@ -82,7 +82,7 @@ function Home() {
 
     const filtered = allFoods
       .filter(({ food }) => food.name.toLowerCase().includes(searchInput.toLowerCase()))
-      .filter(({ food }, index, self) => self.findIndex(({ food }) => food.name === food.name) === index);
+      // .filter(({ food }, index, self) => self.findIndex(({ food }) => food.name === food.name) === index);
 
     setFilteredFoods(filtered);
     setShowSearchResults(true);
