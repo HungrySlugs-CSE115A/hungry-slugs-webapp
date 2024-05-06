@@ -7,6 +7,7 @@ import './accordian.css';
 
 interface Food {
   name: string;
+  allergies: Array<string>
 }
 
 interface subCategory {
@@ -89,6 +90,8 @@ export default function Page({ searchParams }) {
         console.log(error);
       });
   }, []);
+  console.log(categories)
+
 
   return (
     <main>
