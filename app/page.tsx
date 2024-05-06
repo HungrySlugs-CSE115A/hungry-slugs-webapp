@@ -47,48 +47,92 @@ function ButtonLink(props: any) {
 }
 
 function Home() {
-  const [dhs_names, set_dhs_names] = useState([""]);
+  const [dhs, setDhs] = useState<DiningHall[]>([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredFoods, setFilteredFoods] = useState<{ food: Food; dhName: string; categoryName: string }[]>([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+
   useEffect(() => {
     axios
       .get("http://localhost:8000/myapi/dining-halls/")
       .then((response) => {
-        // get the data from the response
-        const dhs: Array<DiningHall> = response.data["locations"];
-
-        // print the data to the console
-        console.log(dhs);
-
-        // extract the names of the dining halls
-        const dhs_names: string[] = [];
-        dhs.forEach((dh: DiningHall) => {
-          dhs_names.push(dh["name"]);
-        });
-
-        // set the state of the dining hall names
-        set_dhs_names(dhs_names);
+        const dhs: DiningHall[] = response.data["locations"];
+        setDhs(dhs);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSearch = () => {
+    const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
+    dhs.forEach((dh) => {
+      dh.categories.forEach((category) => {
+        category.sub_categories.forEach((subCategory) => {
+          subCategory.foods.forEach((food) => {
+            allFoods.push({ food, dhName: dh.name, categoryName: category.name });
+          });
+        });
+      });
+    });
+
+    const filtered = allFoods
+      .filter(({ food }) => food.name.toLowerCase().includes(searchInput.toLowerCase()))
+      .filter(({ food }, index, self) => self.findIndex(({ food }) => food.name === food.name) === index);
+
+    setFilteredFoods(filtered);
+    setShowSearchResults(true);
+  };
+
   return (
     <main>
       <div>
         {/* Title */}
         <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
-        {/* Display All of the dinning hall names as links */}
-        <ul>
-          {dhs_names.map((dh, i) => (
-            <li key={i}>
-              <ButtonLink button_name={dh} name={dh} />
-            </li>
-          ))}
-        </ul>
+        {/* Search bar */}
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search foods..."
+            value={searchInput}
+            onChange={handleSearchInputChange}
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
+        {/* Display search results if button clicked */}
+        {showSearchResults && (
+          <div>
+            <h3>Search Results:</h3>
+            <ul>
+              {filteredFoods.map(({ food, dhName, categoryName }, index) => (
+                <li key={index}>
+                  {food.name} - {categoryName} ({dhName})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {/* Display all dining halls */}
+        <div>
+          <h2>Dining Halls:</h2>
+          <ul>
+            {dhs.map((dh, i) => (
+              <li key={i}>
+                <ButtonLink button_name={dh.name} name={dh.name} />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </main>
   );
 }
+
+
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);
