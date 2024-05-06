@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import './accordian.css';
+import Link from "next/link";
+
 
 interface Food {
   name: string;
@@ -116,6 +118,10 @@ export default function Page({ searchParams }) {
   };
 
   const handleSearch = () => {
+    const dhChoice = searchParams.name;
+    const searchResultPageUrl = `/SearchResultPage`;
+    // Navigate to the search result page
+    
     const allFoods: Food[] = categories.reduce((accumulator: Food[], currentCategory: Category) => {
       return accumulator.concat(currentCategory.sub_categories.flatMap(subCategory => subCategory.foods));
     }, []);
@@ -194,6 +200,7 @@ export default function Page({ searchParams }) {
             value={searchInput}
             onChange={handleSearchInputChange}
             onClick={toggleSearchActive}
+            
           />
           <button onClick={handleSearch}>Search</button>
         </div>
