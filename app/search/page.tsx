@@ -28,6 +28,8 @@ const BarebonesComponent = () => {
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
 
+  const diningHall = localStorage.getItem('diningHall');
+
   useEffect(() => {
     axios
       .get('http://localhost:8000/myapi/dining-halls/')
@@ -45,13 +47,14 @@ const BarebonesComponent = () => {
   };
 
   const handleSearch = () => {
+    const currentDiningHall = dhs.find((dh) => dh.name === diningHall);
+    if (!currentDiningHall) return;
+
     const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
-    dhs.forEach((dh) => {
-      dh.categories.forEach((category) => {
-        category.sub_categories.forEach((subCategory) => {
-          subCategory.foods.forEach((food) => {
-            allFoods.push({ food, dhName: dh.name, categoryName: category.name });
-          });
+    currentDiningHall.categories.forEach((category) => {
+      category.sub_categories.forEach((subCategory) => {
+        subCategory.foods.forEach((food) => {
+          allFoods.push({ food, dhName: currentDiningHall.name, categoryName: category.name });
         });
       });
     });
@@ -65,18 +68,20 @@ const BarebonesComponent = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    {/* Title */}
-    <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
-    {/* Search bar */}
-    <div className="search-bar" style={{ marginTop: '20px' }}> {/* Adjust margin as needed */}
-      <input
-        type="text"
-        placeholder="Search foods..."
-        value={searchInput}
-        onChange={handleSearchInputChange}
-      />
-      <button onClick={handleSearch}>Search</button>
-    </div>
+      {/* Dining Hall Name */}
+      <h2 style={{ fontSize: '60px', marginBottom: '20px' }}>{diningHall} Search</h2>
+      
+      {/* Search bar */}
+      <div className="search-bar" style={{ marginTop: '20px' }}> {/* Adjust margin as needed */}
+        <input
+          type="text"
+          placeholder="Search foods..."
+          value={searchInput}
+          onChange={handleSearchInputChange}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      
       {/* Display search results if button clicked */}
       {showSearchResults && (
         <div>

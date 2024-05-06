@@ -148,6 +148,7 @@ export default function Page({ searchParams }) {
       const searchResultPageUrl = `/search?diningHall=${encodeURIComponent(searchParams.name)}`;
     // Navigate to the search result page
     window.location.href = searchResultPageUrl;
+    localStorage.setItem('diningHall', dhChoice);
 
   }
 
