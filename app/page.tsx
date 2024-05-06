@@ -51,6 +51,7 @@ function Home() {
   const [searchInput, setSearchInput] = useState('');
   const [filteredFoods, setFilteredFoods] = useState<{ food: Food; dhName: string; categoryName: string }[]>([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [noFoodsFound, setNoFoodsFound] = useState(false);
 
   useEffect(() => {
     axios
@@ -84,6 +85,7 @@ function Home() {
       .filter(({ food }) => food.name.toLowerCase().includes(searchInput.toLowerCase()))
       // .filter(({ food }, index, self) => self.findIndex(({ food }) => food.name === food.name) === index);
 
+    setNoFoodsFound(filtered.length === 0);
     setFilteredFoods(filtered);
     setShowSearchResults(true);
   };
@@ -114,6 +116,12 @@ function Home() {
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+      
+      {noFoodsFound && (
+          <div>
+            <h3>No foods found at this dining hall.</h3>
           </div>
         )}
         {/* Display all dining halls */}
