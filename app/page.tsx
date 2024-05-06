@@ -96,7 +96,7 @@ function Home() {
         {/* Title */}
         <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
         {/* Search bar */}
-        <div className="search-bar">
+        {/* <div className="search-bar">
           <input
             type="text"
             placeholder="Search foods..."
@@ -104,7 +104,7 @@ function Home() {
             onChange={handleSearchInputChange}
           />
           <button onClick={handleSearch}>Search</button>
-        </div>
+        </div> */}
         {/* Display search results if button clicked */}
         {showSearchResults && (
           <div>

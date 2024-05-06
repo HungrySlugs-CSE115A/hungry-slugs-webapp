@@ -117,31 +117,39 @@ export default function Page({ searchParams }) {
     setSearchInput(event.target.value);
   };
 
-  const handleSearch = () => {
-    const dhChoice = searchParams.name;
-    const searchResultPageUrl = `/SearchResultPage`;
-    // Navigate to the search result page
+  // const handleSearch = () => {
+  //   const dhChoice = searchParams.name;
+  //   const searchResultPageUrl = `/SearchResultPage`;
+  //   // Navigate to the search result page
     
-    const allFoods: Food[] = categories.reduce((accumulator: Food[], currentCategory: Category) => {
-      return accumulator.concat(currentCategory.sub_categories.flatMap(subCategory => subCategory.foods));
-    }, []);
+  //   const allFoods: Food[] = categories.reduce((accumulator: Food[], currentCategory: Category) => {
+  //     return accumulator.concat(currentCategory.sub_categories.flatMap(subCategory => subCategory.foods));
+  //   }, []);
   
-    const filtered = allFoods
-      .filter(food => food.name.toLowerCase().includes(searchInput.toLowerCase()))
-      .filter((value, index, self) => {
-        return self.findIndex(f => f.name === value.name) === index;
-      });
+  //   const filtered = allFoods
+  //     .filter(food => food.name.toLowerCase().includes(searchInput.toLowerCase()))
+  //     .filter((value, index, self) => {
+  //       return self.findIndex(f => f.name === value.name) === index;
+  //     });
   
-    setFilteredFoods(filtered);
-    setNoFoodsFound(filtered.length === 0);
-    if (filtered.length > 0) {
-      const timeOfDay = getTimeOfDay(); 
-      const timeIndex = categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
-      if (timeIndex !== -1) {
-        setExpandedCategory(timeIndex);
-      }
-    }
-  };
+  //   setFilteredFoods(filtered);
+  //   setNoFoodsFound(filtered.length === 0);
+  //   if (filtered.length > 0) {
+  //     const timeOfDay = getTimeOfDay(); 
+  //     const timeIndex = categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
+  //     if (timeIndex !== -1) {
+  //       setExpandedCategory(timeIndex);
+  //     }
+  //   }
+  // };
+
+  function handleSearch() {
+      const dhChoice = searchParams.name;
+      const searchResultPageUrl = `/search?diningHall=${encodeURIComponent(searchParams.name)}`;
+    // Navigate to the search result page
+    window.location.href = searchResultPageUrl;
+
+  }
 
   function getTimeOfDay(): string {
     const currentTime = new Date();
@@ -203,6 +211,7 @@ export default function Page({ searchParams }) {
             
           />
           <button onClick={handleSearch}>Search</button>
+          
         </div>
         
         {/* Search results */}
