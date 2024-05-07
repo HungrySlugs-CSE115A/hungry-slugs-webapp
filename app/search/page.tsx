@@ -32,7 +32,7 @@ const BarebonesComponent = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/myapi/dining-halls/')
+      .get('http://localhost:8000/myapi/locations/')
       .then((response) => {
         const dhsData: DiningHall[] = response.data.locations;
         setDhs(dhsData);
@@ -70,7 +70,7 @@ const BarebonesComponent = () => {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* Dining Hall Name */}
       <h2 style={{ fontSize: '60px', marginBottom: '20px' }}>{diningHall} Search</h2>
-      
+
       {/* Search bar */}
       <div className="search-bar" style={{ marginTop: '20px' }}> {/* Adjust margin as needed */}
         <input
@@ -81,7 +81,7 @@ const BarebonesComponent = () => {
         />
         <button onClick={handleSearch}>Search</button>
       </div>
-      
+
       {/* Display search results if button clicked */}
       {showSearchResults && (
         <div>

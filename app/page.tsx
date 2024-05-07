@@ -56,7 +56,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/myapi/dining-halls/")
+      .get("http://localhost:8000/myapi/locations/")
       .then((response) => {
         const dhs: DiningHall[] = response.data["locations"];
         setDhs(dhs);
@@ -119,7 +119,7 @@ function Home() {
             </ul>
           </div>
         )}
-      
+
       {noFoodsFound && (
           <div>
             <h3>No foods found at this dining hall.</h3>
