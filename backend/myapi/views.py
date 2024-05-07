@@ -2,13 +2,17 @@ from django.conf.locale import fr
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .db_functions.locations import get_all_locations_from_db,  remove_add_locations_to_db
+from .db_functions.locations import (
+    get_all_locations_from_db,
+    remove_add_locations_to_db,
+)
 from .db_functions.tasks import set_task_last_update, get_task_last_update
 from webscraper.food_locations import FoodLocations
 
 
 from django.utils import timezone
 from datetime import datetime
+
 
 # Create your views here.
 @api_view(["GET"])
