@@ -95,8 +95,16 @@ export default function Page({ searchParams }) {
 
   return (
     <main>
+
       <div className="container mx-auto">
-        <h2 className="text-2xl mb-4">{searchParams.name}</h2>
+        <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
+          {searchParams.name}
+        </h1>
+
+
+        
+
+
         {categories.map((category, i) => (
           <div key={i}>
             {/* <h3 className="text-lg">{category.name}</h3> */}
