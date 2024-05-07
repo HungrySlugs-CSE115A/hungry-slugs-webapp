@@ -1,7 +1,4 @@
 from django.db import models
-from django.conf.locale import ta
-from celery.app import task
-from requests import get
 from db_connection import db
 
 # Create your models here.
