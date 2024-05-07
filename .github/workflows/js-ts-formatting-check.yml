@@ -2,22 +2,17 @@ name: Prettier Check
 
 on:
   push: {}
-  pull_request: {}
 
 jobs:
   prettier:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@4
-
-      - name: Use latest Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'node'  # Use 'node' for latest stable version
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
-        run: npm ci  # Or yarn install if you use Yarn
+        run: bun install
 
       - name: Run Prettier check
-        run: npx prettier --check '**/*.{js,ts}'
+        run: bunx prettier --check '**/*.{js,ts,jsx,tsx}'
