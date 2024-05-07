@@ -33,7 +33,7 @@ function name_to_dh_index(dhName: string, dhArray: DiningHall[]) {
   return -1;
 }
 
-function Accordion({ category, index, isOpen }) {
+function Accordion({ category, isOpen }) {
   const [isOpenState, setIsOpenState] = useState(isOpen);
 
   useEffect(() => {
@@ -187,7 +187,6 @@ export default function Page({ searchParams }) {
           <div key={i}>
             <Accordion
               category={category}
-              index={i}
               isOpen={expandedCategory === i}
             />
           </div>

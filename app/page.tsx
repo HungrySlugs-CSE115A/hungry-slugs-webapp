@@ -53,6 +53,7 @@ function ButtonLink(props: any) {
 
 function Home() {
   const [dhs, setDhs] = useState<DiningHall[]>([]);
+  const [dhs_names, set_dhs_names] = useState([""]);
   const [searchInput, setSearchInput] = useState("");
   const [filteredFoods, setFilteredFoods] = useState<
     { food: Food; dhName: string; categoryName: string }[]
@@ -66,6 +67,7 @@ function Home() {
       .then((response) => {
         const dhs: DiningHall[] = response.data["locations"];
         setDhs(dhs);
+
       })
       .catch((error) => {
         console.log(error);
@@ -148,9 +150,9 @@ function Home() {
         <h3 className="w-full">
 
           <ul className="">
-            {dhs_names.map((dh, i) => (
+            {dhs.map((dh, i) => (
               <li key={i}>
-                <DhBar name={dh} />
+                <DhBar name={dh.name} />
               </li>
             ))}
           </ul>
