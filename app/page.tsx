@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+//import LoginPage from "@/app/loginPage/page";
+
 
 
 interface DiningHall {
@@ -57,6 +59,7 @@ export default function Home() {
   return (
     <main>
       <div>
+
         {/* Title */}
         <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
         {/* Display All of the dinning hall names as links */}
@@ -68,6 +71,10 @@ export default function Home() {
           ))}
         </ul>
       </div>
+      {/* Account Button */}
+      <Link href="/loginPage" className="hover:underline decoration-yellow-400 underline-offset-8 fixed top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl flex items-center justify-center">
+        Account
+      </Link>
     </main>
   );
 }

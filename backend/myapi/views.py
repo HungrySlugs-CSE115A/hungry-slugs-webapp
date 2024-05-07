@@ -41,8 +41,10 @@ def create_user(request):
             'last_name': last_name
         })
         if created:
+            #print(user)
             return Response({'message': 'User created successfully'})
         else:
+            #print(user)
             return Response({'message': 'User already exists'})
     except Exception as e:
         return Response({'error': str(e)})

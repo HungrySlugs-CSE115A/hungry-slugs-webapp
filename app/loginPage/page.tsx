@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
@@ -10,8 +10,10 @@ interface User {
     picture: string;
 }
 
-export default function Page() {
+
+const LoginPage = () => {
     const [user, setUser] = useState<User | null>(null);
+    console.log("Page linked");
 
     useEffect(() => {
       console.log("Page component loaded and GoogleOAuthProvider should be active");
@@ -33,7 +35,7 @@ export default function Page() {
         });
 
         // Send user data to backend
-        axios.post('http://localhost:8000/api/users/', {
+        axios.post('http://localhost:8000/myapi/users/', {
           name: decoded.name,
           email: decoded.email,
           picture: decoded.picture
@@ -60,3 +62,4 @@ export default function Page() {
       </GoogleOAuthProvider>
     );
 }
+export default LoginPage;
