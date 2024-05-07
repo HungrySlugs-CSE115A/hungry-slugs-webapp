@@ -26,17 +26,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <GoogleOAuthProvider clientId={'1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com'}>
-      <html lang="en">
-        <body className={inter.className}>
-          <Navbar height={navbarHeight} />
-          <div style={{ paddingTop: navbarHeight }}>
-            {children}
-          </div>
+    <html lang="en">
+      <body className={inter.className}>
+        <Navbar height={navbarHeight} />
+        <div style={{ paddingTop: navbarHeight }}>
+          {children}
+        </div>
 
-        </body>
+      </body>
 
-      </html>
-    </GoogleOAuthProvider>
+    </html>
   );
 }

@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+//const googleclientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 interface User {
     name: string;
     email: string;
@@ -45,7 +46,7 @@ const LoginPage = () => {
       };
 
     return (
-      <GoogleOAuthProvider clientId="1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={'1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com'}>
         <GoogleLogin
           onSuccess={handleLoginSuccess}
           onError={() => {
@@ -55,7 +56,7 @@ const LoginPage = () => {
         {user && (
           <div>
             <img src={user.picture} alt="User profile" />
-            <h2>{user.name} - {user.email}</h2>
+            <h2 className="text-[#003C6C] font-medium text-xl">Welcome {user.name} - {user.email}</h2>
           </div>
         )}
         <button onClick={handleLogout} className="p-2 mt-2 text-white bg-red-600 rounded">Logout</button>
