@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 interface Food {
   name: string;
@@ -23,16 +23,18 @@ interface DiningHall {
 
 const BarebonesComponent = () => {
   const [dhs, setDhs] = useState<DiningHall[]>([]);
-  const [searchInput, setSearchInput] = useState<string>('');
-  const [filteredFoods, setFilteredFoods] = useState<{ food: Food; dhName: string; categoryName: string }[]>([]);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [filteredFoods, setFilteredFoods] = useState<
+    { food: Food; dhName: string; categoryName: string }[]
+  >([]);
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
 
-  const diningHall = localStorage.getItem('diningHall');
+  const diningHall = localStorage.getItem("diningHall");
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/myapi/locations/')
+      .get("http://localhost:8000/myapi/locations/")
       .then((response) => {
         const dhsData: DiningHall[] = response.data.locations;
         setDhs(dhsData);
@@ -42,7 +44,9 @@ const BarebonesComponent = () => {
       });
   }, []);
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSearchInput(event.target.value);
   };
 
@@ -54,12 +58,18 @@ const BarebonesComponent = () => {
     currentDiningHall.categories.forEach((category) => {
       category.sub_categories.forEach((subCategory) => {
         subCategory.foods.forEach((food) => {
-          allFoods.push({ food, dhName: currentDiningHall.name, categoryName: category.name });
+          allFoods.push({
+            food,
+            dhName: currentDiningHall.name,
+            categoryName: category.name,
+          });
         });
       });
     });
 
-    const filtered = allFoods.filter(({ food }) => food.name.toLowerCase().includes(searchInput.toLowerCase()));
+    const filtered = allFoods.filter(({ food }) =>
+      food.name.toLowerCase().includes(searchInput.toLowerCase()),
+    );
 
     setNoFoodsFound(filtered.length === 0);
     setFilteredFoods(filtered);
@@ -67,12 +77,18 @@ const BarebonesComponent = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       {/* Dining Hall Name */}
-      <h2 style={{ fontSize: '60px', marginBottom: '20px' }}>{diningHall} Search</h2>
+      <h2 style={{ fontSize: "60px", marginBottom: "20px" }}>
+        {diningHall} Search
+      </h2>
 
       {/* Search bar */}
-      <div className="search-bar" style={{ marginTop: '20px' }}> {/* Adjust margin as needed */}
+      <div className="search-bar" style={{ marginTop: "20px" }}>
+        {" "}
+        {/* Adjust margin as needed */}
         <input
           type="text"
           placeholder="Search foods..."

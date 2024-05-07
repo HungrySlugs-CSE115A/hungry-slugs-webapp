@@ -1,33 +1,32 @@
-
 .accordion {
-    background-color: #ffffff;
-    border: transparent;
-  }
-  .accordion-item {
-    border: 1px solid #1321e1;
-    margin-bottom: 10px;
-  }
-  .accordion-button {
-    background-color: transparent; /* Transparent background */
-    color: #003c6c; /* Category font color */
-    padding: 10px;
-    font-size: 16px;
-    border-bottom: 1px solid #ffffff;
-  }
-  .accordion-collapse {
-    padding: 10px;
-  }
+  background-color: #ffffff;
+  border: transparent;
+}
+.accordion-item {
+  border: 1px solid #1321e1;
+  margin-bottom: 10px;
+}
+.accordion-button {
+  background-color: transparent; /* Transparent background */
+  color: #003c6c; /* Category font color */
+  padding: 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #ffffff;
+}
+.accordion-collapse {
+  padding: 10px;
+}
 
-  .sub-category {
-    background-color: transparent; 
-    padding: 10px; 
-    border-radius: 8px;
-    border-bottom: 1px solid #fdc700;
-  }
+.sub-category {
+  background-color: transparent;
+  padding: 10px;
+  border-radius: 8px;
+  border-bottom: 1px solid #fdc700;
+}
 
-  .food-item {
-    background-color: #9c9c9c;
-    padding: 8px; 
-    margin-bottom: 4px;
-    border-radius: 4px;
-  }
+.food-item {
+  background-color: #9c9c9c;
+  padding: 8px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+}

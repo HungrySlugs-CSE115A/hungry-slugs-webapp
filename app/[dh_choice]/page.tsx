@@ -1,13 +1,12 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import './accordian.css';
+import "./accordian.css";
 import Link from "next/link";
-
 
 interface Food {
   name: string;
-  allergies: Array<string>
+  allergies: Array<string>;
 }
 
 interface subCategory {
@@ -48,9 +47,7 @@ function Accordion({ category, index, isOpen }) {
         onClick={() => setIsOpenState(!isOpenState)}
       >
         {category.name}
-        <span className="float-right">
-          {isOpenState ? "▲" : "▼"}
-        </span>
+        <span className="float-right">{isOpenState ? "▲" : "▼"}</span>
       </button>
       {isOpenState && (
         <div className="accordion-collapse p-3">
@@ -59,7 +56,9 @@ function Accordion({ category, index, isOpen }) {
               <h4 className="sub-category">{sub_category.name}</h4>
               <ul className="pl-4">
                 {sub_category.foods.map((food, k) => (
-                  <li key={k} className="food-item">{food.name}</li>
+                  <li key={k} className="food-item">
+                    {food.name}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -72,7 +71,7 @@ function Accordion({ category, index, isOpen }) {
 
 export default function Page({ searchParams }) {
   const [categories, set_categories] = useState<Category[]>([]);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const [filteredFoods, setFilteredFoods] = useState<Food[]>([]);
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
   const [noFoodsFound, setNoFoodsFound] = useState(false);
@@ -96,7 +95,9 @@ export default function Page({ searchParams }) {
           return;
         }
         const timeOfDay = getTimeOfDay();
-        const timeIndex = a_dh.categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
+        const timeIndex = a_dh.categories.findIndex(
+          (category) => category.name.toLowerCase() === timeOfDay,
+        );
         if (timeIndex !== -1) {
           setExpandedCategory(timeIndex);
         }
@@ -105,18 +106,21 @@ export default function Page({ searchParams }) {
         console.log(error);
       });
   }, []);
-  console.log(categories)
-
+  console.log(categories);
 
   useEffect(() => {
     const timeOfDay = getTimeOfDay();
-    const timeIndex = categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
+    const timeIndex = categories.findIndex(
+      (category) => category.name.toLowerCase() === timeOfDay,
+    );
     if (timeIndex !== -1) {
       setExpandedCategory(timeIndex);
     }
   }, [categories]);
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSearchInput(event.target.value);
   };
 
@@ -125,7 +129,7 @@ export default function Page({ searchParams }) {
     const searchResultPageUrl = `/search?diningHall=${encodeURIComponent(searchParams.name)}`;
     // Navigate to the search result page
     window.location.href = searchResultPageUrl;
-    localStorage.setItem('diningHall', dhChoice);
+    localStorage.setItem("diningHall", dhChoice);
   }
 
   function getTimeOfDay(): string {
@@ -145,7 +149,10 @@ export default function Page({ searchParams }) {
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setSearchActive(false);
       }
     };
@@ -170,7 +177,11 @@ export default function Page({ searchParams }) {
         {/* Categories */}
         {categories.map((category, i) => (
           <div key={i}>
-            <Accordion category={category} index={i} isOpen={expandedCategory === i} />
+            <Accordion
+              category={category}
+              index={i}
+              isOpen={expandedCategory === i}
+            />
           </div>
         ))}
       </div>
