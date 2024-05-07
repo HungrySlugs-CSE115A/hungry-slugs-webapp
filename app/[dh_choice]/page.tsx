@@ -81,7 +81,7 @@ export default function Page({ searchParams }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/myapi/dining-halls/")
+      .get("http://localhost:8000/myapi/locations/")
       .then((response) => {
         const dhs = response.data.locations;
         const dh_index = name_to_dh_index(searchParams.name, dhs);
@@ -95,7 +95,7 @@ export default function Page({ searchParams }) {
           alert("No food categories found");
           return;
         }
-        const timeOfDay = getTimeOfDay(); 
+        const timeOfDay = getTimeOfDay();
         const timeIndex = a_dh.categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
         if (timeIndex !== -1) {
           setExpandedCategory(timeIndex);
@@ -109,7 +109,7 @@ export default function Page({ searchParams }) {
 
 
   useEffect(() => {
-    const timeOfDay = getTimeOfDay(); 
+    const timeOfDay = getTimeOfDay();
     const timeIndex = categories.findIndex(category => category.name.toLowerCase() === timeOfDay);
     if (timeIndex !== -1) {
       setExpandedCategory(timeIndex);
@@ -131,7 +131,7 @@ export default function Page({ searchParams }) {
   function getTimeOfDay(): string {
     const currentTime = new Date();
     const currentHour = currentTime.getHours();
-  
+
     if (currentHour >= 7 && currentHour < 11) {
       return "breakfast";
     } else if (currentHour >= 11 && currentHour < 16) {
@@ -161,7 +161,7 @@ export default function Page({ searchParams }) {
     <main>
       <div className="container mx-auto">
         <h2 className="text-2xl mb-4">{searchParams.name}</h2>
-        
+
         {/* Search button */}
         <div>
           <button onClick={handleSearch}>Search</button>

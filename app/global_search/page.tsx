@@ -30,7 +30,7 @@ const BarebonesComponent = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/myapi/dining-halls/')
+      .get('http://localhost:8000/myapi/locations/')
       .then((response) => {
         const dhsData: DiningHall[] = response.data.locations;
         setDhs(dhsData);
