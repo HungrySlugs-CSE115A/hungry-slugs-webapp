@@ -33,7 +33,7 @@ function name_to_dh_index(dhName: string, dhArray: DiningHall[]) {
   return -1;
 }
 
-function Accordion({ category, index, isOpen }) {
+function Accordion({ category, isOpen }) {
   const [isOpenState, setIsOpenState] = useState(isOpen);
 
   useEffect(() => {
@@ -166,8 +166,16 @@ export default function Page({ searchParams }) {
 
   return (
     <main>
+
       <div className="container mx-auto">
-        <h2 className="text-2xl mb-4">{searchParams.name}</h2>
+        <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
+          {searchParams.name}
+        </h1>
+
+
+
+
+
 
         {/* Search button */}
         <div>
@@ -179,7 +187,6 @@ export default function Page({ searchParams }) {
           <div key={i}>
             <Accordion
               category={category}
-              index={i}
               isOpen={expandedCategory === i}
             />
           </div>

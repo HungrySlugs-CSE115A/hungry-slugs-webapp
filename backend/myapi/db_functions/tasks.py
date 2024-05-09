@@ -1,4 +1,3 @@
-from celery.app import task
 from ..models import tasks_collection
 from datetime import datetime
 

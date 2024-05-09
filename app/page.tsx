@@ -23,6 +23,7 @@ interface Category {
   name: string;
   sub_categories: Array<subCategory>;
 }
+import DhBar from "@/components/dh_bar_main";
 
 interface DiningHall {
   name: string;
@@ -52,6 +53,7 @@ function ButtonLink(props: any) {
 
 function Home() {
   const [dhs, setDhs] = useState<DiningHall[]>([]);
+  const [dhs_names, set_dhs_names] = useState([""]);
   const [searchInput, setSearchInput] = useState("");
   const [filteredFoods, setFilteredFoods] = useState<
     { food: Food; dhName: string; categoryName: string }[]
@@ -65,6 +67,7 @@ function Home() {
       .then((response) => {
         const dhs: DiningHall[] = response.data["locations"];
         setDhs(dhs);
+
       })
       .catch((error) => {
         console.log(error);
@@ -106,18 +109,10 @@ function Home() {
   return (
     <main>
       <div>
-        {/* Title */}
-        <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
-        {/* Search bar */}
-        {/* <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search foods..."
-            value={searchInput}
-            onChange={handleSearchInputChange}
-          />
-          <button onClick={handleSearch}>Search</button>
-        </div> */}
+        <h1 className="font-semibold py-5 text-4xl text-[#003C6C] flex items-center justify-center">
+          Locations
+        </h1>
+
         {/* Display search results if button clicked */}
         {showSearchResults && (
           <div>
@@ -137,17 +132,32 @@ function Home() {
             <h3>No foods found at this dining hall.</h3>
           </div>
         )}
-        {/* Display all dining halls */}
-        <div>
-          <h2>Dining Halls:</h2>
-          <ul>
+
+        <h2 className="font-medium text-2xl text-[#003C6C]  flex items-center justify-center pb-5">
+          <ul className="flex flex-col  md:p-0  md:flex-row md:border-0 ">
+            <li className="">
+              <button className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Dining Halls</button>
+            </li>
+            <li>
+              <a href="#" className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Markets</a>
+            </li>
+            <li>
+              <a href="#" className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Cafes & Other</a>{/* pr-X dicates how far off right we want.  */}
+            </li>
+          </ul>
+        </h2>
+
+        <h3 className="w-full">
+
+          <ul className="">
             {dhs.map((dh, i) => (
               <li key={i}>
-                <ButtonLink button_name={dh.name} name={dh.name} />
+                <DhBar name={dh.name} />
               </li>
             ))}
           </ul>
-        </div>
+        </h3>
+
       </div>
     </main>
   );
