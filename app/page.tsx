@@ -8,6 +8,7 @@ interface Food {
   extra_data: Array<string>;
 }
 
+
 interface subCategory {
   name: string;
   foods: Array<Food>;
