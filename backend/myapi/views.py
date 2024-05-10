@@ -1,3 +1,14 @@
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth.models import User
+from .webscraper.food_options import FoodOptions
+from .db_functions.dining_halls import get_all_dining_halls_from_db
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
+from social_django.utils import psa
 from django.conf.locale import fr
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -59,3 +70,39 @@ def get_locations(request):
     json_data = {"locations": locations}
 
     return Response(json_data)
+#user information
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@psa('social:complete')
+def create_user(request,backend):
+    # Extract the token sent from the frontend
+    
+    token = request.data.get('access_token')
+    print(token)
+
+    # `do_auth` method will try to authenticate the token with Google
+    try:
+        user = request.backend.do_auth(token)
+    except Exception as e:
+        # Log the exception to understand why authentication fails
+        print(f'Authentication failed: {str(e)}')
+        return Response(
+            {'errors': {'token': 'Authentication failed', 'detail': str(e)}},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
+
+    if user:
+        # If user is authenticated, get or create a token for your application
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({
+            'id': user.id,
+            'name': user.username,
+            'email': user.email,
+            'token': token.key  # Send the token key to the frontend
+        })
+    else:
+        return Response(
+            {'errors': {'token': 'Invalid token'}},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
