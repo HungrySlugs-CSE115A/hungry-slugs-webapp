@@ -2,16 +2,37 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-//import LoginPage from "@/app/loginPage/page";
+import {
+  GoogleOAuthProvider,
+  GoogleLogin,
+  googleLogout,
+} from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
+interface Food {
+  name: string;
+  extra_data: Array<string>;
+}
 
+interface subCategory {
+  name: string;
+  foods: Array<Food>;
+}
+
+interface Category {
+  name: string;
+  sub_categories: Array<subCategory>;
+}
+import DhBar from "@/components/dh_bar_main";
 
 interface DiningHall {
   name: string;
-  meals: any;
+  categories: Category;
 }
-
-
+interface User {
+  name: string;
+  picture: string;
+}
 
 function ButtonLink(props: any) {
   return (
@@ -30,46 +51,113 @@ function ButtonLink(props: any) {
   );
 }
 
-export default function Home() {
+function Home() {
+  const [dhs, setDhs] = useState<DiningHall[]>([]);
   const [dhs_names, set_dhs_names] = useState([""]);
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredFoods, setFilteredFoods] = useState<
+    { food: Food; dhName: string; categoryName: string }[]
+  >([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [noFoodsFound, setNoFoodsFound] = useState(false);
+
   useEffect(() => {
     axios
-      .get("http://localhost:8000/myapi/dining-halls/")
+      .get("http://localhost:8000/myapi/locations/")
       .then((response) => {
-        // get the data from the response
-        const dhs: Array<DiningHall> = response.data["dining_halls"];
+        const dhs: DiningHall[] = response.data["locations"];
+        setDhs(dhs);
 
-        // print the data to the console
-        console.log(dhs);
-
-        // extract the names of the dining halls
-        const dhs_names_temp: string[] = [];
-        dhs.forEach((value: DiningHall) => {
-          dhs_names_temp.push(value.name);
-        });
-
-        // set the state of the dining hall names
-        set_dhs_names(dhs_names_temp);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSearch = () => {
+    const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
+    dhs.forEach((dh) => {
+      dh.categories.forEach((category) => {
+        category.sub_categories.forEach((subCategory) => {
+          subCategory.foods.forEach((food) => {
+            allFoods.push({
+              food,
+              dhName: dh.name,
+              categoryName: category.name,
+            });
+          });
+        });
+      });
+    });
+
+    const filtered = allFoods.filter(({ food }) =>
+      food.name.toLowerCase().includes(searchInput.toLowerCase()),
+    );
+    // .filter(({ food }, index, self) => self.findIndex(({ food }) => food.name === food.name) === index);
+
+    setNoFoodsFound(filtered.length === 0);
+    setFilteredFoods(filtered);
+    setShowSearchResults(true);
+  };
+
   return (
     <main>
       <div>
+        <h1 className="font-semibold py-5 text-4xl text-[#003C6C] flex items-center justify-center">
+          Locations
+        </h1>
 
-        {/* Title */}
-        <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
-        {/* Display All of the dinning hall names as links */}
-        <ul>
-          {dhs_names.map((dh, i) => (
-            <li key={i}>
-              <ButtonLink button_name={dh} name={dh} />
+        {/* Display search results if button clicked */}
+        {showSearchResults && (
+          <div>
+            <h3>Search Results:</h3>
+            <ul>
+              {filteredFoods.map(({ food, dhName, categoryName }, index) => (
+                <li key={index}>
+                  {food.name} - {categoryName} ({dhName})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {noFoodsFound && (
+          <div>
+            <h3>No foods found at this dining hall.</h3>
+          </div>
+        )}
+
+        <h2 className="font-medium text-2xl text-[#003C6C]  flex items-center justify-center pb-5">
+          <ul className="flex flex-col  md:p-0  md:flex-row md:border-0 ">
+            <li className="">
+              <button className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Dining Halls</button>
             </li>
-          ))}
-        </ul>
+            <li>
+              <a href="#" className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Markets</a>
+            </li>
+            <li>
+              <a href="#" className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Cafes & Other</a>{/* pr-X dicates how far off right we want.  */}
+            </li>
+          </ul>
+        </h2>
+
+        <h3 className="w-full">
+
+          <ul className="">
+            {dhs.map((dh, i) => (
+              <li key={i}>
+                <DhBar name={dh.name} />
+              </li>
+            ))}
+          </ul>
+        </h3>
+
       </div>
       {/* Account Button */}
       <Link href="/loginPage" className="hover:underline decoration-yellow-400 underline-offset-8 fixed top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl flex items-center justify-center">
@@ -79,3 +167,51 @@ export default function Home() {
   );
 }
 
+export default function Page() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    console.log(
+      "Page component loaded and GoogleOAuthProvider should be active",
+    );
+  }, []);
+
+  const handleLogout = () => {
+    googleLogout();
+    setUser(null); // Clear user state on logout
+    console.log("Logout Successful");
+  };
+
+  const handleLoginSuccess = (credentialResponse: any) => {
+    console.log("Login Successful", credentialResponse);
+    const decoded: User = jwtDecode(credentialResponse.credential);
+    setUser({
+      name: decoded.name,
+      picture: decoded.picture,
+    });
+  };
+
+  return (
+    <GoogleOAuthProvider clientId="1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com">
+      <Home />
+      <GoogleLogin
+        onSuccess={handleLoginSuccess}
+        onError={() => {
+          console.log("Login Failed");
+        }}
+      />
+      {user && (
+        <div>
+          <img src={user.picture} alt="User profile" />
+          <h2>{user.name}</h2>
+        </div>
+      )}
+      <button
+        onClick={handleLogout}
+        className="p-2 mt-2 text-white bg-red-600 rounded"
+      >
+        Logout
+      </button>
+    </GoogleOAuthProvider>
+  );
+}

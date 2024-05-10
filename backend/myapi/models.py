@@ -8,19 +8,27 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=50, blank=True)
     email = models.EmailField(blank=True)
 
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-# Dining Hall Model
-dining_hall_collection = db["dining_hall"]
+# locations Model
+locations_collection = db["locations"]
+
+# Food Model
+foods_collection = db["food"]
+
+# Users Model
+users_collection = db["users"]
+
+# Tasks Model
+tasks_collection = db["tasks"]
 
 
-# NOTE: This is temporary and will be replaced with a background task
-from .webscraper.food_options import FoodOptions
-# Fetch dining halls
-fo = FoodOptions()
-# Get dining halls as a list of json objects
-dining_halls: list[dict] = fo.jsonify_dining_halls()
-# Add dining halls to db
-from .db_functions.dining_halls import remove_add_dining_halls_to_db
-remove_add_dining_halls_to_db(dining_halls)
+# # NOTE: This is temporary and will be replaced with a background task
+# from webscraper.food_locations import FoodLocations
 
+# # Fetch dining halls
+# fo = FoodLocations()
+# # Get dining halls as a list of json objects
+# dining_halls: list[dict] = [dh.to_dict() for dh in fo.get_locations()]
+# # Add dining halls to db
+# from .db_functions.dining_halls import remove_add_dining_halls_to_db
+
+# remove_add_dining_halls_to_db(dining_halls)

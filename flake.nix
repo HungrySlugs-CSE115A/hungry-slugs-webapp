@@ -15,7 +15,6 @@
               inherit system;
             };
             my-python = pkgs.python3.withPackages (ps: with ps; [
-              black
               pip
             ]);
           in
@@ -46,6 +45,9 @@
               export PATH="$PIP_PREFIX/bin:$PATH"
               unset SOURCE_DATE_EPOCH
               pip install -r requirements.txt
+
+              # Install the npm packages
+              bun install
             '';
           };
       });
