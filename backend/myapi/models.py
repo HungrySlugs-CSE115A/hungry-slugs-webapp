@@ -2,11 +2,6 @@ from django.db import models
 from db_connection import db
 from django.contrib.auth.models import User
 # Create your models here.
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=50, blank=True)
-    last_name = models.CharField(max_length=50, blank=True)
-    email = models.EmailField(blank=True)
 
 # locations Model
 locations_collection = db["locations"]

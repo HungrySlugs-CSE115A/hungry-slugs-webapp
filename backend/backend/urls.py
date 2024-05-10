@@ -25,5 +25,6 @@ urlpatterns = [
     path("myapi/", include("myapi.urls")),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('auth/',include('drf_social_oauth2.urls',namespace='drf')),
+    path('social-auth/', include('social_django.urls', namespace='social')),
     
 ]

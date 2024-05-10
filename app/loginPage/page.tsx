@@ -1,66 +1,82 @@
-"use client"
-import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
+"use client";
+import { useEffect, useState } from "react";
+import { GoogleOAuthProvider, useGoogleLogin, googleLogout, TokenResponse} from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect } from "react";
 import axios from "axios";
 
-//const googleclientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 interface User {
-    name: string;
-    email: string;
-    picture: string;
+  name: string;
+  email: string;
+  picture: string;
 }
-
-
 const LoginPage = () => {
-    const [user, setUser] = useState<User | null>(null);
-    console.log("Page linked");
-
-    useEffect(() => {
-      console.log("Page component loaded and GoogleOAuthProvider should be active");
-    }, []);
-
-    const handleLogout = () => {
-      googleLogout();
-      setUser(null); // Clear user state on logout
-      console.log('Logout Successful');
-    };
-
-    const handleLoginSuccess = (credentialResponse: any) => {
-        console.log('Login Successful', credentialResponse);
-        const decoded: User = jwtDecode(credentialResponse.credential);
-        setUser({
-          name: decoded.name,
-          email: decoded.email,
-          picture: decoded.picture
-        });
-
-        // Send user data to backend
-        axios.post('http://localhost:8000/myapi/users/', {
-          name: decoded.name,
-          email: decoded.email,
-          picture: decoded.picture
-        })
-        .then(response => console.log('User saved in backend', response))
-        .catch(error => console.error('Failed to save user', error));
-      };
-
-    return (
-      <GoogleOAuthProvider clientId={'1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com'}>
-        <GoogleLogin
-          onSuccess={handleLoginSuccess}
-          onError={() => {
-            console.log('Login Failed');
-          }}
-        />
-        {user && (
-          <div>
-            <img src={user.picture} alt="User profile" />
-            <h2 className="text-[#003C6C] font-medium text-xl">Welcome {user.name} - {user.email}</h2>
-          </div>
-        )}
-        <button onClick={handleLogout} className="p-2 mt-2 text-white bg-red-600 rounded">Logout</button>
-      </GoogleOAuthProvider>
-    );
+  return(
+    <GoogleOAuthProvider clientId={'1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com'}>
+      <LoginComponent/>
+    </GoogleOAuthProvider>
+  )
 }
+
+const LoginComponent = () => {
+  const [user, setUser] = useState<User | null>(null);
+  
+
+
+  useEffect(() => {
+    console.log("LoginPage component mounted");
+  }, []);
+
+  const handleLoginSuccess = (tokenResponse: any) => {
+    if ('code' in tokenResponse) {
+      // Handle authorization code flow
+      console.log('Authorization Code:', tokenResponse.code);
+      // Exchange code for tokens here
+    } else {
+      // Handle implicit flow
+      console.log('Token Received:', tokenResponse.access_token);
+      const decoded: User = jwtDecode(tokenResponse.id_token);
+      setUser({
+        name: decoded.name,
+        email: decoded.email,
+        picture: decoded.picture
+      });
+      // Send token to backend if necessary
+      axios.post('http://localhost:8000/myapi/users/google-oauth2/', { token: tokenResponse.access_token })
+        .then(res => console.log('Backend login successful', res))
+        .catch(err => console.error('Backend login failed', err));
+    }
+
+  };
+  const login = useGoogleLogin({
+    flow: "auth-code",
+    
+    onSuccess: (tokenResponse) => handleLoginSuccess,
+    onError: (errorResponse) => console.error('Login Failed', errorResponse),
+  });
+  const handleLogout = () => {
+    googleLogout();
+    setUser(null);  // Clears the user state, effectively logging out the user
+    console.log('Logged out successfully');
+  };
+  return (
+    <div>
+      <button onClick={() => login()} className="hover:underline decoration-yellow-400 underline-offset-8 m-5 p-2 text-[#003C6C] font-medium text-xl">
+        Login with Google
+      </button>
+      {user && (
+        <div>
+          <img src={user.picture} alt="User profile" />
+          <h2>Welcome, {user.name} - {user.email}</h2>
+          
+        </div>
+      )}
+      <button onClick={handleLogout} className="hover:underline decoration-yellow-400 underline-offset-8 top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl">
+            Logout
+      </button>
+    </div>
+    
+  );
+};
+
 export default LoginPage;
+

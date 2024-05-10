@@ -2,12 +2,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-import {
-  GoogleOAuthProvider,
-  GoogleLogin,
-  googleLogout,
-} from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 
 interface Food {
   name: string;
@@ -20,6 +14,7 @@ interface subCategory {
 }
 
 interface Category {
+  forEach(arg0: (category: any) => void): unknown;
   name: string;
   sub_categories: Array<subCategory>;
 }
@@ -51,7 +46,7 @@ function ButtonLink(props: any) {
   );
 }
 
-function Home() {
+export default function Home() {
   const [dhs, setDhs] = useState<DiningHall[]>([]);
   const [dhs_names, set_dhs_names] = useState([""]);
   const [searchInput, setSearchInput] = useState("");
@@ -84,7 +79,7 @@ function Home() {
     const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
     dhs.forEach((dh) => {
       dh.categories.forEach((category) => {
-        category.sub_categories.forEach((subCategory) => {
+        category.sub_categories.forEach((subCategory: { foods: any[]; }) => {
           subCategory.foods.forEach((food) => {
             allFoods.push({
               food,
@@ -160,58 +155,6 @@ function Home() {
 
       </div>
       {/* Account Button */}
-      <Link href="/loginPage" className="hover:underline decoration-yellow-400 underline-offset-8 fixed top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl flex items-center justify-center">
-        Account
-      </Link>
     </main>
-  );
-}
-
-export default function Page() {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    console.log(
-      "Page component loaded and GoogleOAuthProvider should be active",
-    );
-  }, []);
-
-  const handleLogout = () => {
-    googleLogout();
-    setUser(null); // Clear user state on logout
-    console.log("Logout Successful");
-  };
-
-  const handleLoginSuccess = (credentialResponse: any) => {
-    console.log("Login Successful", credentialResponse);
-    const decoded: User = jwtDecode(credentialResponse.credential);
-    setUser({
-      name: decoded.name,
-      picture: decoded.picture,
-    });
-  };
-
-  return (
-    <GoogleOAuthProvider clientId="1040494859138-vji3ddfil5jancg23ifaginvmn71hktf.apps.googleusercontent.com">
-      <Home />
-      <GoogleLogin
-        onSuccess={handleLoginSuccess}
-        onError={() => {
-          console.log("Login Failed");
-        }}
-      />
-      {user && (
-        <div>
-          <img src={user.picture} alt="User profile" />
-          <h2>{user.name}</h2>
-        </div>
-      )}
-      <button
-        onClick={handleLogout}
-        className="p-2 mt-2 text-white bg-red-600 rounded"
-      >
-        Logout
-      </button>
-    </GoogleOAuthProvider>
   );
 }
