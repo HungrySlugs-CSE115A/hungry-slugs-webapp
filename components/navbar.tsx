@@ -25,7 +25,7 @@ export default function Navbar({ height }: { height: string }) {
                             </a>
                         </li>
                         <li>
-                            <a href="/loginPage" className="pl-4 pr-5">
+                            <a href="#" className="pl-4 pr-5">
                                 Account
                             </a>
                             {/* pr-X dicates how far off right we want.  */}

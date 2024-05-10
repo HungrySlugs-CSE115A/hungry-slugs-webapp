@@ -1,6 +1,6 @@
 from django.db import models
 from db_connection import db
-from django.contrib.auth.models import User
+
 # Create your models here.
 
 # locations Model
