@@ -1,6 +1,10 @@
 "use client";
+import React, { useContext } from 'react';
+import { AuthContext } from '../app/loginPage/AuthContext'; // Import AuthContext
+
 
 export default function Navbar({ height }: { height: string }) {
+    const { isLoggedIn } = useContext(AuthContext); // Access isLoggedIn state from AuthContext
     return (
         <nav className="bg-white fixed w-full  top-0 start-0  ">
             <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-2.5">
@@ -9,6 +13,7 @@ export default function Navbar({ height }: { height: string }) {
                         Hungry Slugs
                     </span>
                 </a>
+
 
                 <div className="" id="navbar-sticky">
                     <ul className="flex flex-col  md:p-0  md:flex-row md:border-0 font-medium text-2xl  pl-10  text-[#003C6C]">
@@ -25,9 +30,15 @@ export default function Navbar({ height }: { height: string }) {
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="pl-4 pr-5">
-                                Account
+                          {isLoggedIn ? (
+                            <a href="/account" className="pl-4 pr-5">
+                              Account
                             </a>
+                          ) : (
+                            <a href="/loginPage" className="pl-4 pr-5">
+                              Account
+                            </a>
+                          )}
                             {/* pr-X dicates how far off right we want.  */}
                         </li>
                         <li>
