@@ -86,8 +86,7 @@ def validate_user(request):
 
 
     
-    #using access token we can get the user information
-
+    #using access token to retrieve user information similar to frontend
     try:
         response = requests.get(
             GOOGLE_USER_INFO_URL,

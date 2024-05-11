@@ -30,7 +30,7 @@ const LoginComponent = () => {
   }, []);
 
   /*const handleLoginSuccess = async (tokenResponse: any) => {
-   if ('code' in tokenResponse) {
+    if ('code' in tokenResponse) {
       // Handle authorization code flow
       console.log('Authorization Code:', tokenResponse.code);
       // Exchange code for tokens here
@@ -71,7 +71,7 @@ const LoginComponent = () => {
       //client side authentication retrieve user info from access token
       const userInfo = await axios
       .get('https://www.googleapis.com/oauth2/v3/userinfo', {
-        headers: { Authorization: `Bearer ${tokenResponse.}` },
+        headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
       })
       
       .then(res => res.data);
