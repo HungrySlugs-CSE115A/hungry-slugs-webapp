@@ -1,6 +1,16 @@
 from django.conf.locale import fr
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.conf import settings
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
+import requests
+
+
+
+GOOGLE_ID_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
+GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
 
 from .db_functions.locations import (
     get_all_locations_from_db,
@@ -59,3 +69,47 @@ def get_locations(request):
     json_data = {"locations": locations}
 
     return Response(json_data)
+
+@api_view(["POST"])
+def validate_user(request):
+    token_response = request.data.get('tokenResponse')
+    access_token = token_response.get('access_token')
+    id_token = token_response.get('code')
+    print(id_token)
+    try:
+        response = requests.get(
+            GOOGLE_ID_TOKEN_INFO_URL,
+            params={'id_token': id_token}
+        )
+    except:
+        return JsonResponse({'error': 'Failed to validate id token token'}, status=500)
+
+
+    
+    #using access token we can get the user information
+
+    try:
+        response = requests.get(
+            GOOGLE_USER_INFO_URL,
+            headers={'Authorization': f'Bearer {access_token}'}
+        )
+        response.raise_for_status()
+        user_info = response.json()
+        print(user_info["email"])
+        #add user_info to database using get or create possibly
+        #print(user_info)
+        
+
+    except requests.RequestException as e:
+        return JsonResponse({'error': 'Failed to validate access token'}, status=500)
+    
+    return JsonResponse({'message': 'User is validated', 'user_info': user_info})
+
+
+
+    
+
+
+
+
+
