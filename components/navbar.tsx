@@ -1,10 +1,15 @@
 "use client";
 import React, { useContext } from 'react';
-import { AuthContext } from '../app/loginPage/AuthContext'; // Import AuthContext
 
+const checkLogin = () => {
+  if (!localStorage.getItem('token')) {
+    window.location.href = '/loginPage'; // Redirect to login page if not authenticated
+  } else {
+    window.location.href = '/profile'; // Redirect to profile page if authenticated
+  }
+}
 
 export default function Navbar({ height }: { height: string }) {
-    const { isLoggedIn } = useContext(AuthContext); // Access isLoggedIn state from AuthContext
     return (
         <nav className="bg-white fixed w-full  top-0 start-0  ">
             <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-2.5">
@@ -20,7 +25,7 @@ export default function Navbar({ height }: { height: string }) {
                         <li>
                             {" "}
                             {/* replace the pound sign with actual link */}
-                            <a href="#" className="px-4">
+                            <a href="/" className="px-4">
                                 Home
                             </a>
                         </li>
@@ -30,15 +35,9 @@ export default function Navbar({ height }: { height: string }) {
                             </a>
                         </li>
                         <li>
-                          {isLoggedIn ? (
-                            <a href="/account" className="pl-4 pr-5">
-                              Account
+                            <a onClick={checkLogin} className="pl-4 pr-5">
+                                Account
                             </a>
-                          ) : (
-                            <a href="/loginPage" className="pl-4 pr-5">
-                              Account
-                            </a>
-                          )}
                             {/* pr-X dicates how far off right we want.  */}
                         </li>
                         <li>
