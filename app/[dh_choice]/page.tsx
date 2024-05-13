@@ -166,16 +166,10 @@ export default function Page({ searchParams }) {
 
   return (
     <main>
-
       <div className="container mx-auto">
         <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
           {searchParams.name}
         </h1>
-
-
-
-
-
 
         {/* Search button */}
         <div>
@@ -185,10 +179,7 @@ export default function Page({ searchParams }) {
         {/* Categories */}
         {categories.map((category, i) => (
           <div key={i}>
-            <Accordion
-              category={category}
-              isOpen={expandedCategory === i}
-            />
+            <Accordion category={category} isOpen={expandedCategory === i} />
           </div>
         ))}
       </div>

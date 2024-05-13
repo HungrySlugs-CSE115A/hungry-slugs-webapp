@@ -12,7 +12,8 @@ last_update: str
 
 ## Basic CRUD
 
-def set_task(task_name: str) -> dict[str,str]:
+
+def set_task(task_name: str) -> dict[str, str]:
     """
     Create a new task with the given name
     """
@@ -30,11 +31,13 @@ def set_task(task_name: str) -> dict[str,str]:
 
     return task
 
+
 def get_task(task_name: str) -> dict | None:
     """
     Get the task from the database
     """
     return tasks_collection.find_one({"name": task_name})
+
 
 def update_task(task_name: str, last_update: datetime) -> None:
     """
@@ -48,6 +51,7 @@ def update_task(task_name: str, last_update: datetime) -> None:
         {"name": task_name}, {"$set": {"last_update": time_str}}
     )
 
+
 def delete_task(task_name: str) -> None:
     """
     Delete the task from the database
@@ -56,6 +60,7 @@ def delete_task(task_name: str) -> None:
 
 
 ## Additional CRUD
+
 
 def get_last_update_time(task_name: str) -> datetime | None:
     """
@@ -76,7 +81,9 @@ def get_last_update_time(task_name: str) -> datetime | None:
 
     return last_update_time
 
+
 ## helper functions
+
 
 def str_to_datetime(time_str: str) -> datetime:
     """

@@ -4,7 +4,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from .db_functions.locations import update_locations, get_locations as get_locations_db
-from .db_functions.tasks import update_task, get_last_update_time, set_task, str_to_datetime
+from .db_functions.tasks import (
+    update_task,
+    get_last_update_time,
+    set_task,
+    str_to_datetime,
+)
 from webscraper.food_locations import FoodLocations
 
 

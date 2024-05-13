@@ -14,7 +14,6 @@ interface Food {
   extra_data: Array<string>;
 }
 
-
 interface subCategory {
   name: string;
   foods: Array<Food>;
@@ -68,7 +67,6 @@ export default function Home() {
       .then((response) => {
         const dhs: DiningHall[] = response.data["locations"];
         setDhs(dhs);
-
       })
       .catch((error) => {
         console.log(error);
@@ -137,13 +135,26 @@ export default function Home() {
         <h2 className="font-medium text-2xl text-[#003C6C]  flex items-center justify-center pb-5">
           <ul className="flex flex-col  md:p-0  md:flex-row md:border-0 ">
             <li className="">
-              <button className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Dining Halls</button>
+              <button className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4">
+                Dining Halls
+              </button>
             </li>
             <li>
-              <a href="#" className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Markets</a>
+              <a
+                href="#"
+                className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4"
+              >
+                Markets
+              </a>
             </li>
             <li>
-              <a href="#" className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4" >Cafes & Other</a>{/* pr-X dicates how far off right we want.  */}
+              <a
+                href="#"
+                className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4"
+              >
+                Cafes & Other
+              </a>
+              {/* pr-X dicates how far off right we want.  */}
             </li>
           </ul>
         </h2>
@@ -157,7 +168,6 @@ export default function Home() {
             ))}
           </ul>
         </h3>
-
       </div>
     </main>
   );

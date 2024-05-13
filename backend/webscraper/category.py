@@ -29,7 +29,9 @@ class Category:
         self.sub_categories: list[SubCategory] = self._process_data(html)
 
     def is_empty(self) -> bool:
-        return all(sub_cat.is_empty() for sub_cat in self.sub_categories) or (len(self.sub_categories) == 0)
+        return all(sub_cat.is_empty() for sub_cat in self.sub_categories) or (
+            len(self.sub_categories) == 0
+        )
 
     def _process_data(self, html: Tag) -> list[SubCategory]:
         # find the categories in the meal time
