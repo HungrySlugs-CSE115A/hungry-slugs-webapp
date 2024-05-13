@@ -26,7 +26,6 @@ export default function RootLayout({
       <body className={monst.className}>
         <Navbar height={navbarHeight} />
         <div className="" style={{ paddingTop: navbarHeight }}>
-          
           {children}
         </div>
       </body>

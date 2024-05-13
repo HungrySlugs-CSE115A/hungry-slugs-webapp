@@ -5,10 +5,9 @@ class Food:
     def __init__(self, html: Tag) -> None:
         self.name = "Error: Food name not found"
         self.allergies = []
-        self.__process_data(html)
+        self._process_data(html)
 
-    def __process_data(self, html: Tag) -> None:
-
+    def _process_data(self, html: Tag) -> None:
         # find the food name
         name = html.find("div", class_="shortmenurecipes")
         if name:
