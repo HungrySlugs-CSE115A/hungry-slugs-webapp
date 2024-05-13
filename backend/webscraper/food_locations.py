@@ -10,7 +10,7 @@ class FoodLocations:
     main_url = "https://nutrition.sa.ucsc.edu/"
 
     def __init__(self) -> None:
-        self.locations: list[DiningHall] = self.__retrieve_data()
+        self.locations: list[DiningHall] = self._retrieve_data()
 
     def get_locations(self) -> list[DiningHall]:
         return self.locations
@@ -21,7 +21,7 @@ class FoodLocations:
     def get_non_empty_locations(self) -> list[DiningHall]:
         return [dh for dh in self.locations if not dh.is_empty()]
 
-    def __retrieve_data(self) -> list[DiningHall]:
+    def _retrieve_data(self) -> list[DiningHall]:
         try:
             page = requests.get(self.main_url, verify=UCSC_SSL_CERT)
         except requests.exceptions.RequestException as e:  # This is the correct syntax

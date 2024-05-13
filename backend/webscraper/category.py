@@ -26,12 +26,12 @@ class SubCategory:
 class Category:
     def __init__(self, name: str, html: Tag) -> None:
         self.name = name
-        self.sub_categories: list[SubCategory] = self.__process_data(html)
+        self.sub_categories: list[SubCategory] = self._process_data(html)
 
     def is_empty(self) -> bool:
         return all(sub_cat.is_empty() for sub_cat in self.sub_categories) or (len(self.sub_categories) == 0)
 
-    def __process_data(self, html: Tag) -> list[SubCategory]:
+    def _process_data(self, html: Tag) -> list[SubCategory]:
         # find the categories in the meal time
         sub_cat_data: ResultSet = html.find_all("div", class_="shortmenucats")
 
