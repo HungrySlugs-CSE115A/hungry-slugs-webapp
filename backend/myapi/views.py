@@ -1,11 +1,8 @@
-from django.conf.locale import fr
+from requests import get
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .db_functions.locations import (
-    get_all_locations_from_db,
-    remove_add_locations_to_db,
-)
+from .db_functions.locations import update_locations, get_locations as get_locations_db
 from .db_functions.tasks import set_task_last_update, get_task_last_update
 from webscraper.food_locations import FoodLocations
 
@@ -36,11 +33,18 @@ def get_locations(request):
     # check if not updated in the last hour
     if last_update is None or (time_now - last_update).seconds > 3600:
         print("Locations need to be updated...")
+
         # fetch the locations from the web scraper and add them to the db
         fo = FoodLocations()
-        locations: list[dict] = [dh.to_dict() for dh in fo.get_locations()]
-        # add the locations to the db
-        remove_add_locations_to_db(locations)
+
+        # Filter out the empty locations
+        filtered_locations = fo.get_non_empty_locations()
+
+        # Convert the list of dining halls to a list of dictionaries
+        locations = [dh.to_dict() for dh in filtered_locations]
+
+        # Update the locations in the db
+        update_locations(locations)
 
         # update the last update time
         set_task_last_update(task_name="locations")
@@ -48,7 +52,7 @@ def get_locations(request):
     else:
         print("Locations are up to date. Getting from DB...")
         # Get all locations from the db
-        locations: list[dict] = get_all_locations_from_db()
+        locations: list[dict] = get_locations_db()
 
     # remove the _id field from each dining hall
     for dh in locations:

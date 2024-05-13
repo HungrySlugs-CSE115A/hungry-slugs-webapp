@@ -15,6 +15,12 @@ class FoodLocations:
     def get_locations(self) -> list[DiningHall]:
         return self.locations
 
+    def get_location_names(self) -> list[str]:
+        return [dh.name for dh in self.locations]
+
+    def get_non_empty_locations(self) -> list[DiningHall]:
+        return [dh for dh in self.locations if not dh.is_empty()]
+
     def __retrieve_data(self) -> list[DiningHall]:
         try:
             page = requests.get(self.main_url, verify=UCSC_SSL_CERT)

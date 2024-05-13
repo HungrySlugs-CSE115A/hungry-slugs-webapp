@@ -15,6 +15,10 @@ class DiningHall:
         self.categories: list[Category] = self.__retrieve_data(url)
         print(self.name)
 
+    def is_empty(self) -> bool:
+        # empty if all categories are empty
+        return all(category.is_empty() for category in self.categories) or (len(self.categories) == 0)
+
     def __retrieve_data(self, url: str) -> list[Category]:
         # Set the cookies to be empty to avoid loading nothing
         cookies = {
