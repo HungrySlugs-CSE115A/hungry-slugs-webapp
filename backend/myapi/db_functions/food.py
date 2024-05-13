@@ -6,12 +6,9 @@ food_name: str,
 ratings: {
     username: int
 }
-
-user_name: str,
-ratings: {
-    food_name: int
-}
 """
+
+## Basic CRUD
 
 def set_food(name: str) -> None:
     # check if food already exists
@@ -21,41 +18,22 @@ def set_food(name: str) -> None:
     # add food
     foods_collection.insert_one({"food_name": name, "ratings": {}})
 
-
 def get_food(name: str) -> dict | None:
     return foods_collection.find_one({"food_name": name})
 
-
-def set_rating(food_name: str, username: str, rating: int) -> None:
+def update_food(food_name: str, username: str, rating: int|None = None) -> None:
     # check if food exists
     food = foods_collection.find_one({"food_name": food_name})
     if not food:
         return
-    # add/change rating
-    food["ratings"][username] = rating
-    # update food
-    foods_collection.update_one(
-        {"food_name": food_name}, {"$set": {"ratings": food["ratings"]}}
-    )
 
-    # add rating to user's ratings
+    if rating is not None:
+        # add/change rating
+        food["ratings"][username] = rating
+        # update food
+        foods_collection.update_one(
+            {"food_name": food_name}, {"$set": {"ratings": food["ratings"]}}
+        )
 
-
-def get_user_rating(food_name: str, username: str) -> int | None:
-    # check if food exists
-    food = foods_collection.find_one({"food_name": food_name})
-    if not food:
-        return None
-    # check if user rated
-    if username not in food["ratings"]:
-        return None
-    return food["ratings"][username]
-
-def get_avg_rating(food_name: str) -> float | None:
-    # check if food exists
-    food = foods_collection.find_one({"food_name": food_name})
-    if not food:
-        return None
-    # calculate average rating
-    ratings = food["ratings"].values()
-    return sum(ratings) / len(ratings)
+def delete_food(name: str) -> None:
+    foods_collection.delete_one({"food_name": name})
