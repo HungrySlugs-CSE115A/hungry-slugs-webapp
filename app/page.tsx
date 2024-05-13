@@ -46,21 +46,22 @@ export default function Home() {
           Locations
         </h1>
 
-
         <ul className="flex font-medium text-2xl text-[#003C6C] flex items-center justify-center pb-5">
-          {
-            [["Dining Halls", "#"], ["Markets", "#"], ["Cafes & Other", "#"]].map(([category, href]: Array<string>, i) => (
-              <li key={i} className="">
-                <a
-                  href={href}
-                  className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4">
-                  {category}
-                </a>
-              </li>
-            ))
-          }
+          {[
+            ["Dining Halls", "#"],
+            ["Markets", "#"],
+            ["Cafes & Other", "#"],
+          ].map(([category, href]: Array<string>, i) => (
+            <li key={i} className="">
+              <a
+                href={href}
+                className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4"
+              >
+                {category}
+              </a>
+            </li>
+          ))}
         </ul>
-
 
         <h3 className="w-full">
           <ul className="">
