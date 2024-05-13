@@ -1,0 +1,18 @@
+name: Prettier Check
+
+on:
+  push: {}
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run Prettier check
+        run: bunx prettier --check '**/*.{js,ts,jsx,tsx}'

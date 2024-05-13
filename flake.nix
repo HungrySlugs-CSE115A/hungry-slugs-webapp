@@ -15,7 +15,6 @@
               inherit system;
             };
             my-python = pkgs.python3.withPackages (ps: with ps; [
-              black
               pip
             ]);
           in

@@ -2,13 +2,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Running Code
 
-* Make sure to have a private folder in the root directory that contains all secrets. (for now you can get this folder from our shared google drive folder) [link](https://drive.google.com/drive/folders/1oz7vGXPAI2S8vzYIpQ2ATTfjgqFHDD_p?usp=sharing)
-* Make sure that you have all the python dependencies installed in the requirements.txt
-* Make sure to install JS dependencies with `bun i` or `npm i`
-* you then will have to have two terminals to run backend and frontend
-* the backend is run with: `python backend/manage.py runserver`
-* the frontend is run one of the commands below in the Getting Started
-* Also, if you have nix installed with flakes you can skip most of the environment setup steps and use `nix develop` to setup your dev environment
+- Make sure to have a private folder in the root directory that contains all secrets. (for now you can get this folder from our shared google drive folder) [link](https://drive.google.com/drive/folders/1oz7vGXPAI2S8vzYIpQ2ATTfjgqFHDD_p?usp=sharing)
+- Make sure that you have all the python dependencies installed in the requirements.txt
+- Make sure to install JS dependencies with `bun i` or `npm i`
+- you then will have to have two terminals to run backend and frontend
+- the backend is run with: `python backend/manage.py runserver`
+- the frontend is run one of the commands below in the Getting Started
+- Also, if you have nix installed with flakes you can skip most of the environment setup steps and use `nix develop` to setup your dev environment
 
 ## Getting Started
 
@@ -23,8 +23,6 @@ pnpm dev
 # or
 bun dev
 ```
-
-
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

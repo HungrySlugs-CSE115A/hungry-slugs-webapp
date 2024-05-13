@@ -1,0 +1,15 @@
+name: Black Formatting Check
+
+on:
+  push: {}
+
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: psf/black@stable # Official Black action
+        with:
+          options: "--check --verbose" # Check for formatting issues only
+          src: "." # Path to your Python source code (optional)
