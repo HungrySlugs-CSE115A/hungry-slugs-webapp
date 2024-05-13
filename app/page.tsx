@@ -46,7 +46,7 @@ export default function Home() {
           Locations
         </h1>
 
-        <ul className="flex font-medium text-2xl text-[#003C6C] flex items-center justify-center pb-5">
+        <ul className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
           {[
             ["Dining Halls", "#"],
             ["Markets", "#"],
