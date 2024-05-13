@@ -13,8 +13,7 @@ ratings: {
 }
 """
 
-
-def set_new_food(name: str) -> None:
+def set_food(name: str) -> None:
     # check if food already exists
     food = foods_collection.find_one({"food_name": name})
     if food:
@@ -41,4 +40,22 @@ def set_rating(food_name: str, username: str, rating: int) -> None:
 
     # add rating to user's ratings
 
-def get_(food_name: 
+
+def get_user_rating(food_name: str, username: str) -> int | None:
+    # check if food exists
+    food = foods_collection.find_one({"food_name": food_name})
+    if not food:
+        return None
+    # check if user rated
+    if username not in food["ratings"]:
+        return None
+    return food["ratings"][username]
+
+def get_avg_rating(food_name: str) -> float | None:
+    # check if food exists
+    food = foods_collection.find_one({"food_name": food_name})
+    if not food:
+        return None
+    # calculate average rating
+    ratings = food["ratings"].values()
+    return sum(ratings) / len(ratings)
