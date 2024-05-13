@@ -1,4 +1,13 @@
 "use client";
+import React, { useContext } from 'react';
+
+const checkLogin = () => {
+  if (!localStorage.getItem('token')) {
+    window.location.href = '/loginPage'; // Redirect to login page if not authenticated
+  } else {
+    window.location.href = '/profile'; // Redirect to profile page if authenticated
+  }
+}
 
 export default function Navbar({ height }: { height: string }) {
     return (
@@ -10,12 +19,13 @@ export default function Navbar({ height }: { height: string }) {
                     </span>
                 </a>
 
+
                 <div className="" id="navbar-sticky">
                     <ul className="flex flex-col  md:p-0  md:flex-row md:border-0 font-medium text-2xl  pl-10  text-[#003C6C]">
                         <li>
                             {" "}
                             {/* replace the pound sign with actual link */}
-                            <a href="#" className="px-4">
+                            <a href="/" className="px-4">
                                 Home
                             </a>
                         </li>
@@ -25,7 +35,7 @@ export default function Navbar({ height }: { height: string }) {
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="pl-4 pr-5">
+                            <a onClick={checkLogin} className="pl-4 pr-5">
                                 Account
                             </a>
                             {/* pr-X dicates how far off right we want.  */}
