@@ -1,9 +1,10 @@
+from dns import update
 from requests import get
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from .db_functions.locations import update_locations, get_locations as get_locations_db
-from .db_functions.tasks import set_task_last_update, get_task_last_update
+from .db_functions.tasks import update_task, get_last_update_time, set_task, str_to_datetime
 from webscraper.food_locations import FoodLocations
 
 
@@ -21,11 +22,15 @@ def hello_world(request):
 @api_view(["GET"])
 def get_locations(request):
     # Get the last update time of the locations
-    last_update: datetime | None = get_task_last_update(task_name="locations")
+    last_update: datetime | None = get_last_update_time(task_name="locations")
+
+    # check if the last update time doesn't exist
+    if last_update is None:
+        task = set_task(task_name="locations")
+        last_update = str_to_datetime(task["last_update"])
 
     # get the current time and make it naive
-    time_now: datetime = timezone.now()
-    time_now = time_now.replace(tzinfo=None)
+    time_now: datetime = timezone.now().replace(tzinfo=None)
 
     print("Last time   : ", last_update)
     print("Current time: ", time_now)
@@ -47,7 +52,7 @@ def get_locations(request):
         update_locations(locations)
 
         # update the last update time
-        set_task_last_update(task_name="locations")
+        update_task(task_name="locations", last_update=time_now)
 
     else:
         print("Locations are up to date. Getting from DB...")
