@@ -26,4 +26,4 @@ class Food:
 
     def to_dict(self) -> dict:
         # foodObj = {self.name: self.allergies}
-        return {"name": self.name, "allergies": self.allergies}
+        return {"name": self.name, "restrictions": self.allergies}

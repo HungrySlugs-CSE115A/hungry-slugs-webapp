@@ -32,10 +32,10 @@ def get_locations(request):
     # check if the last update time doesn't exist
     if last_update is None:
         task = set_task(task_name="locations")
-        last_update = str_to_datetime(task["last_update"])
-
-    # get the current time and make it naive
-    time_now: datetime = timezone.now().replace(tzinfo=None)
+        time_now = str_to_datetime(task["last_update"])
+    else:
+        # get the current time and make it naive
+        time_now: datetime = timezone.now().replace(tzinfo=None)
 
     print("Last time   : ", last_update)
     print("Current time: ", time_now)

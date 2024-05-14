@@ -4,7 +4,7 @@ import axios from "axios";
 
 interface Food {
   name: string;
-  extra_data: Array<string>;
+  restrictions: Array<string>;
 }
 
 interface subCategory {
@@ -17,7 +17,7 @@ interface Category {
   sub_categories: Array<subCategory>;
 }
 
-interface DiningHall {
+interface Location {
   name: string;
   categories: Category;
 }
@@ -25,14 +25,13 @@ interface DiningHall {
 import DhBar from "@/components/dh_bar_main";
 
 export default function Home() {
-  const [dhs, setDhs] = useState<DiningHall[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:8000/myapi/locations/")
       .then((response) => {
-        const dhs: DiningHall[] = response.data["locations"];
-        setDhs(dhs);
+        setLocations(response.data["locations"]);
       })
       .catch((error) => {
         console.log(error);
@@ -65,9 +64,9 @@ export default function Home() {
 
         <h3 className="w-full">
           <ul className="">
-            {dhs.map((dh, i) => (
+            {locations.map((location, i) => (
               <li key={i}>
-                <DhBar name={dh.name} />
+                <DhBar name={location.name} index={i} />
               </li>
             ))}
           </ul>
