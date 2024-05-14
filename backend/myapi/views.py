@@ -12,10 +12,12 @@ import requests
 GOOGLE_ID_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
 GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
 
+
 from .db_functions.locations import (
     get_all_locations_from_db,
     remove_add_locations_to_db,
 )
+from .db_functions.users import add_user_data, get_user_data, get_ratings_data
 from .db_functions.tasks import set_task_last_update, get_task_last_update
 from webscraper.food_locations import FoodLocations
 
@@ -70,22 +72,26 @@ def get_locations(request):
 
     return Response(json_data)
 
+class CurrentUser:
+    def __init__(self, session):
+        self.session = session
+
+    @property
+    def is_authenticated(self):
+        return 'current_user' in self.session
+
+    @property
+    def info(self):
+        return self.session.get('current_user')
+
+    def logout(self):
+        if 'current_user' in self.session:
+            del self.session['current_user']
+
 @api_view(["POST"])
 def validate_user(request):
-    token_response = request.data.get('tokenResponse')
-    access_token = token_response.get('access_token')
-    id_token = token_response.get('code')
-    print(id_token)
-    try:
-        response = requests.get(
-            GOOGLE_ID_TOKEN_INFO_URL,
-            params={'id_token': id_token}
-        )
-    except:
-        return JsonResponse({'error': 'Failed to validate id token token'}, status=500)
-
-
-    
+    token_response = request.data.get("tokenResponse")
+    access_token = token_response.get("access_token")
     #using access token to retrieve user information similar to frontend
     try:
         response = requests.get(
@@ -94,19 +100,30 @@ def validate_user(request):
         )
         response.raise_for_status()
         user_info = response.json()
-        print(user_info["email"])
+        #print(user_info["email"])
         #add user_info to database using get or create possibly
         #print(user_info)
+
+        #add current user 
+        current_user = CurrentUser(request.session)
+        request.session['current_user'] = user_info['email']
+        print(request.session['current_user'])
         
 
     except requests.RequestException as e:
         return JsonResponse({'error': 'Failed to validate access token'}, status=500)
     
     return JsonResponse({'message': 'User is validated', 'user_info': user_info})
+@api_view(["POST"])
+def current_logout(request):
+    current_user = CurrentUser(request.session)
+    current_user.logout()
+    #print(request.session['current_user'])
+    print("Current session after logout:", request.session.get('current_user')) 
+    return JsonResponse({'message': 'User has been logged out'})
 
 
 
-    
 
 
 

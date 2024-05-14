@@ -82,9 +82,11 @@ const LoginComponent = () => {
         picture: userInfo.picture
       })
       //send the token to backend
-      axios.post('http://localhost:8000/myapi/users/', {tokenResponse: tokenResponse})
+      axios.post('http://localhost:8000/myapi/users', {tokenResponse: tokenResponse})
       .then(res => console.log('Backend login successful', res))
       .catch(err => console.error('Backend login failed', err))
+
+      
   
       
     
@@ -94,6 +96,9 @@ const LoginComponent = () => {
   });
 
   const handleLogout = () => {
+    axios.post('http://localhost:8000/myapi/logout/')
+      .then(res => console.log('Backend logout successful', res))
+      .catch(err => console.error('Backend logout failed', err))
     googleLogout();
     setUser(null);  // Clears the user state, effectively logging out the user
     console.log('Logged out successfully');
@@ -106,7 +111,7 @@ const LoginComponent = () => {
       {user && (
         <div>
             <div className="center">
-              <img src={user.picture} alt="User profile" />
+              <img src={user.picture} alt="User profile"/>
             </div>
           <h2 className="m-5 p-2 text-[#003C6C] font-medium text-xl">Welcome, {user.name}</h2>
           <h3 className="m-5 p-2 text-[#003C6C] font-medium text-xl">Email: {user.email}</h3>
