@@ -50,29 +50,29 @@ export default function Page({ params }: { params: { location: number } }) {
         <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
           {location && location.name}
         </h1>
-        {location && location.categories.map((category, i) => (
-          <div key={i}>
-            <h2>{category.name}</h2>
-            {category.sub_categories.map((subCategory, j) => (
-              <div key={j}>
-                <h3>{subCategory.name}</h3>
-                {subCategory.foods.map((food, k) => (
-                  <div key={k}>
-                    <h4>{food.name}</h4>
-                    <ul>
-                      {food.restrictions.map((restrictions, l) => (
-                        // note the restrictions is an array of strings
-                        // this should probably be displayed in a different way for the images
-                        <li key={l}>{restrictions}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        ))
-        }
+        {location &&
+          location.categories.map((category, i) => (
+            <div key={i}>
+              <h2>{category.name}</h2>
+              {category.sub_categories.map((subCategory, j) => (
+                <div key={j}>
+                  <h3>{subCategory.name}</h3>
+                  {subCategory.foods.map((food, k) => (
+                    <div key={k}>
+                      <h4>{food.name}</h4>
+                      <ul>
+                        {food.restrictions.map((restrictions, l) => (
+                          // note the restrictions is an array of strings
+                          // this should probably be displayed in a different way for the images
+                          <li key={l}>{restrictions}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
       </div>
     </main>
   );

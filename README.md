@@ -1,6 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Formatting Code
+
 - For Python code run `black backend/**/*.py`
 - For All other code run `bun run prettier * --write`
 
