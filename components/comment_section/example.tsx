@@ -52,6 +52,6 @@ export const updateComment = async (text: string): Promise<{ text: string }> => 
   return { text };
 };
 
-export const deleteComment = async (): Promise<{}> => {
+export const deleteComment = async (comment_id: string): Promise<{}> => {
   return {};
 };

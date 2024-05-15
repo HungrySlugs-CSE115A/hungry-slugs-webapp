@@ -1,6 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { getComments, createComment } from './example';
+import { getComments as getCommentsApi, 
+  createComment as createCommentApi, 
+  deleteComment as deleteCommentApi } from './example';
 import Comment, { CommentData } from './comment';
 import CommentForm from './comment_form';
 import './index.css';
@@ -23,13 +25,24 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
 
   const addComment = (text: string, parent_id: string | null) => {
     console.log("addComment", text, parent_id);
-    createComment(text, parent_id).then((comment) => {
+    createCommentApi(text, parent_id).then((comment) => {
       setBackendComments([comment, ...(backendComments || [])]);
     });
   };
 
+  const deleteComment = (comment_id: string): void => {
+    if (window.confirm("Confirm: Delete comment?")) {
+      deleteCommentApi(comment_id).then(() => {
+        const updatedBackendComments = backendComments?.filter(
+          (backendComment) => backendComment.id !== comment_id
+        );
+        setBackendComments(updatedBackendComments);
+      });
+    }
+  };  
+
   useEffect(() => {
-    getComments().then((data) => {
+    getCommentsApi().then((data) => {
       setBackendComments(data);
     });
   }, []);
@@ -43,7 +56,10 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
         {rootComments.map((rootComment) => (
           <Comment key={rootComment.id} 
           comment={rootComment} 
-          replies={getReplies(rootComment.id)}/>
+          replies={getReplies(rootComment.id)}
+          currentUserId={currentUserId}
+          deleteComment={deleteComment}
+          />
         ))}
       </div>
     </div>
