@@ -100,14 +100,14 @@ def validate_user(request):
         )
         response.raise_for_status()
         user_info = response.json()
-        #print(user_info["email"])
+        
         #add user_info to database using get or create possibly
-        #print(user_info)
+        
 
         #add current user 
         current_user = CurrentUser(request.session)
         request.session['current_user'] = user_info['email']
-        print(request.session['current_user'])
+        
         
 
     except requests.RequestException as e:
@@ -118,7 +118,7 @@ def validate_user(request):
 def current_logout(request):
     current_user = CurrentUser(request.session)
     current_user.logout()
-    #print(request.session['current_user'])
+    
     print("Current session after logout:", request.session.get('current_user')) 
     return JsonResponse({'message': 'User has been logged out'})
 
