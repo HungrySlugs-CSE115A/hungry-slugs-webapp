@@ -17,27 +17,24 @@ interface User {
   picture: string;
 }
 const LoginPage = () => {
-  return(
+  return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <LoginComponent/>
+      <LoginComponent />
     </GoogleOAuthProvider>
   );
 };
 
 const LoginComponent = () => {
   const [user, setUser] = useState<User | null>(null);
-  
-  
-
 
   useEffect(() => {
     console.log("LoginPage component mounted");
   }, []);
-  
+
   const login = useGoogleLogin({
     flow: "implicit",
-    
-    onSuccess: async tokenResponse => {
+
+    onSuccess: async (tokenResponse) => {
       console.log(tokenResponse);
       // Store authentication token in the browser's local storage for navigation bar use
       localStorage.setItem("token", tokenResponse.access_token);
@@ -46,12 +43,14 @@ const LoginComponent = () => {
       //handleLoginSuccess
       //client side authentication retrieve user info from access token
       //send the token to backend
-      axios.post('http://localhost:8000/myapi/users', {tokenResponse: tokenResponse})
-      .then(res => console.log('Backend login successful', res))
-      .catch(err => console.error('Backend login failed', err))
-      
+      axios
+        .post("http://localhost:8000/myapi/users", {
+          tokenResponse: tokenResponse,
+        })
+        .then((res) => console.log("Backend login successful", res))
+        .catch((err) => console.error("Backend login failed", err));
     },
-    onError: (errorResponse) => console.error('Login Failed', errorResponse),
+    onError: (errorResponse) => console.error("Login Failed", errorResponse),
   });
   return (
     <div>

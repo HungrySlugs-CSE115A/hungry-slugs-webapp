@@ -5,9 +5,8 @@ from rest_framework.decorators import api_view
 import requests
 
 
-
-GOOGLE_ID_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
-GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
+GOOGLE_ID_TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v3/tokeninfo"
+GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
 
 from .db_functions.locations import (
@@ -69,60 +68,52 @@ def get_locations(request):
 
     return Response(json_data)
 
+
 class CurrentUser:
     def __init__(self, session):
         self.session = session
 
     @property
     def is_authenticated(self):
-        return 'current_user' in self.session
+        return "current_user" in self.session
 
     @property
     def info(self):
-        return self.session.get('current_user')
+        return self.session.get("current_user")
 
     def logout(self):
-        if 'current_user' in self.session:
-            del self.session['current_user']
+        if "current_user" in self.session:
+            del self.session["current_user"]
+
 
 @api_view(["POST"])
 def validate_user(request):
     token_response = request.data.get("tokenResponse")
     access_token = token_response.get("access_token")
-    #using access token to retrieve user information similar to frontend
+    # using access token to retrieve user information similar to frontend
     try:
         response = requests.get(
-            GOOGLE_USER_INFO_URL,
-            headers={'Authorization': f'Bearer {access_token}'}
+            GOOGLE_USER_INFO_URL, headers={"Authorization": f"Bearer {access_token}"}
         )
         response.raise_for_status()
         user_info = response.json()
-        
-        #add user_info to database using get or create possibly
-        
 
-        #add current user 
+        # add user_info to database using get or create possibly
+
+        # add current user
         current_user = CurrentUser(request.session)
-        request.session['current_user'] = user_info['email']
-        
-        
+        request.session["current_user"] = user_info["email"]
 
     except requests.RequestException as e:
-        return JsonResponse({'error': 'Failed to validate access token'}, status=500)
-    
-    return JsonResponse({'message': 'User is validated', 'user_info': user_info})
+        return JsonResponse({"error": "Failed to validate access token"}, status=500)
+
+    return JsonResponse({"message": "User is validated", "user_info": user_info})
+
+
 @api_view(["POST"])
 def current_logout(request):
     current_user = CurrentUser(request.session)
     current_user.logout()
-    
-    print("Current session after logout:", request.session.get('current_user')) 
-    return JsonResponse({'message': 'User has been logged out'})
 
-
-
-
-
-
-
-
+    print("Current session after logout:", request.session.get("current_user"))
+    return JsonResponse({"message": "User has been logged out"})
