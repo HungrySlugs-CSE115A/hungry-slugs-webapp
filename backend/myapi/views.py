@@ -1,4 +1,3 @@
-
 GOOGLE_ID_TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v3/tokeninfo"
 GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
@@ -10,7 +9,6 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 import requests
-
 
 
 from dns import update
@@ -88,6 +86,7 @@ def get_locations(request):
     json_data = {"locations": locations}
 
     return Response(json_data)
+
 
 class CurrentUser:
     def __init__(self, session):
