@@ -12,10 +12,16 @@ from private.private_settings import UCSC_SSL_CERT
 class DiningHall:
     def __init__(self, url: str) -> None:
         self.name: str = "Error: Name not found"
-        self.categories: list[Category] = self.__retrieve_data(url)
+        self.categories: list[Category] = self._retrieve_data(url)
         print(self.name)
 
-    def __retrieve_data(self, url: str) -> list[Category]:
+    def is_empty(self) -> bool:
+        # empty if all categories are empty
+        return all(category.is_empty() for category in self.categories) or (
+            len(self.categories) == 0
+        )
+
+    def _retrieve_data(self, url: str) -> list[Category]:
         # Set the cookies to be empty to avoid loading nothing
         cookies = {
             "WebInaCartLocation": "",
