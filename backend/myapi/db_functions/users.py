@@ -1,52 +1,42 @@
+from requests import delete
 from ..models import users_collection
-from pymongo.errors import PyMongoError
+
+"""
+username: str,
+id: str,
+ratings: {
+    food_name: int
+}
+"""
+
+## Basic CRUD
 
 
-# Add user data to db, search by email/username
-def add_user_data(user_data):
-    try:
-        # Insert new user's data or update existing user's data by overwritting fields in user_data
-        result = users_collection.update_one(
-            {"email": user_data["email"]}, {"$set": user_data}, upsert=True
-        )
-        if result.upserted_id:
-            print("User data inserted with id:", result.upserted_id)
-        else:
-            print("User data updated")
-    except PyMongoError as e:
-        print("Error while adding user data:", e)
+def set_user(username: str, id: str) -> None:
+    # check if user already exists
+    user = users_collection.find_one({"username": username})
+    if user:
+        return
+    # add user
+    users_collection.insert_one({"username": username, "id": id, "ratings": {}})
 
 
-# Get all the user's data from db, search by email/username
-def get_user_data(email):
-    try:
-        user_data = users_collection.find_one({"email": email})
-        return user_data
-    except PyMongoError as e:
-        print("Error while getting user data:", e)
-        return None
+def get_user(id: str) -> dict | None:
+    return users_collection.find_one({"id": id})
 
 
-# Get ratings data from user
-def get_ratings_data(email):
-    try:
-        user_data = users_collection.find_one(
-            {"email": email}, {"_id": 0, "ratings": 1}
-        )
-        # Return the "ratings" field, or an empty dictionary if not found
-        return user_data.get("ratings", {})
-    except PyMongoError as e:
-        print("Error while getting ratings data:", e)
-        return {}
+def update_user(id: str, food_name: str, rating: int | None = None) -> None:
+    # check if user exists
+    user = users_collection.find_one({"id": id})
+    if not user:
+        return
+
+    if rating is not None:
+        # add/change rating
+        user["ratings"][food_name] = rating
+        # update user
+        users_collection.update_one({"id": id}, {"$set": {"ratings": user["ratings"]}})
 
 
-# Remove a user's data
-def remove_user_data(email):
-    try:
-        result = users_collection.delete_one({"email": email})
-        if result.deleted_count == 1:
-            print("User data removed successfully")
-        else:
-            print("User not found")
-    except PyMongoError as e:
-        print("Error while removing user data:", e)
+def delete_user(id: str) -> None:
+    users_collection.delete_one({"id": id})
