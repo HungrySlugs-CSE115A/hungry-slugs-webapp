@@ -16,7 +16,6 @@ users_collection = db["users"]
 tasks_collection = db["tasks"]
 
 
-
 # # NOTE: This is temporary and will be replaced with a background task
 # from webscraper.food_locations import FoodLocations
 
