@@ -1,4 +1,3 @@
-from re import sub
 from bs4.element import Tag, ResultSet
 
 from webscraper.food import Food
@@ -9,9 +8,6 @@ class SubCategory:
     def __init__(self, name: str, html_list: list[Tag]) -> None:
         self.name = name
         self.foods: list[Food] = [Food(html) for html in html_list]
-
-    def is_empty(self) -> bool:
-        return len(self.foods) == 0
 
     def __str__(self) -> str:
         result = f"{self.name}\n"
@@ -26,14 +22,9 @@ class SubCategory:
 class Category:
     def __init__(self, name: str, html: Tag) -> None:
         self.name = name
-        self.sub_categories: list[SubCategory] = self._process_data(html)
+        self.sub_categories: list[SubCategory] = self.__process_data(html)
 
-    def is_empty(self) -> bool:
-        return all(sub_cat.is_empty() for sub_cat in self.sub_categories) or (
-            len(self.sub_categories) == 0
-        )
-
-    def _process_data(self, html: Tag) -> list[SubCategory]:
+    def __process_data(self, html: Tag) -> list[SubCategory]:
         # find the categories in the meal time
         sub_cat_data: ResultSet = html.find_all("div", class_="shortmenucats")
 
