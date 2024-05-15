@@ -21,6 +21,7 @@ from datetime import datetime
 GOOGLE_ID_TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v3/tokeninfo"
 GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
+
 # Create your views here.
 @api_view(["GET"])
 def hello_world(request):

@@ -4,45 +4,45 @@ import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
 interface User {
-    name: string;
-    email: string;
-    picture: string;
-  }
+  name: string;
+  email: string;
+  picture: string;
+}
 
 const Page = () => {
-    const [user, setUser] = useState<User | null>(null);
-    const fetchUserInfo = async () => {
-        try {
-          // Retrieve the access token from local storage
-          const access_token = localStorage.getItem("token");
-    
-          // Fetch user info from Google OAuth2 API
-          const userInfo = await axios
-            .get("https://www.googleapis.com/oauth2/v3/userinfo", {
-              headers: { Authorization: `Bearer ${access_token}` },
-            })
-            .then((res) => res.data);
-    
-          // Update the user state
-          setUser({
-            name: userInfo.name,
-            email: userInfo.email,
-            picture: userInfo.picture,
-          });
-        } catch (error) {
-          console.error("Error fetching user info:", error);
-        }
-      };
-      useEffect(() => {
-        fetchUserInfo();
-      }, []);
+  const [user, setUser] = useState<User | null>(null);
+  const fetchUserInfo = async () => {
+    try {
+      // Retrieve the access token from local storage
+      const access_token = localStorage.getItem("token");
+
+      // Fetch user info from Google OAuth2 API
+      const userInfo = await axios
+        .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${access_token}` },
+        })
+        .then((res) => res.data);
+
+      // Update the user state
+      setUser({
+        name: userInfo.name,
+        email: userInfo.email,
+        picture: userInfo.picture,
+      });
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
   const handleLogout = () => {
     googleLogout();
     axios
-        .post("http://localhost:8000/myapi/logout/")
-        .then((res) => console.log("Backend logout successful", res))
-        .catch((err) => console.error("Backend logout failed", err));
+      .post("http://localhost:8000/myapi/logout/")
+      .then((res) => console.log("Backend logout successful", res))
+      .catch((err) => console.error("Backend logout failed", err));
 
     // Remove the token from local storage
     localStorage.removeItem("token");

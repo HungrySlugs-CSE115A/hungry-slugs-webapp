@@ -18,11 +18,7 @@ interface User {
 }
 const LoginPage = () => {
   return (
-    <GoogleOAuthProvider
-      clientId={
-        GOOGLE_CLIENT_ID
-      }
-    >
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <LoginComponent />
     </GoogleOAuthProvider>
   );
@@ -56,7 +52,6 @@ const LoginComponent = () => {
     },
     onError: (errorResponse) => console.error("Login Failed", errorResponse),
   });
-
 
   // const handleLogout = () => {
   //   googleLogout();
