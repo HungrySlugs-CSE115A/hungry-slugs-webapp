@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Formatting Code
+
+- For Python code run `black backend/**/*.py`
+- For All other code run `bun run prettier * --write`
+
 ## Running Code
 
 - Make sure to have a private folder in the root directory that contains all secrets. (for now you can get this folder from our shared google drive folder) [link](https://drive.google.com/drive/folders/1oz7vGXPAI2S8vzYIpQ2ATTfjgqFHDD_p?usp=sharing)

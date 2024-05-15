@@ -1,7 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
-import { GoogleOAuthProvider, useGoogleLogin, googleLogout, TokenResponse} from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  GoogleOAuthProvider,
+  useGoogleLogin,
+  googleLogout,
+  TokenResponse,
+} from "@react-oauth/google";
+
 import axios from "axios";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -16,8 +21,8 @@ const LoginPage = () => {
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <LoginComponent/>
     </GoogleOAuthProvider>
-  )
-}
+  );
+};
 
 const LoginComponent = () => {
   const [user, setUser] = useState<User | null>(null);
