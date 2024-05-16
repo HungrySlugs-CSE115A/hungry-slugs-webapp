@@ -1,4 +1,3 @@
-from requests import delete
 from ..models import users_collection
 
 """
