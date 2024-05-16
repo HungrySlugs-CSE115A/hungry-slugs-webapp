@@ -1,12 +1,9 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   GoogleOAuthProvider,
   useGoogleLogin,
-  googleLogout,
-  TokenResponse,
 } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -53,28 +50,11 @@ const LoginComponent = () => {
     onError: (errorResponse) => console.error("Login Failed", errorResponse),
   });
 
-  // const handleLogout = () => {
-  //   googleLogout();
-  //   setUser(null);  // Clears the user state, effectively logging out the user
-  //   // Remove the token from local storage
-  //   localStorage.removeItem('token');
-  //   // Redirect the user to the login page
-  //   window.location.href = '/loginPage';
-  //   console.log('Logged out successfully');
-  // };
 
   return (
-    <div>
-      <button
-        onClick={() => handleLogin()}
-        className="hover:underline decoration-yellow-400 underline-offset-8 m-5 p-2 text-[#003C6C] font-medium text-xl"
-      >
-        Login with Google
+      <button onClick={() => handleLogin()}>
+        Account
       </button>
-      {/* <button onClick={handleLogout} className="hover:underline decoration-yellow-400 underline-offset-8 top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl">
-        Logout
-      </button> */}
-    </div>
   );
 };
 
