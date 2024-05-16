@@ -68,6 +68,8 @@ def get_locations(request):
 
 
 from .db_functions.food import get_food as get_food_db, set_food as set_food_db
+
+
 # Get request that takes parameter of food name and returns the food object
 # if it doesn't exist in the db it will add the food object to the db
 @api_view(["GET"])
@@ -78,6 +80,9 @@ def get_food(request, food_name: str):
     # if the food doesn't exist in the db
     if food is None:
         # add the food object to the db
-        set_food_db(food)
+        set_food_db(name=food_name)
+
+    # get the food from the db
+    food = get_food_db(name=food_name)
 
     return Response(food)

@@ -11,13 +11,15 @@ ratings: {
 ## Basic CRUD
 
 
-def set_food(name: str) -> None:
+def set_food(name: str) -> dict | None:
     # check if food already exists
     food = foods_collection.find_one({"food_name": name})
     if food:
         return
     # add food
-    foods_collection.insert_one({"food_name": name, "ratings": {}})
+    food = {"food_name": name, "ratings": {}}
+    foods_collection.insert_one(food)
+    return food
 
 
 def get_food(name: str) -> dict | None:
