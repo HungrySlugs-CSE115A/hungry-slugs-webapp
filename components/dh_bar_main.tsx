@@ -13,7 +13,7 @@ export default function DhBar({
       <div className="border  hover:border-black w-1/2 px-8 py-3 bg-[#F9F9F9] m4">
         <ul className="flex flex-col md:flex-row font-semibold text-2xl ">
           <li className=" text-[#00458C]">
-            <Link href={`/${index}`}>{name}</Link>
+            <Link href={`/locations/${index}`}>{name}</Link>
           </li>
         </ul>
       </div>
