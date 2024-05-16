@@ -15,12 +15,6 @@ from django.utils import timezone
 from datetime import datetime
 
 
-# Create your views here.
-@api_view(["GET"])
-def hello_world(request):
-    return Response({"message": "Hello, world!"})
-
-
 # Get the list of locations at UCSC and their information
 @api_view(["GET"])
 def get_locations(request):
@@ -71,3 +65,19 @@ def get_locations(request):
     json_data = {"locations": locations}
 
     return Response(json_data)
+
+
+from .db_functions.food import get_food as get_food_db, set_food as set_food_db
+# Get request that takes parameter of food name and returns the food object
+# if it doesn't exist in the db it will add the food object to the db
+@api_view(["GET"])
+def get_food(request, food_name: str):
+    # get the food from the db
+    food = get_food_db(name=food_name)
+
+    # if the food doesn't exist in the db
+    if food is None:
+        # add the food object to the db
+        set_food_db(food)
+
+    return Response(food)
