@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { getComments as getCommentsApi, 
   createComment as createCommentApi, 
-  deleteComment as deleteCommentApi } from './example';
+  deleteComment as deleteCommentApi, 
+  updateComment as updateCommentApi} from './example';
 import Comment, { CommentData } from './comment';
 import CommentForm from './comment_form';
 import './index.css';
@@ -13,7 +14,7 @@ interface CommentsProps {
 
 const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
   const [backendComments, setBackendComments] = useState<CommentData[]>();
-
+  const [activeComment, setActiveComment] = useState<{ id: string, type: string } | null>(null);
   const rootComments = backendComments ? backendComments.filter((backendComment) => backendComment.parent_id === null) : [];
   
   const getReplies = (comment_id: string): CommentData[] => {
@@ -27,6 +28,8 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
     console.log("addComment", text, parent_id);
     createCommentApi(text, parent_id).then((comment) => {
       setBackendComments([comment, ...(backendComments || [])]);
+      // Closes the textbox after posting comment
+      setActiveComment(null);
     });
   };
 
@@ -41,6 +44,21 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
     }
   };  
 
+  const updateComment = (text: string, comment_id: string) => {
+    updateCommentApi(text).then(() => {
+      const updatedBackendComments = backendComments?.map(backendComment => {
+        if (backendComment.id === comment_id) {
+          return {...backendComment, body: text};
+        }
+        return backendComment;
+      });
+      setBackendComments(updatedBackendComments);
+      // Closes the textbox after editing comment
+      setActiveComment(null);
+    });
+  };
+
+
   useEffect(() => {
     getCommentsApi().then((data) => {
       setBackendComments(data);
@@ -54,11 +72,17 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
       <CommentForm submitLabel="Write" handleSubmit={addComment}/>
       <div className="comments_container">
         {rootComments.map((rootComment) => (
-          <Comment key={rootComment.id} 
+          <Comment 
+          key={rootComment.id} 
           comment={rootComment} 
           replies={getReplies(rootComment.id)}
           currentUserId={currentUserId}
           deleteComment={deleteComment}
+          addComment={addComment}
+          updateComment={updateComment}
+          activeComment={activeComment}
+          setActiveComment={setActiveComment}
+          parentId={rootComment.id}
           />
         ))}
       </div>

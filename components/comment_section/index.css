@@ -37,7 +37,6 @@
 }
 
 .comment_form_button:disabled {
-  opacity: 0.7;
   cursor: default;
 }
 
