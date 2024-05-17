@@ -21,9 +21,8 @@ def get_local_db_handle(db_name: str, host: str = "localhost", port: int = 27017
 
 
 if __name__ == "__main__":
-    if (
-        IS_DEV and False
-    ):  # Remove the False to test locally but you will have to have a local mongodb server running
+    if IS_DEV and False:
+        # Remove the False to test locally but you will have to have a local mongodb server running
         db_handle, client = get_local_db_handle("test")
     else:
         db_handle, client = get_db_handle(
