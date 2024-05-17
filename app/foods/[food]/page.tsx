@@ -28,7 +28,7 @@ export default function Page({ params }: { params: { food: string } }) {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/myapi/foods/${encodeURIComponent(params.food)}/`
+        `http://localhost:8000/myapi/foods/${encodeURIComponent(params.food)}/`,
       )
       .then((response) => {
         if (response.status === 200) {
@@ -67,7 +67,7 @@ export default function Page({ params }: { params: { food: string } }) {
               </div>
             )}
           </div>
-        )
+        ),
       )}
     </main>
   );
