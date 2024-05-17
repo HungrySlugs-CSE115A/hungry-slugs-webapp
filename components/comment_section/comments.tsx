@@ -6,7 +6,6 @@ import { getComments as getCommentsApi,
   updateComment as updateCommentApi} from './example';
 import Comment, { CommentData } from './comment';
 import CommentForm from './comment_form';
-import './index.css';
 
 interface CommentsProps {
   currentUserId: string;
@@ -69,11 +68,10 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
   }, []);
 
   return (
-    <div className="comments">
-      <h3 className="comments_title">Comments</h3>
-      <div className="comment_form_title">Write Comment</div>
-      <CommentForm submitLabel="Write" handleSubmit={addComment}/>
-      <div className="comments_container">
+    <div className="comments mt-5 p-4">
+      <h3 className="comments_title text-3xl mb-5">Comments</h3>
+      <CommentForm submitLabel="Post" handleSubmit={addComment}/>
+      <div className="comments_container mt-10">
         {/* Map through root comments and render each Comment component */}
         {rootComments.map((rootComment) => (
           <Comment 

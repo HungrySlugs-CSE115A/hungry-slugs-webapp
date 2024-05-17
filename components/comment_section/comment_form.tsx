@@ -22,17 +22,21 @@ const CommentForm: React.FC<CommentFormProps> = ({ handleSubmit, submitLabel, ha
     <form onSubmit={onSubmit}>
       {/* Textarea for entering comment */}
       <textarea 
-        className="comment_form_textarea" 
+        className="comment_form_textarea w-full h-20 border border-gray-300 p-2 mb-2 mt-2 break-all max-w-full"
+        style={{ borderColor: 'rgb(107, 114, 12)' }} 
         value={text} 
         onChange={(e) => setText(e.target.value)} // Update the textarea value on change
       />
       {/* Submit button */}
-      <button className="comment_form_button" disabled={isTextareDisabled}>
+      <button className={`comment_form_button 
+        text-white ${isTextareDisabled ? 'bg-gray-300 cursor-default' : 'bg-blue-500 hover:bg-blue-700'} 
+        rounded-md px-4 py-2`} disabled={isTextareDisabled}>
         {submitLabel}
       </button>
       {/* Cancel button*/}
       {hasCancelButton && (
-        <button type="button" className="comment_form_button comment_form_cancel_button" 
+        <button type="button" className={`comment_form_button comment_form_cancel_button 
+        text-white bg-blue-500 hover:bg-blue-700 rounded-md px-4 py-2 ml-2`} 
         onClick={handleCancel}> 
           Cancel 
         </button>

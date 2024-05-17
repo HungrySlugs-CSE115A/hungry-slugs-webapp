@@ -46,16 +46,16 @@ const Comment: React.FC<CommentProps> = ({ comment, replies, currentUserId, dele
   const replyId = parentId ? parentId : comment.id;
 
   return (
-    <div className="comment">
-      <div className="comment_image_container">
-        <img src="/user-icon.png"/>
+    <div className="comment flex mb-7 p-4">
+      <div className="comment_image_container mr-3">
+        <img src="/user-icon.png" className="rounded-full"/>
       </div>
-      <div className="comment_right_part">
-        <div className="comment_content">
-          <div className="comment_author">{comment.username}</div>
+      <div className="comment_right_part w-full">
+        <div className="comment_content flex">
+          <div className="comment_author mr-2 text-xl text-blue-500">{comment.username}</div>
           <div>{timePosted}</div>
         </div>
-        {!isEditing && <div className="comment_text">{comment.body}</div>}
+        {!isEditing && <div className="comment_text text-base break-all max-w-full">{comment.body}</div>}
         {isEditing && (
           <CommentForm 
             submitLabel="Update" 
@@ -67,14 +67,13 @@ const Comment: React.FC<CommentProps> = ({ comment, replies, currentUserId, dele
         )}
         
         {/* Display actions (reply, edit, delete) */}
-        <div className="comment_actions">
-          {canReply && <div className="comment_action" onClick={() => setActiveComment({id: comment.id, type: "replying"})}>
+        <div className="comment_actions flex text-sm text-gray-700 cursor-pointer mt-2">
+          {canReply && <div className="comment_action mr-2 hover:underline" onClick={() => setActiveComment({id: comment.id, type: "replying"})}>
             Reply</div>}
-          {canEdit && <div className="comment_action"  onClick={() => setActiveComment({id: comment.id, type: "editing"})}>
+          {canEdit && <div className="comment_action mr-2 hover:underline"  onClick={() => setActiveComment({id: comment.id, type: "editing"})}>
             Edit</div>}
-          {canDelete && (
-            <div className="comment_action" onClick={() => deleteComment(comment.id)}>
-              Delete</div>)}
+          {canDelete && (<div className="comment_action mr-2 hover:underline" onClick={() => deleteComment(comment.id)}>
+            Delete</div>)}
         </div>
         {/* Display a form for replying to the comment */}
         {isReplying && (
@@ -82,7 +81,7 @@ const Comment: React.FC<CommentProps> = ({ comment, replies, currentUserId, dele
           />
         )}
         {replies.length > 0 && (
-          <div className="replies"> 
+          <div className="replies mt-5"> 
             {replies.map((reply) => (
               <Comment 
                 key={reply.id} 
