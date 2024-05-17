@@ -6,7 +6,7 @@ import {
 } from "@react-oauth/google";
 import axios from "axios";
 
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+import { GOOGLE_CLIENT_ID } from "@/private/secrets";
 
 interface User {
   name: string;
