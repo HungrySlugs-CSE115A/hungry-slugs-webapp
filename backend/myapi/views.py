@@ -1,10 +1,16 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.http import JsonResponse
 import requests
+from django.http import JsonResponse
 
+
+from .model_logic.locations.actions import (
+    get_locations as get_locations_db,
+    update_locations,
+)
 from .model_logic.tasks.actions import (
     get_last_update_time,
+    update_task,
     set_task,
     str_to_datetime,
     update_task,

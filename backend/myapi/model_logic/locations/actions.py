@@ -57,3 +57,20 @@ def update_locations(locations: list[dict]) -> None:
 
 def delete_locations(names: list[str]) -> None:
     locations_collection.delete_many({"name": {"$in": names}})
+
+
+## Helpers
+def find_food_in_location(location: dict, food_name: str) -> dict | None:
+    if "categories" not in location:
+        return
+    for category in location["categories"]:
+        if "sub_categories" not in category:
+            continue
+        for subcategory in category["sub_categories"]:
+            if "foods" not in subcategory:
+                continue
+            for food in subcategory["foods"]:
+                if "name" not in food:
+                    continue
+                if food["name"] == food_name:
+                    return food
