@@ -1,9 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  GoogleOAuthProvider,
-  useGoogleLogin,
-} from "@react-oauth/google";
+import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
 import { GOOGLE_CLIENT_ID } from "@/private/secrets";
@@ -50,12 +47,7 @@ const LoginComponent = () => {
     onError: (errorResponse) => console.error("Login Failed", errorResponse),
   });
 
-
-  return (
-      <button onClick={() => handleLogin()}>
-        Account
-      </button>
-  );
+  return <button onClick={() => handleLogin()}>Account</button>;
 };
 
 export default LoginPage;

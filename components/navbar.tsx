@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import LoginPage from './login'; // Used if not logged in
+import LoginPage from "./login"; // Used if not logged in
 
 export default function Navbar({ height }: { height: string }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -10,7 +10,6 @@ export default function Navbar({ height }: { height: string }) {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
-
 
   return (
     <nav className="bg-white fixed w-full  top-0 start-0  ">
@@ -38,7 +37,7 @@ export default function Navbar({ height }: { height: string }) {
             <li>
               {!isLoggedIn ? (
                 <a className="pl-4 pr-5">
-                <LoginPage />
+                  <LoginPage />
                 </a>
               ) : (
                 <a href="/profile" className="pl-4 pr-5">
