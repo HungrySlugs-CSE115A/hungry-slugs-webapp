@@ -69,7 +69,7 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
 
   return (
     <div className="comments mt-5 p-4">
-      <h3 className="comments_title text-3xl mb-5">Comments</h3>
+      {/* <h3 className="comments_title text-3xl mb-5">Comments</h3> */}
       <CommentForm submitLabel="Post" handleSubmit={addComment}/>
       <div className="comments_container mt-10">
         {/* Map through root comments and render each Comment component */}
