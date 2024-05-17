@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import LoginPage from './login'; // Used if not logged in
 
 export default function Navbar({ height }: { height: string }) {
