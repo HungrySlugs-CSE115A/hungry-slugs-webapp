@@ -1,6 +1,7 @@
 import React from 'react';
 import CommentForm from './comment_form';
 
+// Define the shape of each comment's data
 export interface CommentData {
   id: string;
   body: string;
@@ -10,6 +11,7 @@ export interface CommentData {
   time_posted: string;
 }
 
+// Define the props expected by the Comment component
 interface CommentProps {
   comment: {
     id: string;
@@ -18,16 +20,17 @@ interface CommentProps {
     user_id: string;
     time_posted: string; 
   };
-  replies: CommentData[];
+  replies: CommentData[]; 
   currentUserId: string;
   deleteComment: (comment_id: string) => void;
   addComment: (text: string, parent_id: string | null) => void;
   updateComment: (text: string, comment_id: string) => void;
   activeComment: { id: string, type: string } | null;
-  setActiveComment: React.Dispatch<React.SetStateAction<{ id: string, type: string } | null>>; // Explicitly declare the type;
+  setActiveComment: React.Dispatch<React.SetStateAction<{ id: string, type: string } | null>>;
   parentId: null | string;
 }
 
+// Comment component
 const Comment: React.FC<CommentProps> = ({ comment, replies, currentUserId, deleteComment, addComment, updateComment, activeComment, setActiveComment, parentId }) => {
   // Don't allow editing or deleting comment after 5 minutes passed since posting
   const fiveMinutes: number = 300000; // 5 minutes in milliseconds
@@ -63,6 +66,7 @@ const Comment: React.FC<CommentProps> = ({ comment, replies, currentUserId, dele
           />
         )}
         
+        {/* Display actions (reply, edit, delete) */}
         <div className="comment_actions">
           {canReply && <div className="comment_action" onClick={() => setActiveComment({id: comment.id, type: "replying"})}>
             Reply</div>}
@@ -72,6 +76,7 @@ const Comment: React.FC<CommentProps> = ({ comment, replies, currentUserId, dele
             <div className="comment_action" onClick={() => deleteComment(comment.id)}>
               Delete</div>)}
         </div>
+        {/* Display a form for replying to the comment */}
         {isReplying && (
           <CommentForm submitLabel="Reply" handleSubmit={(text: string) => addComment(text, replyId)}
           />

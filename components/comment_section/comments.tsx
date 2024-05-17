@@ -27,6 +27,7 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
   const addComment = (text: string, parent_id: string | null) => {
     console.log("addComment", text, parent_id);
     createCommentApi(text, parent_id).then((comment) => {
+      // Add the new comment to backendComments
       setBackendComments([comment, ...(backendComments || [])]);
       // Closes the textbox after posting comment
       setActiveComment(null);
@@ -39,6 +40,7 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
         const updatedBackendComments = backendComments?.filter(
           (backendComment) => backendComment.id !== comment_id
         );
+        // Update backendComments after deleting the comment
         setBackendComments(updatedBackendComments);
       });
     }
@@ -48,6 +50,7 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
     updateCommentApi(text).then(() => {
       const updatedBackendComments = backendComments?.map(backendComment => {
         if (backendComment.id === comment_id) {
+          // Update the body of the comment with the new text
           return {...backendComment, body: text};
         }
         return backendComment;
@@ -71,6 +74,7 @@ const Comments: React.FC<CommentsProps> = ({ currentUserId }) => {
       <div className="comment_form_title">Write Comment</div>
       <CommentForm submitLabel="Write" handleSubmit={addComment}/>
       <div className="comments_container">
+        {/* Map through root comments and render each Comment component */}
         {rootComments.map((rootComment) => (
           <Comment 
           key={rootComment.id} 
