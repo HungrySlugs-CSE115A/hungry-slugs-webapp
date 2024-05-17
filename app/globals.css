@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Force scrollbar to always be visible so text doesn't move when navigating across pages*/
+body {
+  overflow-y: scroll;
+}

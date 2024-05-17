@@ -1,15 +1,16 @@
 "use client";
-import React, { useContext } from "react";
-
-const checkLogin = () => {
-  if (!localStorage.getItem("token")) {
-    window.location.href = "/loginPage"; // Redirect to login page if not authenticated
-  } else {
-    window.location.href = "/profile"; // Redirect to profile page if authenticated
-  }
-};
+import { useState, useEffect } from "react";
+import LoginPage from "./login"; // Used if not logged in
 
 export default function Navbar({ height }: { height: string }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if localStorage is available and if token exists
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
     <nav className="bg-white fixed w-full  top-0 start-0  ">
       <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-2.5">
@@ -34,10 +35,15 @@ export default function Navbar({ height }: { height: string }) {
               </a>
             </li>
             <li>
-              <a onClick={checkLogin} className="pl-4 pr-5">
-                Account
-              </a>
-              {/* pr-X dicates how far off right we want.  */}
+              {!isLoggedIn ? (
+                <a className="pl-4 pr-5">
+                  <LoginPage />
+                </a>
+              ) : (
+                <a href="/profile" className="pl-4 pr-5">
+                  Account
+                </a>
+              )}
             </li>
             <li>
               <a href="/search" className="pl-4 pr-5"></a>
