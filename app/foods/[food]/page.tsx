@@ -1,6 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Comments from '@/components/comment_section/comments';
+
+// Define the components for each tab if component not finished
+const Ratings = () => <div>Ratings Component</div>;
+const Images = () => <div>Images Component</div>;
 
 export default function Page({ params }: { params: { food: string } }) {
   const [tabSelected, setTabSelected] = useState(0);
@@ -42,6 +47,9 @@ export default function Page({ params }: { params: { food: string } }) {
       });
   }, [params.food]);
 
+  // Define an array of components corresponding to each tab
+  const components = [<Comments currentUserId="1"/>, <Ratings />, <Images />];
+
   return (
     <main className="flex flex-col items-center">
       <ul className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
@@ -57,18 +65,9 @@ export default function Page({ params }: { params: { food: string } }) {
         ))}
       </ul>
       <h1 className="text-2xl">{decodeURIComponent(params.food)}</h1>
-      {[<div>test 0</div>, <div>test 1</div>, <div>test 2</div>].map(
-        (pageContent, i) => (
-          <div key={i} className="flex flex-col items-center">
-            {tabSelected === i && (
-              <div>
-                <h2>{tabs[i][0] as string}</h2>
-                {pageContent}
-              </div>
-            )}
-          </div>
-        ),
-      )}
+      <div className="flex flex-col items-center">
+        {components[tabSelected]}
+      </div>
     </main>
   );
 }

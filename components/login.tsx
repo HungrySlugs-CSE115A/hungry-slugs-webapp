@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
-import { GOOGLE_CLIENT_ID } from "../private/secrets";
+import { GOOGLE_CLIENT_ID } from "@/private/secrets";
 
 interface User {
   name: string;
