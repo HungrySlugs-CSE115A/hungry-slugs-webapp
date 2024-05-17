@@ -1,4 +1,4 @@
-from ..models import locations_collection
+from ...models import locations_collection
 
 """
 name: str

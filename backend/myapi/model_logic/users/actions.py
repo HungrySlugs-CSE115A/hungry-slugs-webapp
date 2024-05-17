@@ -1,4 +1,4 @@
-from ..models import users_collection
+from ...models import users_collection
 
 """
 username: str,

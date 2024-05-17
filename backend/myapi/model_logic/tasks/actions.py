@@ -1,5 +1,5 @@
 from requests import get
-from ..models import tasks_collection
+from ...models import tasks_collection
 from datetime import datetime
 
 # import time from django
