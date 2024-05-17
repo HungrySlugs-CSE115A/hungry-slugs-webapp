@@ -3,13 +3,18 @@ from rest_framework.decorators import api_view
 from django.http import JsonResponse
 import requests
 
-from .db_functions.locations import update_locations, get_locations as get_locations_db
-from .db_functions.tasks import (
-    update_task,
+from .model_logic.tasks.actions import (
     get_last_update_time,
     set_task,
     str_to_datetime,
+    update_task,
 )
+
+from .model_logic.locations.actions import (
+    update_locations,
+    get_locations as get_locations_db,
+)
+
 from webscraper.food_locations import FoodLocations
 
 
@@ -120,24 +125,3 @@ def current_logout(request):
 
     print("Current session after logout:", request.session.get("current_user"))
     return JsonResponse({"message": "User has been logged out"})
-
-
-from .db_functions.food import get_food as get_food_db, set_food as set_food_db
-
-
-# Get request that takes parameter of food name and returns the food object
-# if it doesn't exist in the db it will add the food object to the db
-@api_view(["GET"])
-def get_food(request, food_name: str):
-    # get the food from the db
-    food = get_food_db(name=food_name)
-
-    # if the food doesn't exist in the db
-    if food is None:
-        # add the food object to the db
-        set_food_db(name=food_name)
-
-    # get the food from the db
-    food = get_food_db(name=food_name)
-
-    return Response(food)
