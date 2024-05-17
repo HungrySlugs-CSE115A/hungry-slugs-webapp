@@ -48,7 +48,7 @@ const Comment: React.FC<CommentProps> = ({ comment, replies, currentUserId, dele
   return (
     <div className="comment flex mb-7 p-4">
       <div className="comment_image_container mr-3">
-        <img src="/user-icon.png" className="rounded-full"/>
+        {/* <img src="/user-icon.png" className="rounded-full"/> */}
       </div>
       <div className="comment_right_part w-full">
         <div className="comment_content flex">
