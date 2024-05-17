@@ -1,5 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+import requests
+from django.http import JsonResponse
 
 
 from .model_logic.locations.actions import (
