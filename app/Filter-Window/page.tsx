@@ -13,8 +13,8 @@ const AllergyFilterPage = () => {
     return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
   });
 
-  const hideAllergies = ['Milk', 'Egg', 'Fish', 'Shellfish', 'Tree Nut', 'Peanut', 'Wheat', 'Soy', 'Gluten', 'Sesame', 'Alcohol'];
-  const showAllergies = ['Egg', 'Fish', 'Gluten Friendly', 'Milk', 'Peanuts', 'Soy', 'Vegan', 'Vegetarian', 'Pork', 'Beef', 'Halal', 'Shellfish', 'Tree Nut', 'Alcohol', 'Sesame'];
+  const hideAllergies = ['milk', 'eggs', 'fish', 'shellfish', 'treenut', 'nuts', 'wheat', 'soy', 'gluten', 'sesame', 'alcohol'];
+  const showAllergies = ['eggs', 'fish', 'gluten', 'milk', 'nuts', 'soy', 'vegan', 'veggie', 'pork', 'beef', 'halal', 'shellfish', 'treenut', 'alcohol', 'sesame'];
 
   const handleReset = () => {
     setSelectedHideAllergies([]);

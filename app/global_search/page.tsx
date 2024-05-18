@@ -1,9 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import LocationFood from "@/components/location/food";
 
 interface Food {
   name: string;
+  restrictions: string[]; // Change to string array
 }
 
 interface subCategory {
@@ -18,8 +20,29 @@ interface Category {
 
 interface DiningHall {
   name: string;
-  categories: Category[];
+  categories: Array<Category>;
 }
+interface RestrictionImageMap {
+  [key: string]: string;
+}
+
+const restrictionImageMap = {
+  eggs: "/Images/egg.jpg",
+  vegan: "/Images/vegan.jpg",
+  fish: "/Images/fish.jpg",
+  veggie: "/Images/veggie.jpg",
+  gluten: "/Images/gluten.jpg",
+  pork: "/Images/pork.jpg",
+  milk: "/Images/milk.jpg",
+  beef: "/Images/beef.jpg",
+  nuts: "/Images/nuts.jpg",
+  halal: "/Images/halal.jpg",
+  soy: "/Images/soy.jpg",
+  shellfish: "/Images/shellfish.jpg",
+  treenut: "/Images/treenut.jpg",
+  sesame: "/Images/sesame.jpg",
+  alcohol: "/Images/alcohol.jpg",
+};
 
 const BarebonesComponent = () => {
   const [dhs, setDhs] = useState<DiningHall[]>([]);
@@ -78,21 +101,36 @@ const BarebonesComponent = () => {
         });
       });
     });
-
+  
     const filtered = allFoods.filter(({ food }) =>
-      food.name.toLowerCase().includes(searchInput.toLowerCase()),
+      food.name.toLowerCase().includes(searchInput.toLowerCase())
     );
-
-    // Filter foods based on selectedShowAllergies and selectedHideAllergies
-    const finalFilteredFoods = filtered.filter(({ food }) =>
-      selectedShowAllergies.every(allergy => food.name.toLowerCase().includes(allergy.toLowerCase())) &&
-      !selectedHideAllergies.some(allergy => food.name.toLowerCase().includes(allergy.toLowerCase()))
-    );
-
+  
+    // Check if all boxes are unchecked
+    const allBoxesUnchecked =
+      selectedShowAllergies.length === 0 && selectedHideAllergies.length === 0;
+  
+    let finalFilteredFoods = filtered;
+    if (!allBoxesUnchecked) {
+      // Filter foods based on selectedShowAllergies and selectedHideAllergies
+      finalFilteredFoods = filtered.filter(({ food }) => {
+        const hasShowAllergy = selectedShowAllergies.length === 0 ||
+          selectedShowAllergies.every(allergy =>
+            food.name.toLowerCase().includes(allergy.toLowerCase())
+          );
+        const hasHideAllergy = selectedHideAllergies.some(allergy =>
+          food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
+        );
+        return hasShowAllergy && !hasHideAllergy;
+      });
+    }
+  
     setNoFoodsFound(finalFilteredFoods.length === 0);
     setFilteredFoods(finalFilteredFoods);
     setShowSearchResults(true);
   };
+  
+  
 
   return (
     <div
@@ -133,38 +171,30 @@ const BarebonesComponent = () => {
             {filteredFoods.map(({ food, dhName, categoryName }, index) => (
               <li key={index}>
                 {food.name} - {categoryName} ({dhName})
+                <div style={{ display: "flex", flexWrap: "nowrap" }}>
+                  
+                  {food.restrictions.map((restriction, index) => (
+                    <img
+                      key={index}
+                      src={restrictionImageMap[restriction]}
+                      alt={restriction}
+                      style={{ width: "25px", height: "25px", margin: "5px" }}
+                    />
+                  ))}
+                </div>
               </li>
             ))}
           </ul>
         </div>
       )}
-
+  
       {noFoodsFound && (
         <div>
           <h3>No foods found at this dining hall.</h3>
         </div>
       )}
-
-      {/* Display selected hide and show allergies */}
-      <div>
-        <h3>Selected Hide Allergies:</h3>
-        <ul>
-          {selectedHideAllergies.map((allergy, index) => (
-            <li key={index}>{allergy}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h3>Selected Show Allergies:</h3>
-        <ul>
-          {selectedShowAllergies.map((allergy, index) => (
-            <li key={index}>{allergy}</li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
-};
+  };
 
 export default BarebonesComponent;
