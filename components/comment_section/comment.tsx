@@ -40,13 +40,23 @@ const Comment: React.FC<CommentProps> = ({ comment, replies, currentUserId, dele
   const canReply = Boolean(currentUserId)
   const canEdit = currentUserId === comment.user_id && !timePassed;
   const canDelete = currentUserId === comment.user_id && !timePassed;
-  const timePosted = new Date(comment.time_posted).toLocaleDateString();
+  // Define the options for date and time formatting
+  const options = {
+    year: 'numeric' as 'numeric', 
+    month: '2-digit' as '2-digit',  
+    day: '2-digit' as '2-digit', 
+    hour: '2-digit' as '2-digit', 
+    minute: '2-digit' as '2-digit', 
+    second: '2-digit' as '2-digit',  
+    hour12: false  
+  };
+  const timePosted = new Date(comment.time_posted).toLocaleString('en-US', options);
   const isReplying = activeComment && activeComment.type === "replying" && activeComment.id === comment.id;
   const isEditing = activeComment && activeComment.type === "editing" && activeComment.id === comment.id;
   const replyId = parentId ? parentId : comment.id;
 
   return (
-    <div className="comment flex mb-7 p-4">
+    <div className="comment flex p-4">
       <div className="comment_image_container mr-3">
         {/* <img src="/user-icon.png" className="rounded-full"/> */}
       </div>
