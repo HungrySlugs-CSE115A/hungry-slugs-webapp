@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+
 export default function LocationFood({
   food_name,
   restriction_images,
@@ -15,7 +16,7 @@ export default function LocationFood({
           <ul className="flex flex-row px-1">
             {restriction_images.map((image, index) => (
               <li key={index} className="px-1">
-                <img src={image} alt = {image}/> {/* Display the image */}
+                <img src={image} height = {20} width = {20} alt = {image}/> {/* Display the image */}
               </li>
             ))}
           </ul>

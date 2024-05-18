@@ -1,4 +1,5 @@
 "use client";
+
 import LocationFood from "@/components/location/food";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -29,7 +30,7 @@ interface RestrictionImageMap {
 }
 
 const restrictionImageMap = {
-  eggs: "app/locations/Images/egg.jpg",
+        eggs: "app/locations/Images/egg.jpg",
         vegan: "app/locations/Images/vegan.jpg",
         fish: "app/locations/Images/fish.jpg",
         veggie: "app/locations/Images/veggie.jpg",
