@@ -30,21 +30,21 @@ interface RestrictionImageMap {
 }
 
 const restrictionImageMap = {
-        eggs: "app/locations/Images/egg.jpg",
-        vegan: "app/locations/Images/vegan.jpg",
-        fish: "app/locations/Images/fish.jpg",
-        veggie: "app/locations/Images/veggie.jpg",
-        gluten: "app/locations/Images/gluten.jpg",
-        pork: "app/locations/Images/pork.jpg",
-        milk: "app/locations/Images/milk.jpg",
-        beef: "app/locations/Images/beef.jpg",
-        nuts: "app/locations/Images/nuts.jpg",
-        halal: "app/locations/Images/halal.jpg",
-        soy: "app/locations/Images/soy.jpg",
-        shellfish: "app/locations/Images/shellfish.jpg",
-        treenut: "app/locations/Images/treenut.jpg",
-        sesame: "app/locations/Images/sesame.jpg",
-        alcohol: "app/locations/Images/alcohol.jpg",
+        eggs: "/Images/egg.jpg",
+        vegan: "/Images/vegan.jpg",
+        fish: "/Images/fish.jpg",
+        veggie: "/Images/veggie.jpg",
+        gluten: "/Images/gluten.jpg",
+        pork: "/Images/pork.jpg",
+        milk: "/Images/milk.jpg",
+        beef: "/Images/beef.jpg",
+        nuts: "/Images/nuts.jpg",
+        halal: "/Images/halal.jpg",
+        soy: "/Images/soy.jpg",
+        shellfish: "/Images/shellfish.jpg",
+        treenut: "/Images/treenut.jpg",
+        sesame: "/Images/sesame.jpg",
+        alcohol: "/Images/alcohol.jpg",
 };
 
 export default function Page({ params }: { params: { location: number } }) {

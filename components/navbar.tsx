@@ -49,6 +49,7 @@ export default function Navbar({ height }: { height: string }) {
               <a href="/search" className="pl-4 pr-5"></a>
               {/* pr-X dicates how far off right we want.  */}
             </li>
+            
           </ul>
         </div>
       </div>
