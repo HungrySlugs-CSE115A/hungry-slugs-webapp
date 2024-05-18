@@ -29,9 +29,17 @@ const BarebonesComponent = () => {
   >([]);
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
-  
-  const [selectedHideAllergies, setSelectedHideAllergies] = useState([]);
-  const [selectedShowAllergies, setSelectedShowAllergies] = useState([]);
+
+  // Retrieve hide and show allergies from local storage
+  const [selectedHideAllergies, setSelectedHideAllergies] = useState<string[]>(() => {
+    const storedHideAllergies = localStorage.getItem('hideAllergies');
+    return storedHideAllergies ? JSON.parse(storedHideAllergies) : [];
+  });
+
+  const [selectedShowAllergies, setSelectedShowAllergies] = useState<string[]>(() => {
+    const storedShowAllergies = localStorage.getItem('showAllergies');
+    return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
+  });
 
   useEffect(() => {
     axios
@@ -75,19 +83,16 @@ const BarebonesComponent = () => {
       food.name.toLowerCase().includes(searchInput.toLowerCase()),
     );
 
-    setNoFoodsFound(filtered.length === 0);
-    setFilteredFoods(filtered);
+    // Filter foods based on selectedShowAllergies and selectedHideAllergies
+    const finalFilteredFoods = filtered.filter(({ food }) =>
+      selectedShowAllergies.every(allergy => food.name.toLowerCase().includes(allergy.toLowerCase())) &&
+      !selectedHideAllergies.some(allergy => food.name.toLowerCase().includes(allergy.toLowerCase()))
+    );
+
+    setNoFoodsFound(finalFilteredFoods.length === 0);
+    setFilteredFoods(finalFilteredFoods);
     setShowSearchResults(true);
   };
-  
-  useEffect(() => {
-    // Filter foods based on selectedShowAllergies and selectedHideAllergies
-    const filtered = filteredFoods.filter(({ food }) =>
-      selectedShowAllergies.every(allergy => food.name.toLowerCase().includes(allergy.toLowerCase())) &&
-      selectedHideAllergies.every(allergy => !food.name.toLowerCase().includes(allergy.toLowerCase()))
-    );
-    setFilteredFoods(filtered);
-  }, [selectedShowAllergies, selectedHideAllergies]);
 
   return (
     <div
@@ -139,6 +144,25 @@ const BarebonesComponent = () => {
           <h3>No foods found at this dining hall.</h3>
         </div>
       )}
+
+      {/* Display selected hide and show allergies */}
+      <div>
+        <h3>Selected Hide Allergies:</h3>
+        <ul>
+          {selectedHideAllergies.map((allergy, index) => (
+            <li key={index}>{allergy}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3>Selected Show Allergies:</h3>
+        <ul>
+          {selectedShowAllergies.map((allergy, index) => (
+            <li key={index}>{allergy}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
