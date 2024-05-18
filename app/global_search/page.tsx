@@ -29,6 +29,9 @@ const BarebonesComponent = () => {
   >([]);
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
+  
+  const [selectedHideAllergies, setSelectedHideAllergies] = useState([]);
+  const [selectedShowAllergies, setSelectedShowAllergies] = useState([]);
 
   useEffect(() => {
     axios
@@ -47,7 +50,7 @@ const BarebonesComponent = () => {
   ) => {
     setSearchInput(event.target.value);
   };
-  
+
   const handleFilter = () => {
     window.location.href = "Filter-Window";
   };
@@ -76,6 +79,16 @@ const BarebonesComponent = () => {
     setFilteredFoods(filtered);
     setShowSearchResults(true);
   };
+  
+  useEffect(() => {
+    // Filter foods based on selectedShowAllergies and selectedHideAllergies
+    const filtered = filteredFoods.filter(({ food }) =>
+      selectedShowAllergies.every(allergy => food.name.toLowerCase().includes(allergy.toLowerCase())) &&
+      selectedHideAllergies.every(allergy => !food.name.toLowerCase().includes(allergy.toLowerCase()))
+    );
+    setFilteredFoods(filtered);
+  }, [selectedShowAllergies, selectedHideAllergies]);
+
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}

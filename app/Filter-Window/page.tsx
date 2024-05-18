@@ -3,27 +3,33 @@ import React, { useState, useEffect } from 'react';
 import styles from './AllergyFilterPage.module.css';
 
 const AllergyFilterPage = () => {
-  const [selectedHideAllergies, setSelectedHideAllergies] = useState([]);
-  const [selectedShowAllergies, setSelectedShowAllergies] = useState([]);
+  const [selectedHideAllergies, setSelectedHideAllergies] = useState(() => {
+    const storedHideAllergies = localStorage.getItem('hideAllergies');
+    return storedHideAllergies ? JSON.parse(storedHideAllergies) : [];
+  });
 
-  // Define hideAllergies and showAllergies arrays
+  const [selectedShowAllergies, setSelectedShowAllergies] = useState(() => {
+    const storedShowAllergies = localStorage.getItem('showAllergies');
+    return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
+  });
+
   const hideAllergies = ['Milk', 'Egg', 'Fish', 'Shellfish', 'Tree Nut', 'Peanut', 'Wheat', 'Soy', 'Gluten', 'Sesame', 'Alcohol'];
   const showAllergies = ['Egg', 'Fish', 'Gluten Friendly', 'Milk', 'Peanuts', 'Soy', 'Vegan', 'Vegetarian', 'Pork', 'Beef', 'Halal', 'Shellfish', 'Tree Nut', 'Alcohol', 'Sesame'];
 
   const handleReset = () => {
     setSelectedHideAllergies([]);
     setSelectedShowAllergies([]);
-    
   };
 
   const handleCancel = () => {
     setSelectedHideAllergies([]);
     setSelectedShowAllergies([]);
     window.location.href = "global_search";
-    
   };
 
   const handleApply = () => {
+    localStorage.setItem('hideAllergies', JSON.stringify(selectedHideAllergies));
+    localStorage.setItem('showAllergies', JSON.stringify(selectedShowAllergies));
     console.log('Hide Allergies:', selectedHideAllergies);
     console.log('Show Allergies:', selectedShowAllergies);
     window.location.href = "global_search";
