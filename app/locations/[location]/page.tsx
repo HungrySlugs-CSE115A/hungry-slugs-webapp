@@ -1,9 +1,7 @@
 "use client";
-
-import LocationFood from "@/components/location/food";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import LocationFood from "@/components/location/food";
 
 interface Food {
   name: string;
@@ -30,21 +28,21 @@ interface RestrictionImageMap {
 }
 
 const restrictionImageMap = {
-        eggs: "/Images/egg.jpg",
-        vegan: "/Images/vegan.jpg",
-        fish: "/Images/fish.jpg",
-        veggie: "/Images/veggie.jpg",
-        gluten: "/Images/gluten.jpg",
-        pork: "/Images/pork.jpg",
-        milk: "/Images/milk.jpg",
-        beef: "/Images/beef.jpg",
-        nuts: "/Images/nuts.jpg",
-        halal: "/Images/halal.jpg",
-        soy: "/Images/soy.jpg",
-        shellfish: "/Images/shellfish.jpg",
-        treenut: "/Images/treenut.jpg",
-        sesame: "/Images/sesame.jpg",
-        alcohol: "/Images/alcohol.jpg",
+  eggs: "/Images/egg.jpg",
+  vegan: "/Images/vegan.jpg",
+  fish: "/Images/fish.jpg",
+  veggie: "/Images/veggie.jpg",
+  gluten: "/Images/gluten.jpg",
+  pork: "/Images/pork.jpg",
+  milk: "/Images/milk.jpg",
+  beef: "/Images/beef.jpg",
+  nuts: "/Images/nuts.jpg",
+  halal: "/Images/halal.jpg",
+  soy: "/Images/soy.jpg",
+  shellfish: "/Images/shellfish.jpg",
+  treenut: "/Images/treenut.jpg",
+  sesame: "/Images/sesame.jpg",
+  alcohol: "/Images/alcohol.jpg",
 };
 
 export default function Page({ params }: { params: { location: number } }) {
@@ -58,7 +56,27 @@ export default function Page({ params }: { params: { location: number } }) {
         const locations: Location[] = response.data["locations"];
         const location = locations[params.location];
         setLocation(location);
-        setShowCategories(new Array(location.categories.length).fill(true));
+
+        // Get current hour
+        const currentHour = new Date().getHours();
+        
+        // Set showCategories based on the time of day
+        setShowCategories(
+          new Array(location.categories.length).fill(false).map((_, index) => {
+            switch (index) {
+              case 0: // Breakfast (6 AM - 11 AM)
+                return currentHour >= 6 && currentHour < 11;
+              case 1: // Lunch (11 AM - 1 PM)
+                return currentHour >= 11 && currentHour < 14;
+              case 2: // Dinner (6 PM - 9 PM)
+                return currentHour >= 18 && currentHour < 21;
+              case 3: // Late Night (9 PM - 12 AM)
+                return currentHour >= 21 && currentHour < 24;
+              default:
+                return false;
+            }
+          })
+        );
       })
       .catch((error) => {
         console.log(error);
