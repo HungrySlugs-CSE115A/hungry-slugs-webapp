@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import LocationFood from "@/components/location/food";
 
@@ -8,14 +8,14 @@ interface Food {
   restrictions: Array<string>;
 }
 
-interface subCategory {
+interface SubCategory {
   name: string;
   foods: Array<Food>;
 }
 
 interface Category {
   name: string;
-  sub_categories: Array<subCategory>;
+  sub_categories: Array<SubCategory>;
 }
 
 interface Location {
@@ -49,12 +49,26 @@ export default function Page({ params }: { params: { location: number } }) {
       });
   }, [params.location]); // params.location is a dependency
 
+  const handleDiningHallSearch = () => {
+    
+    const searchResultPageUrl = `/locations/${params}/DH_Search`;
+    // Navigate to the search result page
+    window.location.href = searchResultPageUrl;
+    localStorage.setItem('diningHall', location?.name);
+  };
+
   return (
     <main>
       <div className="container mx-auto">
         <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
           {location && location.name}
         </h1>
+        <button
+          onClick={handleDiningHallSearch}
+          className="mb-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Dining Hall Search
+        </button>
         {location &&
           location.categories.map((category, i) => (
             <div key={i}>
