@@ -67,11 +67,11 @@ export default function Page({ params }: { params: { location: number } }) {
               case 0: // Breakfast (6 AM - 11 AM)
                 return currentHour >= 6 && currentHour < 11;
               case 1: // Lunch (11 AM - 1 PM)
-                return currentHour >= 11 && currentHour < 14;
+                return currentHour >= 11 && currentHour < 15;
               case 2: // Dinner (6 PM - 9 PM)
-                return currentHour >= 18 && currentHour < 21;
+                return currentHour >= 15 && currentHour < 20;
               case 3: // Late Night (9 PM - 12 AM)
-                return currentHour >= 21 && currentHour < 24;
+                return currentHour >= 20 && currentHour < 24;
               default:
                 return false;
             }

@@ -91,53 +91,73 @@ const AllergyFilterPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.column}>
-        <h2>Hide items that contain:</h2>
-        <div>
-          {hideAllergies.map((allergy, index) => (
-            <div key={index} className={styles.checkbox}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedHideAllergies.includes(allergy)}
-                  onChange={() => handleCheckboxChange(allergy, "hide")}
-                />
-                {allergy}
-              </label>
-            </div>
-          ))}
+      <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>Filter</h1>
+      <div className={styles.columns}>
+        <div className={styles.column}>
+        <h2 className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
+  Hide Items that contain:
+</h2>
+          <div>
+            {hideAllergies.map((allergy, index) => (
+              <div key={index} className={styles.checkbox}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedHideAllergies.includes(allergy)}
+                    onChange={() => handleCheckboxChange(allergy, "hide")}
+                  />
+                  {allergy}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.column}>
+        <h2 className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
+  Show items that match:
+</h2>
+          <div>
+            {showAllergies.map((allergy, index) => (
+              <div key={index} className={styles.checkbox}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedShowAllergies.includes(allergy)}
+                    onChange={() => handleCheckboxChange(allergy, "show")}
+                  />
+                  {allergy}
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className={styles.column}>
-        <h2>Show items that match:</h2>
-        <div>
-          {showAllergies.map((allergy, index) => (
-            <div key={index} className={styles.checkbox}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedShowAllergies.includes(allergy)}
-                  onChange={() => handleCheckboxChange(allergy, "show")}
-                />
-                {allergy}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
+      <div className={styles.submitButtons}>
+  <button 
+    className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`} 
+    style={{ padding: '0 1rem', textDecoration: 'none' }} 
+    onClick={handleCancel}
+  >
+    Cancel
+  </button>
+  <button 
+    className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`} 
+    style={{ padding: '0 1rem', textDecoration: 'none' }} 
+    onClick={handleReset}
+  >
+    Reset
+  </button>
+  <button 
+    className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`} 
+    style={{ padding: '0 1rem', textDecoration: 'none' }} 
+    onClick={handleApply}
+  >
+    Apply
+  </button>
+</div>
 
-      <div className="flex justify-center mt-4 space-x-4">
-        <button className={styles.submitButton} onClick={handleCancel}>
-          Cancel
-        </button>
-        <button className={styles.submitButton} onClick={handleReset}>
-          Reset
-        </button>
-        <button className={styles.submitButton} onClick={handleApply}>
-          Apply
-        </button>
-      </div>
     </div>
   );
 };

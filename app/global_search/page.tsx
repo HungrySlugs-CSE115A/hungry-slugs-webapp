@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import LocationFood from "@/components/location/food";
+import styles from "./Search.module.css";
 
 interface Food {
   name: string;
@@ -139,33 +139,34 @@ const BarebonesComponent = () => {
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      {/* Title */}
-      <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
-      {/* Search bar */}
-      <div className="search-bar" style={{ marginTop: "20px" }}>
-        <input
-          type="text"
-          placeholder="Search foods..."
-          value={searchInput}
-          onChange={handleSearchInputChange}
-        />
-        <button onClick={handleSearch}>Search</button>
-        {/* Filter button */}
-        <div
-          style={{
-            display: "inline-block",
-            marginLeft: "10px",
-            padding: "10px 20px",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            cursor: "pointer",
-            borderRadius: "5px",
-          }}
-          onClick={handleFilter}
-        >
-          Filter
+      {/* Title and Search bar */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px" }}>
+        <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>Global Search</h1>
+        <div className="search-bar" style={{ marginTop: "100px", display: "flex", alignItems: "center" }}>
+          <input
+            type="text"
+            placeholder="Search foods..."
+            value={searchInput}
+            onChange={handleSearchInputChange}
+          />
+          <button onClick={handleSearch}>Search</button>
+          {/* Filter button */}
+          <div
+            style={{
+              marginLeft: "10px",
+              padding: "10px 20px",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={handleFilter}
+          >
+            Filter
+          </div>
         </div>
       </div>
+
       {/* Display search results if button clicked */}
       {showSearchResults && (
         <div>
