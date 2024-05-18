@@ -1,21 +1,22 @@
 "use client";
-import { useState, useEffect, use } from "react";
-import axios from "axios";
 import LocationFood from "@/components/location/food";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 interface Food {
   name: string;
-  restrictions: Array<string>;
+  restrictions: string[]; // Change to string array
 }
 
 interface subCategory {
   name: string;
-  foods: Array<Food>;
+  foods: Food[]; // Update to use the Food interface
 }
 
 interface Category {
   name: string;
-  sub_categories: Array<subCategory>;
+  sub_categories: subCategory[];
 }
 
 interface Location {
@@ -23,31 +24,45 @@ interface Location {
   categories: Category[];
 }
 
-export default function Page({ params }: { params: { location: number } }) {
-  const [location, setLocation] = useState<Location>();
-  const [showCategories, setShowCategories] = useState<boolean[]>();
+interface RestrictionImageMap {
+  [key: string]: string;
+}
 
-  // fetch location data
+const restrictionImageMap = {
+  eggs: "app/locations/Images/egg.jpg",
+        vegan: "app/locations/Images/vegan.jpg",
+        fish: "app/locations/Images/fish.jpg",
+        veggie: "app/locations/Images/veggie.jpg",
+        gluten: "app/locations/Images/gluten.jpg",
+        pork: "app/locations/Images/pork.jpg",
+        milk: "app/locations/Images/milk.jpg",
+        beef: "app/locations/Images/beef.jpg",
+        nuts: "app/locations/Images/nuts.jpg",
+        halal: "app/locations/Images/halal.jpg",
+        soy: "app/locations/Images/soy.jpg",
+        shellfish: "app/locations/Images/shellfish.jpg",
+        treenut: "app/locations/Images/treenut.jpg",
+        sesame: "app/locations/Images/sesame.jpg",
+        alcohol: "app/locations/Images/alcohol.jpg",
+};
+
+export default function Page({ params }: { params: { location: number } }) {
+  const [location, setLocation] = useState<Location | null>(null);
+  const [showCategories, setShowCategories] = useState<boolean[]>([]);
+
   useEffect(() => {
     axios
-      .get("http://localhost:8000/myapi/locations/")
+      .get<Location[]>("http://localhost:8000/myapi/locations/")
       .then((response) => {
-        // Fetch the locations data
         const locations: Location[] = response.data["locations"];
-
-        // get the location data
         const location = locations[params.location];
-
-        // Set the location
         setLocation(location);
-
-        // Set the show categories to array of booleans
         setShowCategories(new Array(location.categories.length).fill(true));
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [params.location]); // params.location is a dependency
+  }, [params.location]);
 
   return (
     <main>
@@ -72,7 +87,9 @@ export default function Page({ params }: { params: { location: number } }) {
                 {/* Icon for accordion that will face up on false and down on true */}
                 <div className="flex justify-center items-center">
                   <svg
-                    className={`h-6 w-6 mr-6 ${showCategories && showCategories[i] ? "rotate-180" : ""}`}
+                    className={`h-6 w-6 mr-6 ${
+                      showCategories && showCategories[i] ? "rotate-180" : ""
+                    }`}
                     fill="#000000"
                     height="800px"
                     width="800px"
@@ -99,7 +116,9 @@ export default function Page({ params }: { params: { location: number } }) {
                         <LocationFood
                           key={k}
                           food_name={food.name}
-                          restrictions={food.restrictions}
+                          restriction_images={food.restrictions.map(
+                            (restriction) => restrictionImageMap[restriction]
+                          )}
                         />
                       ))}
                     </div>
