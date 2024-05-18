@@ -1,0 +1,26 @@
+/* AllergyFilterPage.module.css */
+
+.container {
+    @apply flex justify-center items-start min-h-screen py-12;
+  }
+  
+  .column {
+    @apply mx-4;
+  }
+  
+  .column h2 {
+    @apply text-lg font-semibold mb-2;
+  }
+  
+  .checkbox {
+    @apply mb-1;
+  }
+  
+  .submit-button {
+    @apply mt-4 px-4 py-2 bg-blue-500 text-white rounded cursor-pointer;
+  }
+  
+  .submit-button:hover {
+    @apply bg-blue-600;
+  }
+  

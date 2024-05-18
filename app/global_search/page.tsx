@@ -47,6 +47,10 @@ const BarebonesComponent = () => {
   ) => {
     setSearchInput(event.target.value);
   };
+  
+  const handleFilter = () => {
+    window.location.href = "Filter-Window";
+  };
 
   const handleSearch = () => {
     const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
@@ -72,7 +76,6 @@ const BarebonesComponent = () => {
     setFilteredFoods(filtered);
     setShowSearchResults(true);
   };
-
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -81,8 +84,6 @@ const BarebonesComponent = () => {
       <h1 className="text-8xl">Welcome to Hungry Slugs!</h1>
       {/* Search bar */}
       <div className="search-bar" style={{ marginTop: "20px" }}>
-        {" "}
-        {/* Adjust margin as needed */}
         <input
           type="text"
           placeholder="Search foods..."
@@ -90,6 +91,21 @@ const BarebonesComponent = () => {
           onChange={handleSearchInputChange}
         />
         <button onClick={handleSearch}>Search</button>
+        {/* Filter button */}
+        <div
+          style={{
+            display: 'inline-block',
+            marginLeft: '10px',
+            padding: '10px 20px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            cursor: 'pointer',
+            borderRadius: '5px',
+          }}
+          onClick={handleFilter}
+        >
+          Filter
+        </div>
       </div>
       {/* Display search results if button clicked */}
       {showSearchResults && (
