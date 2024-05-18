@@ -59,7 +59,7 @@ export default function Page({ params }: { params: { location: number } }) {
 
         // Get current hour
         const currentHour = new Date().getHours();
-        
+
         // Set showCategories based on the time of day
         setShowCategories(
           new Array(location.categories.length).fill(false).map((_, index) => {
@@ -75,7 +75,7 @@ export default function Page({ params }: { params: { location: number } }) {
               default:
                 return false;
             }
-          })
+          }),
         );
       })
       .catch((error) => {
@@ -136,7 +136,7 @@ export default function Page({ params }: { params: { location: number } }) {
                           key={k}
                           food_name={food.name}
                           restriction_images={food.restrictions.map(
-                            (restriction) => restrictionImageMap[restriction]
+                            (restriction) => restrictionImageMap[restriction],
                           )}
                         />
                       ))}

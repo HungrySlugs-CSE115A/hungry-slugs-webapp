@@ -54,15 +54,19 @@ const BarebonesComponent = () => {
   const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
 
   // Retrieve hide and show allergies from local storage
-  const [selectedHideAllergies, setSelectedHideAllergies] = useState<string[]>(() => {
-    const storedHideAllergies = localStorage.getItem('hideAllergies');
-    return storedHideAllergies ? JSON.parse(storedHideAllergies) : [];
-  });
+  const [selectedHideAllergies, setSelectedHideAllergies] = useState<string[]>(
+    () => {
+      const storedHideAllergies = localStorage.getItem("hideAllergies");
+      return storedHideAllergies ? JSON.parse(storedHideAllergies) : [];
+    },
+  );
 
-  const [selectedShowAllergies, setSelectedShowAllergies] = useState<string[]>(() => {
-    const storedShowAllergies = localStorage.getItem('showAllergies');
-    return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
-  });
+  const [selectedShowAllergies, setSelectedShowAllergies] = useState<string[]>(
+    () => {
+      const storedShowAllergies = localStorage.getItem("showAllergies");
+      return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
+    },
+  );
 
   useEffect(() => {
     axios
@@ -101,36 +105,35 @@ const BarebonesComponent = () => {
         });
       });
     });
-  
+
     const filtered = allFoods.filter(({ food }) =>
-      food.name.toLowerCase().includes(searchInput.toLowerCase())
+      food.name.toLowerCase().includes(searchInput.toLowerCase()),
     );
-  
+
     // Check if all boxes are unchecked
     const allBoxesUnchecked =
       selectedShowAllergies.length === 0 && selectedHideAllergies.length === 0;
-  
+
     let finalFilteredFoods = filtered;
     if (!allBoxesUnchecked) {
       // Filter foods based on selectedShowAllergies and selectedHideAllergies
       finalFilteredFoods = filtered.filter(({ food }) => {
-        const hasShowAllergy = selectedShowAllergies.length === 0 ||
-          selectedShowAllergies.every(allergy =>
-            food.name.toLowerCase().includes(allergy.toLowerCase())
+        const hasShowAllergy =
+          selectedShowAllergies.length === 0 ||
+          selectedShowAllergies.every((allergy) =>
+            food.name.toLowerCase().includes(allergy.toLowerCase()),
           );
-        const hasHideAllergy = selectedHideAllergies.some(allergy =>
-          food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
+        const hasHideAllergy = selectedHideAllergies.some(
+          (allergy) => food.restrictions.includes(allergy.toLowerCase()), // Check if food's restrictions include the hide allergy
         );
         return hasShowAllergy && !hasHideAllergy;
       });
     }
-  
+
     setNoFoodsFound(finalFilteredFoods.length === 0);
     setFilteredFoods(finalFilteredFoods);
     setShowSearchResults(true);
   };
-  
-  
 
   return (
     <div
@@ -150,13 +153,13 @@ const BarebonesComponent = () => {
         {/* Filter button */}
         <div
           style={{
-            display: 'inline-block',
-            marginLeft: '10px',
-            padding: '10px 20px',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            cursor: 'pointer',
-            borderRadius: '5px',
+            display: "inline-block",
+            marginLeft: "10px",
+            padding: "10px 20px",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            cursor: "pointer",
+            borderRadius: "5px",
           }}
           onClick={handleFilter}
         >
@@ -172,7 +175,6 @@ const BarebonesComponent = () => {
               <li key={index}>
                 {food.name} - {categoryName} ({dhName})
                 <div style={{ display: "flex", flexWrap: "nowrap" }}>
-                  
                   {food.restrictions.map((restriction, index) => (
                     <img
                       key={index}
@@ -187,7 +189,7 @@ const BarebonesComponent = () => {
           </ul>
         </div>
       )}
-  
+
       {noFoodsFound && (
         <div>
           <h3>No foods found at this dining hall.</h3>
@@ -195,6 +197,6 @@ const BarebonesComponent = () => {
       )}
     </div>
   );
-  };
+};
 
 export default BarebonesComponent;
