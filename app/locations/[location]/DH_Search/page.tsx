@@ -217,22 +217,29 @@ const BarebonesComponent: React.FC = () => {
   };
 
   const handleSearch = () => {
-    const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
-    dhs.forEach((dh) => {
-      dh.categories.forEach((category) => {
+    const currentDiningHallName = localStorage.getItem("diningHall");
+  
+    // Filter the dining halls to find the current one
+    const currentDiningHall = dhs.find((dh) => dh.name === currentDiningHallName);
+  
+    if (currentDiningHall) {
+      const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
+  
+      // Collect all foods from the current dining hall only
+      currentDiningHall.categories.forEach((category) => {
         category.sub_categories.forEach((subCategory) => {
           subCategory.foods.forEach((food) => {
             allFoods.push({
               food,
-              dhName: dh.name,
+              dhName: currentDiningHall.name,
               categoryName: category.name,
             });
           });
         });
       });
-    });
-
-    const filtered = allFoods.filter(({ food }) =>
+  
+      // Filter the collected foods based on the search input
+      const filtered = allFoods.filter(({ food }) =>
         food.name.toLowerCase().includes(searchInput.toLowerCase())
       );
   
@@ -259,7 +266,14 @@ const BarebonesComponent: React.FC = () => {
       setNoFoodsFound(finalFilteredFoods.length === 0);
       setFilteredFoods(finalFilteredFoods);
       setShowSearchResults(true);
-    };
+    } else {
+      // Handle case where the current dining hall is not found
+      setFilteredFoods([]);
+      setShowSearchResults(false);
+      setNoFoodsFound(true);
+    }
+  };
+  
   
     return (
       <div
