@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function LocationFood({
   food_name,
-  restrictions,
+  restriction_images,
 }: {
   food_name: string;
-  restrictions: string[];
+  restriction_images: string[]; // Change the type to string array
 }) {
   return (
     <Link href={`/foods/${encodeURIComponent(food_name)}`}>
@@ -13,9 +13,10 @@ export default function LocationFood({
         <h4 className="ml-3">{food_name}</h4>
         <div className="flex flex-row mr-3">
           <ul className="flex flex-row px-1">
-            {restrictions.map((restriction, l) => (
-              <li key={l} className="px-1">
-                {restriction}
+            {restriction_images.map((image, index) => (
+              <li key={index} className="px-1">
+                <img src={image} height={20} width={20} alt={image} />{" "}
+                {/* Display the image */}
               </li>
             ))}
           </ul>
