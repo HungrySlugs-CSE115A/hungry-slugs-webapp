@@ -54,7 +54,7 @@ export default function Page({ params }: { params: { location: number } }) {
     const searchResultPageUrl = `/locations/${params}/DH_Search`;
     // Navigate to the search result page
     window.location.href = searchResultPageUrl;
-    localStorage.setItem('diningHall', location?.name);
+    localStorage.setItem('diningHall', location.name);
   };
 
   return (
