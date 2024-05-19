@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import requests
-from django.http import JsonResponse
+from django.http import JsonResponse 
 
 
 from .model_logic.locations.actions import (
@@ -131,3 +131,13 @@ def current_logout(request):
 
     print("Current session after logout:", request.session.get("current_user"))
     return JsonResponse({"message": "User has been logged out"})
+
+
+@api_view(["GET"])
+def get_rating(request):
+    user = get_rating(request.user_id)
+    if(user==None):
+        return Response({"message": "No user found"})
+    else:
+        return Response({"message": "User found: {user}", "user data": user})
+    
