@@ -1,3 +1,4 @@
+from requests import get
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import requests
@@ -12,9 +13,9 @@ from .model_logic.tasks.actions import (
     get_last_update_time,
     update_task,
     set_task,
-    str_to_datetime,
     update_task,
 )
+from utils import str_to_datetime, get_date
 
 from .model_logic.locations.actions import (
     update_locations,
@@ -24,7 +25,6 @@ from .model_logic.locations.actions import (
 from webscraper.food_locations import FoodLocations
 
 
-from django.utils import timezone
 from datetime import datetime
 
 GOOGLE_ID_TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v3/tokeninfo"
@@ -43,7 +43,7 @@ def get_locations(request):
         time_now = str_to_datetime(task["last_update"])
     else:
         # get the current time and make it naive
-        time_now: datetime = timezone.now().replace(tzinfo=None)
+        time_now: datetime = get_date()
 
     print("Last time   : ", last_update)
     print("Current time: ", time_now)
@@ -65,7 +65,7 @@ def get_locations(request):
         update_locations(locations)
 
         # update the last update time
-        update_task(task_name="locations", last_update=time_now)
+        update_task(task_name="locations")
 
     else:
         print("Locations are up to date. Getting from DB...")
