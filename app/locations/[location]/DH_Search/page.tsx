@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../Search.module.css";
 
+
+
 interface Food {
   name: string;
   restrictions: string[];
@@ -42,6 +44,13 @@ const restrictionImageMap: { [key: string]: string } = {
 };
 
 const HelloWorld: React.FC = () => {
+  const [filteredFoods, setFilteredFoods] = useState<
+  { food: Food; dhName: string; categoryName: string }[]
+>([]);
+
+const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
+
+const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
   const [diningHall, setDiningHall] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -53,41 +62,61 @@ const HelloWorld: React.FC = () => {
   }, []);
 
   const handleSearch = () => {
-    axios
-      .get("http://localhost:8000/myapi/locations/")
-      .then((response) => {
-        const dhsData = response.data.locations;
-        // Retrieve the current dining hall from localStorage
-        const currentDiningHallName = localStorage.getItem("diningHall");
-        // Find the current dining hall
-        const currentDiningHall = dhsData.find((dh: any) =>
-          dh.name.toLowerCase().includes(currentDiningHallName?.toLowerCase() ?? "")
-        );
-       
-          // Filter the foods based on search input and current dining hall
-          const filteredFoods = currentDiningHall.categories.flatMap(
-            (category: any) => {
-              if (category.name.toLowerCase() === "breakfast") {
-                return category.sub_categories.flatMap((subCategory: any) =>
-                  subCategory.foods.filter((food: any) =>
-                    food.name.toLowerCase().includes(searchInput.toLowerCase())
-                  ).map((food: any) => ({ ...food, categoryName: "Breakfast" }))
-                );
-              } else {
-                return category.sub_categories.flatMap((subCategory: any) =>
-                  subCategory.foods.filter((food: any) =>
-                    food.name.toLowerCase().includes(searchInput.toLowerCase())
-                  ).map((food: any) => ({ ...food, categoryName: category.name }))
-                );
-              }
-            }
-          );
-          setSearchResults(filteredFoods);
-        
-      })
-      .catch((error) => {
-        console.log(error);
+    const currentDiningHallName = localStorage.getItem("diningHall");
+  
+    // Filter the dining halls to find the current one
+    const currentDiningHall = dhs.find((dh) => dh.name === currentDiningHallName);
+  
+    if (currentDiningHall) {
+      const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
+  
+      // Collect all foods from the current dining hall only
+      currentDiningHall.categories.forEach((category) => {
+        category.sub_categories.forEach((subCategory) => {
+          subCategory.foods.forEach((food) => {
+            allFoods.push({
+              food,
+              dhName: currentDiningHall.name,
+              categoryName: category.name,
+            });
+          });
+        });
       });
+  
+      // Filter the collected foods based on the search input
+      const filtered = allFoods.filter(({ food }) =>
+        food.name.toLowerCase().includes(searchInput.toLowerCase())
+      );
+  
+      // Check if all boxes are unchecked
+      const allBoxesUnchecked =
+        selectedShowAllergies.length === 0 && selectedHideAllergies.length === 0;
+  
+      let finalFilteredFoods = filtered;
+      if (!allBoxesUnchecked) {
+        // Filter foods based on selectedShowAllergies and selectedHideAllergies
+        finalFilteredFoods = filtered.filter(({ food }) => {
+          const hasShowAllergy =
+            selectedShowAllergies.length === 0 ||
+            selectedShowAllergies.every((allergy) =>
+              food.name.toLowerCase().includes(allergy.toLowerCase())
+            );
+          const hasHideAllergy = selectedHideAllergies.some(
+            (allergy) => food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
+          );
+          return hasShowAllergy && !hasHideAllergy;
+        });
+      }
+  
+      s(finalFilteredFoods.length === 0);
+      setFilteredFoods(finalFilteredFoods);
+      setShowSearchResults(true);
+    } else {
+      // Handle case where the current dining hall is not found
+      setFilteredFoods([]);
+      setShowSearchResults(false);
+      setNoFoodsFound(true);
+    }
   };
   
   
