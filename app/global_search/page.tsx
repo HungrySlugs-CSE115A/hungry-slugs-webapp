@@ -140,21 +140,9 @@ const BarebonesComponent = () => {
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       {/* Title and Search bar */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>
-          Global Search
-        </h1>
-        <div
-          className="search-bar"
-          style={{ marginTop: "100px", display: "flex", alignItems: "center" }}
-        >
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px" }}>
+        <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>Global Search</h1>
+        <div className="search-bar" style={{ marginTop: "100px", display: "flex", alignItems: "center" }}>
           <input
             type="text"
             placeholder="Search foods..."
