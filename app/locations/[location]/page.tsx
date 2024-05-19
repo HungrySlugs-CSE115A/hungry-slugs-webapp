@@ -15,7 +15,7 @@ interface subCategory {
 
 interface Category {
   name: string;
-  sub_categories: subCategory[];
+  sub_categories: Array<subCategory>;
 }
 
 interface Location {
