@@ -14,7 +14,7 @@ export default function Navbar({ height }: { height: string }) {
   return (
     <nav className="bg-white fixed w-full  top-0 start-0  ">
       <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-2.5">
-        <a className="flex items-center">
+        <a href="/" className="flex items-center">
           <span className="pl-5 self-left font-bold text-4xl text-[#003C6C]">
             Hungry Slugs
           </span>
