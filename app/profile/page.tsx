@@ -9,13 +9,15 @@ interface User {
   picture: string;
 }
 import Image from "next/image";
+const imageWidth = 100;
+const imageHeight = 100;
 
 const Page = () => {
   const [user, setUser] = useState<User | null>(null);
   const fetchUserInfo = async () => {
     try {
-      // Retrieve the access token from local storage
-      const access_token = localStorage.getItem("token");
+      // Retrieve the access token from storage
+      const access_token = sessionStorage.getItem("token");
 
       // Fetch user info from Google OAuth2 API
       const userInfo = await axios
@@ -46,7 +48,7 @@ const Page = () => {
       .catch((err) => console.error("Backend logout failed", err));
 
     // Remove the token from local storage
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     // Redirect the user to the main page after logging out
     window.location.href = "/";
     console.log("Logged out successfully");
@@ -57,7 +59,7 @@ const Page = () => {
       <h1>Profile</h1>
       {user && (
         <div>
-          <Image src={user.picture} alt="User profile" />
+          <Image src={user.picture} alt="User profile" width={imageWidth} height={imageHeight}/>
           <h2>
             Welcome, {user.name} - {user.email}
           </h2>

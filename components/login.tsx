@@ -30,8 +30,8 @@ const LoginComponent = () => {
 
     onSuccess: (tokenResponse) => {
       console.log(tokenResponse);
-      // Store authentication token in the browser's local storage for navigation bar use
-      localStorage.setItem("token", tokenResponse.access_token);
+      // Store authentication token in the browser's storage for navigation bar use
+      sessionStorage.setItem("token", tokenResponse.access_token);
       // Redirect the user to main page
       window.location.href = "/";
       //handleLoginSuccess
