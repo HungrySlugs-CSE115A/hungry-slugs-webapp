@@ -26,17 +26,17 @@ export default function Page({ params }: { params: { food: string } }) {
       [category, Component]: Array<
         string | (({ food }: { food: Food }) => JSX.Element)
       >,
-      i
+      i,
     ) => [
       category as string,
       (<Component key={i} food={food} />) as JSX.Element,
-    ]
+    ],
   );
 
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/myapi/foods/${encodeURIComponent(params.food)}/`
+        `http://localhost:8000/myapi/foods/${encodeURIComponent(params.food)}/`,
       )
       .then((response) => {
         if (response.status === 200) {
