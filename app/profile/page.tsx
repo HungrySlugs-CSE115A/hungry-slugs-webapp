@@ -8,6 +8,7 @@ interface User {
   email: string;
   picture: string;
 }
+import Image from "next/image";
 
 const Page = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -56,7 +57,7 @@ const Page = () => {
       <h1>Profile</h1>
       {user && (
         <div>
-          <img src={user.picture} alt="User profile" />
+          <Image src={user.picture} alt="User profile" />
           <h2>
             Welcome, {user.name} - {user.email}
           </h2>
