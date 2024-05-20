@@ -5,6 +5,9 @@ from private.private_settings import (
     MONGODB_CLUSTER,
     IS_DEV,
 )
+from datetime import datetime
+from backend.settings import TIME_ZONE
+import pytz
 
 
 def get_db_handle(db_name: str, password: str, username: str, cluster: str):
@@ -20,43 +23,14 @@ def get_local_db_handle(db_name: str, host: str = "localhost", port: int = 27017
     return db_handle, client
 
 
-if __name__ == "__main__":
-    if IS_DEV and False:
-        # Remove the False to test locally but you will have to have a local mongodb server running
-        db_handle, client = get_local_db_handle("test")
-    else:
-        db_handle, client = get_db_handle(
-            "test", MONGODB_PASSWORD, MONGODB_USERNAME, MONGODB_CLUSTER
-        )
+def get_date() -> datetime:
+    return datetime.now(pytz.timezone(TIME_ZONE))
 
-    try:
-        client.admin.command("ping")
-        print("Pinged your deployment. You successfully connected to MongoDB!")
-    except Exception as e:
-        print(e)
 
-    # create a collection
-    test_collection = db_handle["test_collection"]
-    print("Created a collection called test_collection")
-    print("Collections in the database: ", db_handle.list_collection_names())
+def get_date_str() -> str:
+    return get_date().isoformat()
 
-    # create a dining hall
-    dh1 = {
-        "name": "Porter",
-        "location": "Porter College",
-        "hours": "7:30am - 8:00pm",
-        "menu": {
-            "breakfast": ["eggs", "bacon", "cereal"],
-            "lunch": ["pizza", "salad", "sandwiches"],
-            "dinner": ["pasta", "soup", "chicken"],
-        },
-    }
 
-    # insert the dining hall into the collection
-    test_collection.insert_one(dh1)
-
-    # find the dining hall
-    query = {"name": "Porter"}
-    result = test_collection.find_one(query)
-    print("Found the following dining hall:")
-    print(result)
+def str_to_datetime(date_str: str) -> datetime:
+    # convert isoformat string to datetime
+    return datetime.fromisoformat(date_str)

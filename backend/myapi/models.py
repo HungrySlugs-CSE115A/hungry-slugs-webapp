@@ -61,26 +61,39 @@ restrictions_schema = {
     "items": {"bsonType": "string"},
 }
 ratings_schema_location = {
-    "bsonType": "object",
-    "properties": {
-        "rating": {"bsonType": "double"},
-        "user_id": {"bsonType": "objectId"},
+    "bsonType": "array",
+    "items": {
+        "properties": {
+            "user_id": {"bsonType": "string"},
+            "rating": {"bsonType": "double"},
+            "date": {"bsonType": "string"},
+        },
+        "required": ["user_id", "rating", "date"],
     },
 }
+# comments sorted by date
 comments_schema = {
-    "bsonType": "object",
-    "properties": {
-        "comment": {"bsonType": "string"},
-        "user_id": {"bsonType": "string"},
-        "date": {"bsonType": "string"},
+    "bsonType": "array",
+    "items": {
+        "bsonType": "object",
+        "properties": {
+            "comment": {"bsonType": "string"},
+            "user_id": {"bsonType": "string"},
+            "date": {"bsonType": "string"},
+        },
+        "required": ["comment", "user_id", "date"],
     },
 }
 images_schema = {
-    "bsonType": "object",
-    "properties": {
-        "url": {"bsonType": "string"},
-        "user_id": {"bsonType": "objectId"},
-        "date": {"bsonType": "string"},
+    "bsonType": "array",
+    "items": {
+        "bsonType": "object",
+        "properties": {
+            "url": {"bsonType": "string"},
+            "user_id": {"bsonType": "string"},
+            "date": {"bsonType": "string"},
+        },
+        "required": ["url", "user_id", "date"],
     },
 }
 foods_validator = {

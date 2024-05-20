@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../Search.module.css";
 
-
+import Image from "next/image";
 
 interface Food {
   name: string;
@@ -45,12 +45,12 @@ const restrictionImageMap: { [key: string]: string } = {
 
 const HelloWorld: React.FC = () => {
   const [filteredFoods, setFilteredFoods] = useState<
-  { food: Food; dhName: string; categoryName: string }[]
->([]);
+    { food: Food; dhName: string; categoryName: string }[]
+  >([]);
 
-const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
+  const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
 
-const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
+  const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
   const [diningHall, setDiningHall] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -63,13 +63,16 @@ const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
 
   const handleSearch = () => {
     const currentDiningHallName = localStorage.getItem("diningHall");
-  
+
     // Filter the dining halls to find the current one
-    const currentDiningHall = dhs.find((dh) => dh.name === currentDiningHallName);
-  
+    const currentDiningHall = dhs.find(
+      (dh) => dh.name === currentDiningHallName,
+    );
+
     if (currentDiningHall) {
-      const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
-  
+      const allFoods: { food: Food; dhName: string; categoryName: string }[] =
+        [];
+
       // Collect all foods from the current dining hall only
       currentDiningHall.categories.forEach((category) => {
         category.sub_categories.forEach((subCategory) => {
@@ -82,16 +85,17 @@ const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
           });
         });
       });
-  
+
       // Filter the collected foods based on the search input
       const filtered = allFoods.filter(({ food }) =>
-        food.name.toLowerCase().includes(searchInput.toLowerCase())
+        food.name.toLowerCase().includes(searchInput.toLowerCase()),
       );
-  
+
       // Check if all boxes are unchecked
       const allBoxesUnchecked =
-        selectedShowAllergies.length === 0 && selectedHideAllergies.length === 0;
-  
+        selectedShowAllergies.length === 0 &&
+        selectedHideAllergies.length === 0;
+
       let finalFilteredFoods = filtered;
       if (!allBoxesUnchecked) {
         // Filter foods based on selectedShowAllergies and selectedHideAllergies
@@ -99,15 +103,15 @@ const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
           const hasShowAllergy =
             selectedShowAllergies.length === 0 ||
             selectedShowAllergies.every((allergy) =>
-              food.name.toLowerCase().includes(allergy.toLowerCase())
+              food.name.toLowerCase().includes(allergy.toLowerCase()),
             );
           const hasHideAllergy = selectedHideAllergies.some(
-            (allergy) => food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
+            (allergy) => food.restrictions.includes(allergy.toLowerCase()), // Check if food's restrictions include the hide allergy
           );
           return hasShowAllergy && !hasHideAllergy;
         });
       }
-  
+
       s(finalFilteredFoods.length === 0);
       setFilteredFoods(finalFilteredFoods);
       setShowSearchResults(true);
@@ -118,9 +122,6 @@ const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
       setNoFoodsFound(true);
     }
   };
-  
-  
-  
 
   return (
     <div className="container mx-auto">
@@ -149,16 +150,30 @@ const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
             {searchResults.map((food: any, index: number) => (
               <li key={index}>
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <span>{food.name} - {food.categoryName} ({diningHall})</span>
-                  <div style={{ display: "flex", flexWrap: "nowrap", marginLeft: "10px" }}>
-                    {food.restrictions.map((restriction: string, index: number) => (
-                      <img
-                        key={index}
-                        src={restrictionImageMap[restriction]}
-                        alt={restriction}
-                        style={{ width: "25px", height: "25px", margin: "5px" }}
-                      />
-                    ))}
+                  <span>
+                    {food.name} - {food.categoryName} ({diningHall})
+                  </span>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "nowrap",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {food.restrictions.map(
+                      (restriction: string, index: number) => (
+                        <Image
+                          key={index}
+                          src={restrictionImageMap[restriction]}
+                          alt={restriction}
+                          style={{
+                            width: "25px",
+                            height: "25px",
+                            margin: "5px",
+                          }}
+                        />
+                      ),
+                    )}
                   </div>
                 </div>
               </li>
@@ -218,13 +233,16 @@ const BarebonesComponent: React.FC = () => {
 
   const handleSearch = () => {
     const currentDiningHallName = localStorage.getItem("diningHall");
-  
+
     // Filter the dining halls to find the current one
-    const currentDiningHall = dhs.find((dh) => dh.name === currentDiningHallName);
-  
+    const currentDiningHall = dhs.find(
+      (dh) => dh.name === currentDiningHallName,
+    );
+
     if (currentDiningHall) {
-      const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
-  
+      const allFoods: { food: Food; dhName: string; categoryName: string }[] =
+        [];
+
       // Collect all foods from the current dining hall only
       currentDiningHall.categories.forEach((category) => {
         category.sub_categories.forEach((subCategory) => {
@@ -237,16 +255,17 @@ const BarebonesComponent: React.FC = () => {
           });
         });
       });
-  
+
       // Filter the collected foods based on the search input
       const filtered = allFoods.filter(({ food }) =>
-        food.name.toLowerCase().includes(searchInput.toLowerCase())
+        food.name.toLowerCase().includes(searchInput.toLowerCase()),
       );
-  
+
       // Check if all boxes are unchecked
       const allBoxesUnchecked =
-        selectedShowAllergies.length === 0 && selectedHideAllergies.length === 0;
-  
+        selectedShowAllergies.length === 0 &&
+        selectedHideAllergies.length === 0;
+
       let finalFilteredFoods = filtered;
       if (!allBoxesUnchecked) {
         // Filter foods based on selectedShowAllergies and selectedHideAllergies
@@ -254,15 +273,15 @@ const BarebonesComponent: React.FC = () => {
           const hasShowAllergy =
             selectedShowAllergies.length === 0 ||
             selectedShowAllergies.every((allergy) =>
-              food.name.toLowerCase().includes(allergy.toLowerCase())
+              food.name.toLowerCase().includes(allergy.toLowerCase()),
             );
           const hasHideAllergy = selectedHideAllergies.some(
-            (allergy) => food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
+            (allergy) => food.restrictions.includes(allergy.toLowerCase()), // Check if food's restrictions include the hide allergy
           );
           return hasShowAllergy && !hasHideAllergy;
         });
       }
-  
+
       setNoFoodsFound(finalFilteredFoods.length === 0);
       setFilteredFoods(finalFilteredFoods);
       setShowSearchResults(true);
@@ -273,74 +292,83 @@ const BarebonesComponent: React.FC = () => {
       setNoFoodsFound(true);
     }
   };
-  
-  
-    return (
-      <div
-        style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      >
-        {/* Title and Search bar */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px" }}>
-         
-        <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>{localStorage.getItem("diningHall")}</h1>
 
-          <div className="search-bar" style={{ marginTop: "100px", display: "flex", alignItems: "center" }}>
-            <input
-              type="text"
-              placeholder="Search foods..."
-              value={searchInput}
-              onChange={handleSearchInputChange}
-            />
-            <button onClick={handleSearch}>Search</button>
-            {/* Filter button */}
-            <div
-              style={{
-                marginLeft: "10px",
-                padding: "10px 20px",
-                backgroundColor: "#4CAF50",
-                color: "white",
-                cursor: "pointer",
-                borderRadius: "5px",
-              }}
-              onClick={handleFilter}
-            >
-              Filter
-            </div>
+  return (
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      {/* Title and Search bar */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>
+          {localStorage.getItem("diningHall")}
+        </h1>
+
+        <div
+          className="search-bar"
+          style={{ marginTop: "100px", display: "flex", alignItems: "center" }}
+        >
+          <input
+            type="text"
+            placeholder="Search foods..."
+            value={searchInput}
+            onChange={handleSearchInputChange}
+          />
+          <button onClick={handleSearch}>Search</button>
+          {/* Filter button */}
+          <div
+            style={{
+              marginLeft: "10px",
+              padding: "10px 20px",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={handleFilter}
+          >
+            Filter
           </div>
         </div>
-  
-        {/* Display search results if button clicked */}
-        {showSearchResults && (
-          <div>
-            <h3>Search Results:</h3>
-            <ul>
-              {filteredFoods.map(({ food, dhName, categoryName }, index) => (
-                <li key={index}>
-                  {food.name} - {categoryName} ({dhName})
-                  <div style={{ display: "flex", flexWrap: "nowrap" }}>
-                    {food.restrictions.map((restriction, index) => (
-                      <img
-                        key={index}
-                        src={restrictionImageMap[restriction]}
-                        alt={restriction}
-                        style={{ width: "25px", height: "25px", margin: "5px" }}
-                      />
-                    ))}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-  
-        {noFoodsFound && (
-          <div>
-            <h3>No foods found at this dining hall.</h3>
-          </div>
-        )}
       </div>
-    );
-  };
-  
-  export default BarebonesComponent;
-  
+
+      {/* Display search results if button clicked */}
+      {showSearchResults && (
+        <div>
+          <h3>Search Results:</h3>
+          <ul>
+            {filteredFoods.map(({ food, dhName, categoryName }, index) => (
+              <li key={index}>
+                {food.name} - {categoryName} ({dhName})
+                <div style={{ display: "flex", flexWrap: "nowrap" }}>
+                  {food.restrictions.map((restriction, index) => (
+                    <Image
+                      key={index}
+                      src={restrictionImageMap[restriction]}
+                      alt={restriction}
+                      style={{ width: "25px", height: "25px", margin: "5px" }}
+                    />
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {noFoodsFound && (
+        <div>
+          <h3>No foods found at this dining hall.</h3>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default BarebonesComponent;

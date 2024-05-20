@@ -3,57 +3,39 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import LocationFood from "@/components/location/food";
 
-interface Food {
-  name: string;
-  restrictions: string[]; // Change to string array
-}
-
-interface SubCategory {
-  name: string;
-  foods: Food[]; // Update to use the Food interface
-}
-
-interface Category {
-  name: string;
-  sub_categories: Array<SubCategory>;
-}
-
-interface Location {
-  name: string;
-  categories: Category[];
-}
+import { Location } from "@/interfaces/Location";
 
 interface RestrictionImageMap {
   [key: string]: string;
 }
 
-const restrictionImageMap = {
-  eggs: "/Images/egg.jpg",
-  vegan: "/Images/vegan.jpg",
-  fish: "/Images/fish.jpg",
-  veggie: "/Images/veggie.jpg",
-  gluten: "/Images/gluten.jpg",
-  pork: "/Images/pork.jpg",
-  milk: "/Images/milk.jpg",
-  beef: "/Images/beef.jpg",
-  nuts: "/Images/nuts.jpg",
-  halal: "/Images/halal.jpg",
-  soy: "/Images/soy.jpg",
-  shellfish: "/Images/shellfish.jpg",
-  treenut: "/Images/treenut.jpg",
-  sesame: "/Images/sesame.jpg",
-  alcohol: "/Images/alcohol.jpg",
-};
-
 export default function Page({ params }: { params: { location: number } }) {
-  const [location, setLocation] = useState<Location | null>(null);
+  const [location, setLocation] = useState<Location>();
   const [showCategories, setShowCategories] = useState<boolean[]>([]);
+
+  const restrictionImageMap: RestrictionImageMap = {
+    eggs: "/Images/egg.jpg",
+    vegan: "/Images/vegan.jpg",
+    fish: "/Images/fish.jpg",
+    veggie: "/Images/veggie.jpg",
+    gluten: "/Images/gluten.jpg",
+    pork: "/Images/pork.jpg",
+    milk: "/Images/milk.jpg",
+    beef: "/Images/beef.jpg",
+    nuts: "/Images/nuts.jpg",
+    halal: "/Images/halal.jpg",
+    soy: "/Images/soy.jpg",
+    shellfish: "/Images/shellfish.jpg",
+    treenut: "/Images/treenut.jpg",
+    sesame: "/Images/sesame.jpg",
+    alcohol: "/Images/alcohol.jpg",
+  };
 
   useEffect(() => {
     axios
-      .get<Location[]>("http://localhost:8000/myapi/locations/")
+      .get<{ locations: Location[] }>("http://localhost:8000/myapi/locations/")
       .then((response) => {
-        const locations: Location[] = response.data["locations"];
+        const locations = response.data.locations;
         const location = locations[params.location];
         setLocation(location);
 
@@ -84,11 +66,15 @@ export default function Page({ params }: { params: { location: number } }) {
   }, [params.location]);
 
   const handleDiningHallSearch = () => {
-    
     const searchResultPageUrl = `/locations/${params}/DH_Search`;
     // Navigate to the search result page
     window.location.href = searchResultPageUrl;
-    localStorage.setItem('diningHall', location.name);
+
+    if (location) {
+      localStorage.setItem("diningHall", location.name);
+    } else {
+      console.error("Location not found");
+    }
   };
 
   return (
@@ -97,12 +83,14 @@ export default function Page({ params }: { params: { location: number } }) {
         <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
           {location && location.name}
         </h1>
-        <button
-          onClick={handleDiningHallSearch}
-          className="mb-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Dining Hall Search
-        </button>
+        {location && (
+          <button
+            onClick={handleDiningHallSearch}
+            className="mb-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Dining Hall Search
+          </button>
+        )}
         {location &&
           location.categories.map((category, i) => (
             <div key={i}>

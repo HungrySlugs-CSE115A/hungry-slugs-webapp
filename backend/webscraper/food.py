@@ -1,7 +1,6 @@
 from bs4.element import Tag
 
 
-
 class Food:
 
     restriction_image_map = {
@@ -46,4 +45,8 @@ class Food:
 
     def to_dict(self) -> dict:
         # foodObj = {self.name: self.allergies}
-        return {"name": self.name, "restrictions": self.allergies, "restriction_image_map": self.restriction_image_map}
+        return {
+            "name": self.name,
+            "restrictions": self.allergies,
+            "restriction_image_map": self.restriction_image_map,
+        }

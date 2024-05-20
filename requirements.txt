@@ -11,6 +11,7 @@ requests>=2.31.0
 # Database Dependencies
 pymongo[srv]>=3.12
 dnspython
+pytz>=2024.1
 
 # Python formatting
 black>=24.4.2

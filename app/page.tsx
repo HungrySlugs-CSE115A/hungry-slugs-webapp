@@ -2,27 +2,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-interface Food {
-  name: string;
-  restrictions: Array<string>;
-}
-
-interface subCategory {
-  name: string;
-  foods: Array<Food>;
-}
-
-interface Category {
-  name: string;
-  sub_categories: Array<subCategory>;
-}
-
-interface Location {
-  name: string;
-  categories: Category;
-}
-
 import DhBar from "@/components/dh_bar_main";
+
+import { Location } from "@/interfaces/Location";
 
 export default function Home() {
   const [locations, setLocations] = useState<Location[]>([]);
