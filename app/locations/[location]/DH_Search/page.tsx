@@ -348,7 +348,7 @@ const BarebonesComponent: React.FC = () => {
                 {food.name} - {categoryName} ({dhName})
                 <div style={{ display: "flex", flexWrap: "nowrap" }}>
                   {food.restrictions.map((restriction, index) => (
-                    <Image
+                    <img
                       key={index}
                       src={restrictionImageMap[restriction]}
                       alt={restriction}
