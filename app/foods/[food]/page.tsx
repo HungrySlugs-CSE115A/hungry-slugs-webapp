@@ -2,37 +2,46 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+import { Food } from "@/interfaces/Food";
+
+import Comments from "@/components/food/comments";
+import Ratings from "@/components/food/ratings";
+import Images from "@/components/food/images";
+
 export default function Page({ params }: { params: { food: string } }) {
   const [tabSelected, setTabSelected] = useState(0);
-  const tabs = [
-    [
-      "Comments",
-      () => {
-        setTabSelected(0);
-      },
-    ],
-    [
-      "Ratings",
-      () => {
-        setTabSelected(1);
-      },
-    ],
-    [
-      "Images",
-      () => {
-        setTabSelected(2);
-      },
-    ],
-  ];
+  const [food, setFood] = useState<Food>({
+    name: decodeURIComponent(params.food),
+    restrictions: [],
+    ratings: [],
+    comments: [],
+    images: [],
+  });
+  const tabs: Array<Array<string | JSX.Element>> = [
+    ["Ratings", Ratings],
+    ["Comments", Comments],
+    ["Images", Images],
+  ].map(
+    (
+      [category, Component]: Array<
+        string | (({ food }: { food: Food }) => JSX.Element)
+      >,
+      i
+    ) => [
+      category as string,
+      (<Component key={i} food={food} />) as JSX.Element,
+    ]
+  );
 
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/myapi/foods/${encodeURIComponent(params.food)}/`,
+        `http://localhost:8000/myapi/foods/${encodeURIComponent(params.food)}/`
       )
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
+          // get the food data
+          setFood(response.data);
         } else {
           console.error(response);
         }
@@ -44,31 +53,26 @@ export default function Page({ params }: { params: { food: string } }) {
 
   return (
     <main className="flex flex-col items-center">
-      <ul className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
-        {tabs.map(([category, funct]: Array<string | (() => void)>, i) => (
+      <ul className="flex font-medium text-2xl text-[#003C6C] items-center justify-center py-5">
+        {tabs.map(([category, _]: Array<string | JSX.Element>, i) => (
           <li key={i} className="">
             <button
-              onClick={funct as () => void}
-              className="px-10 hover:underline decoration-yellow-400 underline-offset-8 decoration-4"
+              onClick={() => setTabSelected(i)}
+              className="px-10 decoration-yellow-400 underline-offset-8 decoration-[3px] text-xl"
+              style={{
+                textDecorationLine: tabSelected === i ? "underline" : "none",
+              }}
             >
               {category as string}
             </button>
           </li>
         ))}
       </ul>
-      <h1 className="text-2xl">{decodeURIComponent(params.food)}</h1>
-      {[<div>test 0</div>, <div>test 1</div>, <div>test 2</div>].map(
-        (pageContent, i) => (
-          <div key={i} className="flex flex-col items-center">
-            {tabSelected === i && (
-              <div>
-                <h2>{tabs[i][0] as string}</h2>
-                {pageContent}
-              </div>
-            )}
-          </div>
-        ),
-      )}
+      {tabs.map(([_, element]: Array<string | JSX.Element>, i) => (
+        <div key={i} className="flex flex-col items-center">
+          {tabSelected === i && element}
+        </div>
+      ))}
     </main>
   );
 }
