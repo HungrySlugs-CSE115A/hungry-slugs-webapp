@@ -7,4 +7,5 @@ urlpatterns = [
     path("users", views.validate_user, name="users"),
     path("logout/", views.current_logout, name="current_logout"),
     path("foods/<str:name>/", foods_views.get_food, name="foods"),
+    path("comments/", foods_views.add_comment, name="comments"),
 ]
