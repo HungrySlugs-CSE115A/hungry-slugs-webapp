@@ -94,9 +94,9 @@ const AllergyFilterPage = () => {
       <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>Filter</h1>
       <div className={styles.columns}>
         <div className={styles.column}>
-        <h2 className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
-  Hide Items that contain:
-</h2>
+          <h2 className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
+            Hide Items that contain:
+          </h2>
           <div>
             {hideAllergies.map((allergy, index) => (
               <div key={index} className={styles.checkbox}>
@@ -114,9 +114,9 @@ const AllergyFilterPage = () => {
         </div>
 
         <div className={styles.column}>
-        <h2 className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
-  Show items that match:
-</h2>
+          <h2 className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
+            Show items that match:
+          </h2>
           <div>
             {showAllergies.map((allergy, index) => (
               <div key={index} className={styles.checkbox}>
@@ -135,29 +135,28 @@ const AllergyFilterPage = () => {
       </div>
 
       <div className={styles.submitButtons}>
-  <button 
-    className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`} 
-    style={{ padding: '0 1rem', textDecoration: 'none' }} 
-    onClick={handleCancel}
-  >
-    Cancel
-  </button>
-  <button 
-    className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`} 
-    style={{ padding: '0 1rem', textDecoration: 'none' }} 
-    onClick={handleReset}
-  >
-    Reset
-  </button>
-  <button 
-    className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`} 
-    style={{ padding: '0 1rem', textDecoration: 'none' }} 
-    onClick={handleApply}
-  >
-    Apply
-  </button>
-</div>
-
+        <button
+          className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`}
+          style={{ padding: "0 1rem", textDecoration: "none" }}
+          onClick={handleCancel}
+        >
+          Cancel
+        </button>
+        <button
+          className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`}
+          style={{ padding: "0 1rem", textDecoration: "none" }}
+          onClick={handleReset}
+        >
+          Reset
+        </button>
+        <button
+          className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`}
+          style={{ padding: "0 1rem", textDecoration: "none" }}
+          onClick={handleApply}
+        >
+          Apply
+        </button>
+      </div>
     </div>
   );
 };

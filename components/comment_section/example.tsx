@@ -1,4 +1,4 @@
-import { CommentData } from './comment';
+import { CommentData } from "./comment";
 
 export const getComments = async (): Promise<CommentData[]> => {
   return [
@@ -37,7 +37,10 @@ export const getComments = async (): Promise<CommentData[]> => {
   ];
 };
 
-export const createComment = async (text: string, parentId: string | null = null): Promise<CommentData> => {
+export const createComment = async (
+  text: string,
+  parentId: string | null = null,
+): Promise<CommentData> => {
   return {
     id: Math.random().toString(36).substr(2, 9),
     body: text,
@@ -48,7 +51,9 @@ export const createComment = async (text: string, parentId: string | null = null
   };
 };
 
-export const updateComment = async (text: string): Promise<{ text: string }> => {
+export const updateComment = async (
+  text: string,
+): Promise<{ text: string }> => {
   return { text };
 };
 

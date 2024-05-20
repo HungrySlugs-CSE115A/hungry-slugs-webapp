@@ -66,7 +66,7 @@ const HelloWorld: React.FC = () => {
 
     // Filter the dining halls to find the current one
     const currentDiningHall = dhs.find(
-      (dh) => dh.name === currentDiningHallName
+      (dh) => dh.name === currentDiningHallName,
     );
 
     if (currentDiningHall) {
@@ -88,7 +88,7 @@ const HelloWorld: React.FC = () => {
 
       // Filter the collected foods based on the search input
       const filtered = allFoods.filter(({ food }) =>
-        food.name.toLowerCase().includes(searchInput.toLowerCase())
+        food.name.toLowerCase().includes(searchInput.toLowerCase()),
       );
 
       // Check if all boxes are unchecked
@@ -103,10 +103,10 @@ const HelloWorld: React.FC = () => {
           const hasShowAllergy =
             selectedShowAllergies.length === 0 ||
             selectedShowAllergies.every((allergy) =>
-              food.name.toLowerCase().includes(allergy.toLowerCase())
+              food.name.toLowerCase().includes(allergy.toLowerCase()),
             );
           const hasHideAllergy = selectedHideAllergies.some(
-            (allergy) => food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
+            (allergy) => food.restrictions.includes(allergy.toLowerCase()), // Check if food's restrictions include the hide allergy
           );
           return hasShowAllergy && !hasHideAllergy;
         });
@@ -172,7 +172,7 @@ const HelloWorld: React.FC = () => {
                             margin: "5px",
                           }}
                         />
-                      )
+                      ),
                     )}
                   </div>
                 </div>
@@ -199,14 +199,14 @@ const BarebonesComponent: React.FC = () => {
     () => {
       const storedHideAllergies = localStorage.getItem("hideAllergies");
       return storedHideAllergies ? JSON.parse(storedHideAllergies) : [];
-    }
+    },
   );
 
   const [selectedShowAllergies, setSelectedShowAllergies] = useState<string[]>(
     () => {
       const storedShowAllergies = localStorage.getItem("showAllergies");
       return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
-    }
+    },
   );
 
   useEffect(() => {
@@ -222,7 +222,7 @@ const BarebonesComponent: React.FC = () => {
   }, []);
 
   const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchInput(event.target.value);
   };
@@ -236,7 +236,7 @@ const BarebonesComponent: React.FC = () => {
 
     // Filter the dining halls to find the current one
     const currentDiningHall = dhs.find(
-      (dh) => dh.name === currentDiningHallName
+      (dh) => dh.name === currentDiningHallName,
     );
 
     if (currentDiningHall) {
@@ -258,7 +258,7 @@ const BarebonesComponent: React.FC = () => {
 
       // Filter the collected foods based on the search input
       const filtered = allFoods.filter(({ food }) =>
-        food.name.toLowerCase().includes(searchInput.toLowerCase())
+        food.name.toLowerCase().includes(searchInput.toLowerCase()),
       );
 
       // Check if all boxes are unchecked
@@ -273,10 +273,10 @@ const BarebonesComponent: React.FC = () => {
           const hasShowAllergy =
             selectedShowAllergies.length === 0 ||
             selectedShowAllergies.every((allergy) =>
-              food.name.toLowerCase().includes(allergy.toLowerCase())
+              food.name.toLowerCase().includes(allergy.toLowerCase()),
             );
           const hasHideAllergy = selectedHideAllergies.some(
-            (allergy) => food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
+            (allergy) => food.restrictions.includes(allergy.toLowerCase()), // Check if food's restrictions include the hide allergy
           );
           return hasShowAllergy && !hasHideAllergy;
         });

@@ -57,7 +57,7 @@ export default function Page({ params }: { params: { location: number } }) {
               default:
                 return false;
             }
-          })
+          }),
         );
       })
       .catch((error) => {
@@ -138,7 +138,7 @@ export default function Page({ params }: { params: { location: number } }) {
                           key={k}
                           food_name={food.name}
                           restriction_images={food.restrictions.map(
-                            (restriction) => restrictionImageMap[restriction]
+                            (restriction) => restrictionImageMap[restriction],
                           )}
                         />
                       ))}
