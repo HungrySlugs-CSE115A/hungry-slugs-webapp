@@ -5,31 +5,77 @@ import LocationFood from "@/components/location/food";
 
 import { Location } from "@/interfaces/Location";
 
+interface RestrictionImageMap {
+  [key: string]: string;
+}
+
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location>();
-  const [showCategories, setShowCategories] = useState<boolean[]>();
+  const [showCategories, setShowCategories] = useState<boolean[]>([]);
 
-  // fetch location data
+  const restrictionImageMap: RestrictionImageMap = {
+    eggs: "/Images/egg.jpg",
+    vegan: "/Images/vegan.jpg",
+    fish: "/Images/fish.jpg",
+    veggie: "/Images/veggie.jpg",
+    gluten: "/Images/gluten.jpg",
+    pork: "/Images/pork.jpg",
+    milk: "/Images/milk.jpg",
+    beef: "/Images/beef.jpg",
+    nuts: "/Images/nuts.jpg",
+    halal: "/Images/halal.jpg",
+    soy: "/Images/soy.jpg",
+    shellfish: "/Images/shellfish.jpg",
+    treenut: "/Images/treenut.jpg",
+    sesame: "/Images/sesame.jpg",
+    alcohol: "/Images/alcohol.jpg",
+  };
+
   useEffect(() => {
     axios
-      .get("http://localhost:8000/myapi/locations/")
+      .get<{ locations: Location[] }>("http://localhost:8000/myapi/locations/")
       .then((response) => {
-        // Fetch the locations data
-        const locations: Location[] = response.data["locations"];
-
-        // get the location data
+        const locations = response.data.locations;
         const location = locations[params.location];
-
-        // Set the location
         setLocation(location);
 
-        // Set the show categories to array of booleans
-        setShowCategories(new Array(location.categories.length).fill(true));
+        // Get current hour
+        const currentHour = new Date().getHours();
+
+        // Set showCategories based on the time of day
+        setShowCategories(
+          new Array(location.categories.length).fill(false).map((_, index) => {
+            switch (index) {
+              case 0: // Breakfast (6 AM - 11 AM)
+                return currentHour >= 6 && currentHour < 11;
+              case 1: // Lunch (11 AM - 1 PM)
+                return currentHour >= 11 && currentHour < 15;
+              case 2: // Dinner (6 PM - 9 PM)
+                return currentHour >= 15 && currentHour < 20;
+              case 3: // Late Night (9 PM - 12 AM)
+                return currentHour >= 20 && currentHour < 24;
+              default:
+                return false;
+            }
+          })
+        );
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [params.location]); // params.location is a dependency
+  }, [params.location]);
+
+  const handleDiningHallSearch = () => {
+    const searchResultPageUrl = `/locations/${params}/DH_Search`;
+    // Navigate to the search result page
+    window.location.href = searchResultPageUrl;
+
+    if (location) {
+      localStorage.setItem("diningHall", location.name);
+    } else {
+      console.error("Location not found");
+    }
+  };
 
   return (
     <main>
@@ -37,6 +83,14 @@ export default function Page({ params }: { params: { location: number } }) {
         <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
           {location && location.name}
         </h1>
+        {location && (
+          <button
+            onClick={handleDiningHallSearch}
+            className="mb-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Dining Hall Search
+          </button>
+        )}
         {location &&
           location.categories.map((category, i) => (
             <div key={i}>
@@ -54,7 +108,9 @@ export default function Page({ params }: { params: { location: number } }) {
                 {/* Icon for accordion that will face up on false and down on true */}
                 <div className="flex justify-center items-center">
                   <svg
-                    className={`h-6 w-6 mr-6 ${showCategories && showCategories[i] ? "rotate-180" : ""}`}
+                    className={`h-6 w-6 mr-6 ${
+                      showCategories && showCategories[i] ? "rotate-180" : ""
+                    }`}
                     fill="#000000"
                     height="800px"
                     width="800px"
@@ -81,7 +137,9 @@ export default function Page({ params }: { params: { location: number } }) {
                         <LocationFood
                           key={k}
                           food_name={food.name}
-                          restrictions={food.restrictions}
+                          restriction_images={food.restrictions.map(
+                            (restriction) => restrictionImageMap[restriction]
+                          )}
                         />
                       ))}
                     </div>
