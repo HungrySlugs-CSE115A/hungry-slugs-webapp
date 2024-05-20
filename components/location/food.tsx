@@ -9,14 +9,14 @@ export default function LocationFood({
   restrictions: string[];
 }) {
 
-  // const getuserdata = () => {
+  const getuserdata = () => {
 
-  //   axios
-  //     .get("http://localhost:8000/myapi/user_rating_get")
-  //     .then()
+    axios
+      .get("http://localhost:8000/myapi/user_rating_get")
+      .then()
 
 
-  // };
+  };
 
   return (
     <Link href={`/foods/${encodeURIComponent(food_name)}`}>
