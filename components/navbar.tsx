@@ -6,8 +6,8 @@ export default function Navbar({ height }: { height: string }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Check if localStorage is available and if token exists
-    const token = localStorage.getItem("token");
+    // Check if sessionStorage is available and if token exists
+    const token = sessionStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
 
