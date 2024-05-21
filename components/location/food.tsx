@@ -1,6 +1,10 @@
 import axios from "axios";
 import Link from "next/link";
 
+import Rating_bar from "@/components/review";
+import Review_bar from "@/components/review";
+
+
 export default function LocationFood({
   food_name,
   restriction_images,
@@ -9,14 +13,6 @@ export default function LocationFood({
   restriction_images: string[]; // Change the type to string array
 }) {
 
-  const getuserdata = () => {
-
-    axios
-      .get("http://localhost:8000/myapi/user_rating_get")
-      .then()
-
-
-  };
 
   return (
     <Link href={`/foods/${encodeURIComponent(food_name)}`}>
@@ -33,9 +29,11 @@ export default function LocationFood({
           </ul>
           <div>
             <h4>Review</h4>
+            <Rating_bar name={"wo"} />
           </div>
           <div>
             <h4>Rating</h4>
+            <Rating_bar name={"wo"} />
           </div>
         </div>
       </div>

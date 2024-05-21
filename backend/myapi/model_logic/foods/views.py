@@ -60,6 +60,52 @@ def get_food(request, name: str):
     return Response(food)
 
 
+#         "name": name,
+#         "restrictions": restrictions,
+#         "ratings": [],
+#         "comments": [],
+#         "images": [],
+
+##bulk food get?
+@api_view(["POST"])
+def bulk_update_db(request):
+    name = request.data.get("dh_name")
+
+    # get the location from the db
+    location = get_locations([name])[0]
+    if "categories" not in location:
+        print(f"-"*20 +" Cat")
+        return Response(status=400)
+    for category in location["categories"]: 
+        if "sub_categories" not in category:
+            continue
+        for subcategory in category["sub_categories"]:
+            if "foods" not in subcategory:
+                continue
+            for food in subcategory["foods"]:
+                if "name" not in food:
+                    continue
+                db_food = get_food_db(food['name'])
+                if db_food != None: #check if the food name is in the dh dict
+
+                    if(db_food["restrictions"] != food["restrictions"]): #udpate the restrinctions if not the same
+                        update_food_db(food["name"], food["restrictions"])
+                    continue
+                else:
+                    #add food to db
+                    set_food_db(food["name"], food["restrictions"])
+
+    return Response(200)
+
+## Ratings
+
+@api_view(["POST"])
+def update_food_rating(request):
+    food_name = request.data.get()
+
+    update_food_db(food_name, )
+    return Response(200)
+
 ## Comments
 @api_view(["POST"])
 def add_comment(request):

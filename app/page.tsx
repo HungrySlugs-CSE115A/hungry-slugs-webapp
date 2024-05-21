@@ -6,6 +6,9 @@ import DhBar from "@/components/dh_bar_main";
 
 import { Location } from "@/interfaces/Location";
 
+
+
+
 export default function Home() {
   const [locations, setLocations] = useState<Location[]>([]);
 
@@ -14,11 +17,17 @@ export default function Home() {
       .get("http://localhost:8000/myapi/locations/")
       .then((response) => {
         setLocations(response.data["locations"]);
+        // console.log(response.data["locations"][0]);
       })
       .catch((error) => {
         console.log(error);
       });
+
+
   }, []);
+
+  // Just update the db?
+
 
   return (
     <main>

@@ -9,6 +9,18 @@ interface RestrictionImageMap {
   [key: string]: string;
 }
 
+function kms(location: Location) {
+  // response.data["locations"].map(kms)
+  axios
+    .post("http://localhost:8000/myapi/db_update/", { dh_name: location.name })
+    .then((response) => {//get diff?
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location>();
   const [showCategories, setShowCategories] = useState<boolean[]>([]);
@@ -38,6 +50,7 @@ export default function Page({ params }: { params: { location: number } }) {
         const locations = response.data.locations;
         const location = locations[params.location];
         setLocation(location);
+        kms(location);
 
         // Get current hour
         const currentHour = new Date().getHours();
@@ -108,9 +121,8 @@ export default function Page({ params }: { params: { location: number } }) {
                 {/* Icon for accordion that will face up on false and down on true */}
                 <div className="flex justify-center items-center">
                   <svg
-                    className={`h-6 w-6 mr-6 ${
-                      showCategories && showCategories[i] ? "rotate-180" : ""
-                    }`}
+                    className={`h-6 w-6 mr-6 ${showCategories && showCategories[i] ? "rotate-180" : ""
+                      }`}
                     fill="#000000"
                     height="800px"
                     width="800px"

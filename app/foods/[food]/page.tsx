@@ -8,6 +8,7 @@ import Comments from "@/components/food/comments";
 import Ratings from "@/components/food/ratings";
 import Images from "@/components/food/images";
 
+
 export default function Page({ params }: { params: { food: string } }) {
   const [tabSelected, setTabSelected] = useState(0);
   const [food, setFood] = useState<Food>({
@@ -28,9 +29,9 @@ export default function Page({ params }: { params: { food: string } }) {
       >,
       i,
     ) => [
-      category as string,
-      (<Component key={i} food={food} />) as JSX.Element,
-    ],
+        category as string,
+        (<Component key={i} food={food} />) as JSX.Element,
+      ],
   );
 
   useEffect(() => {
