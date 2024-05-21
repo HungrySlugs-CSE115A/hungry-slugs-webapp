@@ -58,3 +58,44 @@ def get_food(request, name: str):
         food.pop("_id")
 
     return Response(food)
+
+
+## Comments
+@api_view(["POST"])
+def add_comment(request):
+    # get the food name from the request
+    name = request.data.get("food_name")
+    # get the user id from the request
+    user_id = request.data.get("user_id")
+    # get the comment from the request
+    comment = request.data.get("comment")
+
+    # check if the food name, user id, and comment are not None
+    if name is None or user_id is None or comment is None:
+        # return a 400 response Bad Request
+        return Response(status=400)
+
+    # decode the food name
+    name = unquote(name)
+
+    # get the food from the db
+    food = get_food_db(name=name)
+
+    # check if the food is None
+    if food is None:
+        # return a 404 response
+        return Response(status=404)
+
+    # update the food object in the db
+    food = update_food_db(name=name, user_id=user_id, comment=comment)
+
+    # check if the food is None
+    if food is None:
+        # return a 404 response
+        return Response(status=404)
+
+    # remove the _id field from the food object
+    if "_id" in food:
+        food.pop("_id")
+
+    return Response(food)

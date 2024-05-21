@@ -1,0 +1,17 @@
+.filterText {
+  font-size: 3rem; /* Adjust the font size as needed */
+  color: #003c6c; /* Set the text color */
+  font-weight: 600; /* Set the font weight */
+  padding-top: 1.25rem; /* Match the py-5 padding top */
+  display: center; /* Match the flex display */
+  align-items: center; /* Match the items-center alignment */
+  justify-content: center; /* Match the justify-center alignment */
+}
+
+.filterTopLeft {
+  position: absolute;
+  align-items: center;
+  top: 3rem; /* Adjust the top position as needed */
+  left: 80 rem; /* Adjust the left position as needed */
+  margin: 0; /* Remove the margin */
+}

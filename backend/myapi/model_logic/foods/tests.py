@@ -16,21 +16,24 @@ class FoodsTestCase(TestCase):
             self.fail("Failed to set food")
         self.assertEquals(food["name"], food_name)
         self.assertEquals(food["restrictions"], [])
-        self.assertEquals(food["ratings"], {})
-        self.assertEquals(food["comments"], {})
-        self.assertEquals(food["images"], {})
+        self.assertEquals(food["ratings"], [])
+        self.assertEquals(food["comments"], [])
+        self.assertEquals(food["images"], [])
 
         # delete food from db if exists
         delete_food(food_name)
 
     def test_update_food(self):
         food_name = "rice_test_update"
+        # delete food from db if exists
+        delete_food(food_name)
         # set food
         food = set_food(food_name)
         if food is None:
             self.fail("Failed to set food")
         # update food
         user_id = "12345"
+        # ratings
         rating = 5
         update_food(food_name, user_id=user_id, rating=rating)
         # get food
@@ -38,9 +41,46 @@ class FoodsTestCase(TestCase):
         # check food
         if food is None:
             self.fail("Failed to update food")
-        if type(food["ratings"]) is not dict:
-            self.fail("Ratings is not a dict")
-        self.assertEquals(food["ratings"][user_id], rating)
+        if type(food["ratings"]) is not list:
+            self.fail("Ratings is not a list")
+        self.assertEquals(food["ratings"][0]["user_id"], user_id)
+        self.assertEquals(food["ratings"][0]["rating"], rating)
+        # update rating
+        rating = 4
+        update_food(food_name, user_id=user_id, rating=rating)
+        # get food
+        food = get_food(food_name)
+        # check food
+        if food is None:
+            self.fail("Failed to update food")
+        if type(food["ratings"]) is not list:
+            self.fail("Ratings is not a list")
+        self.assertEquals(food["ratings"][0]["user_id"], user_id)
+        self.assertEquals(food["ratings"][0]["rating"], rating)
+
+        # comments
+        comment = "This is a comment"
+        update_food(food_name, user_id=user_id, comment=comment)
+        # get food
+        food = get_food(food_name)
+        # check food
+        if food is None:
+            self.fail("Failed to update food")
+        if type(food["comments"]) is not list:
+            self.fail("Comments is not a list")
+        self.assertEquals(food["comments"][0]["comment"], comment)
+
+        # images
+        image_url = "http://www.example.com/image.jpg"
+        update_food(food_name, user_id=user_id, image_url=image_url)
+        # get food
+        food = get_food(food_name)
+        # check food
+        if food is None:
+            self.fail("Failed to update food")
+        if type(food["images"]) is not list:
+            self.fail("Images is not a list")
+        self.assertEquals(food["images"][0]["url"], image_url)
 
         # delete food from db if exists
         delete_food(food_name)
