@@ -112,7 +112,7 @@ const HelloWorld: React.FC = () => {
         });
       }
 
-      s(finalFilteredFoods.length === 0);
+      setNoFoodsFound(finalFilteredFoods.length === 0)
       setFilteredFoods(finalFilteredFoods);
       setShowSearchResults(true);
     } else {

@@ -29,7 +29,7 @@
 .filterTopLeft {
   position: absolute;
   align-items: center;
-  top: 10rem; /* Adjust the top position as needed */
+  top: 8rem; /* Adjust the top position as needed */
   left: 80 rem; /* Adjust the left position as needed */
   margin: 0; /* Remove the margin */
 }
