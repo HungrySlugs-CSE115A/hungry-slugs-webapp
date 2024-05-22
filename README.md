@@ -1,5 +1,8 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Running Unit Tests
+`python backend/manage.py test backend/`
+
 ## Formatting Code
 
 - For Python code run `black backend/**/*.py`
