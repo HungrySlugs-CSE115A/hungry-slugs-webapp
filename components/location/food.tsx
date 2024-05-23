@@ -1,18 +1,23 @@
 import axios from "axios";
 import Link from "next/link";
 
-import Rating_bar from "@/components/review";
+import Rating_bar from "@/components/rating";
 import Review_bar from "@/components/review";
 
 
 export default function LocationFood({
   food_name,
+  food_average,
   restriction_images,
 }: {
   food_name: string;
+  food_average: number;
   restriction_images: string[]; // Change the type to string array
 }) {
 
+  // const [user_rating, setUserRating] = useState(0);
+  let user_id = sessionStorage.getItem("token");
+  if (user_id == null) user_id = "";
 
   return (
     <Link href={`/foods/${encodeURIComponent(food_name)}`}>
@@ -29,11 +34,12 @@ export default function LocationFood({
           </ul>
           <div>
             <h4>Review</h4>
-            <Rating_bar name={"wo"} />
+            {food_average}
+            {/* <Rating_bar food_name={food_name} user_id={'0'} /> */}
           </div>
           <div>
             <h4>Rating</h4>
-            <Rating_bar name={"wo"} />
+            <Review_bar food_name={food_name} user_id={'0'} />
           </div>
         </div>
       </div>

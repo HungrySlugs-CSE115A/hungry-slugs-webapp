@@ -9,21 +9,18 @@ interface RestrictionImageMap {
   [key: string]: string;
 }
 
-function kms(location: Location) {
-  // response.data["locations"].map(kms)
-  axios
-    .post("http://localhost:8000/myapi/db_update/", { dh_name: location.name })
-    .then((response) => {//get diff?
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+function calc_average(food_name: string, foods: {}) {
+  return 0;
+}
+
+function get_user_rating() {
+
 }
 
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location>();
   const [showCategories, setShowCategories] = useState<boolean[]>([]);
+  const [food_reviews, setReviews] = useState({});
 
   const restrictionImageMap: RestrictionImageMap = {
     eggs: "/Images/egg.jpg",
@@ -50,7 +47,14 @@ export default function Page({ params }: { params: { location: number } }) {
         const locations = response.data.locations;
         const location = locations[params.location];
         setLocation(location);
-        kms(location);
+        axios
+          .post("http://localhost:8000/myapi/db_update/", { dh_name: location.name })
+          .then((response) => {//get diff?
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
         // Get current hour
         const currentHour = new Date().getHours();
@@ -72,6 +76,22 @@ export default function Page({ params }: { params: { location: number } }) {
             }
           }),
         );
+        let user_id = sessionStorage.getItem("token");
+        if (user_id == null) user_id = "";
+
+        axios
+          .get("http://localhost:8000/myapi/get_ratings/", //gets the user rating
+          ) //need to get global
+
+          .then((response) => {//get diff?
+            setReviews(response.data);
+            console.log(food_reviews);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+
       })
       .catch((error) => {
         console.log(error);
@@ -148,6 +168,7 @@ export default function Page({ params }: { params: { location: number } }) {
                       {subCategory.foods.map((food, k) => (
                         <LocationFood
                           key={k}
+                          food_average={calc_average(food.name, food_reviews)}
                           food_name={food.name}
                           restriction_images={food.restrictions.map(
                             (restriction) => restrictionImageMap[restriction],

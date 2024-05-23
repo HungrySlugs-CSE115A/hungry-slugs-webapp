@@ -35,6 +35,7 @@ def update_user(id: str, food_name: str, rating: int | None = None) -> None:
         user["ratings"][food_name] = rating
         # update user
         users_collection.update_one({"id": id}, {"$set": {"ratings": user["ratings"]}})
+    
 
 
 def delete_user(id: str) -> None:

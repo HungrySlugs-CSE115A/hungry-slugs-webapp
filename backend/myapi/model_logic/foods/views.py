@@ -9,6 +9,7 @@ from .actions import (
 from urllib.parse import unquote
 
 from ..locations.actions import get_locations, find_food_in_location
+from ..users.actions import update_user
 
 
 # Get request that takes parameter of food name and returns the food object
@@ -60,11 +61,6 @@ def get_food(request, name: str):
     return Response(food)
 
 
-#         "name": name,
-#         "restrictions": restrictions,
-#         "ratings": [],
-#         "comments": [],
-#         "images": [],
 
 ##bulk food get?
 @api_view(["POST"])
@@ -98,13 +94,62 @@ def bulk_update_db(request):
     return Response(200)
 
 ## Ratings
+# update_user
+
+# @api_view(["POST"])
+# def get_ratings(request):
+    
+#     # get the food name from the request
+#     food_name = request.data.get("food_item")
+#     print("-"*20 + food_name + "-"*20)
+#     food = get_food_db( food_name)
+#     if(food ==None):
+#         return Response (404)
+
+#     rating = food['allergies']
+#     print(rating)
+
+#     return Response(200)
+from ...models import foods_collection
+
+@api_view(["GET"])
+def get_ratings(request):
+
+    foods = {}
+    for n in foods_collection.find():
+        if(n == None) :return Response(404)
+        foods[n['name']] = n['ratings']
+
+    return Response(foods)
 
 @api_view(["POST"])
-def update_food_rating(request):
-    food_name = request.data.get()
+def user_rating_update(request):
+    # get the food name from the request
+    food_name = request.data.get("food_name")
+    # get the user id from the request
+    user_id = request.data.get("user_id")
 
-    update_food_db(food_name, )
-    return Response(200)
+    food_rating = request.data.get("food_rating")
+    if(food_rating == None ):
+        print("none?")
+    print("Food: "+ food_name)
+    print("User: "+ user_id)
+    print(f"", end = "")
+    print({food_rating})
+
+    if(get_food_db(food_name) == None): #a bit redundant, no?
+        print("Food: "+ food_name)
+        return Response(status =  404 )
+    
+    if(update_food_db(food_name, [], user_id, food_rating) == None):
+        print("No user")
+        return Response(status =  404 )
+    
+    if(update_user(user_id, food_name, food_rating) == None):
+        return Response(status =  404 )
+    
+    return Response(food_rating)
+
 
 ## Comments
 @api_view(["POST"])
