@@ -59,7 +59,12 @@ const Page = () => {
       <h1>Profile</h1>
       {user && (
         <div>
-          <Image src={user.picture} alt="User profile" width={imageWidth} height={imageHeight}/>
+          <Image
+            src={user.picture}
+            alt="User profile"
+            width={imageWidth}
+            height={imageHeight}
+          />
           <h2>
             Welcome, {user.name} - {user.email}
           </h2>

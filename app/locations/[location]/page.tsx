@@ -24,17 +24,13 @@ interface food_item {
 
 interface test {
   [key: string]: food_item;
-
 }
-
-
 
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location>();
   const [showCategories, setShowCategories] = useState<boolean[]>([]);
   // const [food_reviews, setReviews] = useState<food_item>();
   const [food_reviews, setReviews] = useState<test>({});
-
 
   const restrictionImageMap: RestrictionImageMap = {
     eggs: "/Images/egg.jpg",
@@ -54,8 +50,6 @@ export default function Page({ params }: { params: { location: number } }) {
     alcohol: "/Images/alcohol.jpg",
   };
 
-
-
   useEffect(() => {
     axios
       .get<{ locations: Location[] }>("http://localhost:8000/myapi/locations/")
@@ -64,15 +58,17 @@ export default function Page({ params }: { params: { location: number } }) {
         const location = locations[params.location];
         setLocation(location);
         axios
-          .post("http://localhost:8000/myapi/db_update/", { dh_name: location.name })
-          .then((response) => {//get diff?
+          .post("http://localhost:8000/myapi/db_update/", {
+            dh_name: location.name,
+          })
+          .then((response) => {
+            //get diff?
             console.log(response.data);
             temp();
           })
           .catch((error) => {
             console.log(error);
           });
-
 
         // Get current hour
         const currentHour = new Date().getHours();
@@ -94,15 +90,11 @@ export default function Page({ params }: { params: { location: number } }) {
             }
           }),
         );
-
-
       })
       .catch((error) => {
         console.log(error);
       });
   }, [params.location]);
-
-
 
   const handleDiningHallSearch = () => {
     const searchResultPageUrl = `/locations/${params}/DH_Search`;
@@ -116,13 +108,15 @@ export default function Page({ params }: { params: { location: number } }) {
     }
   };
 
-
-  function temp() { //call only once on opening page and rating change
+  function temp() {
+    //call only once on opening page and rating change
     axios
-      .get("http://localhost:8000/myapi/get_ratings/", //gets the user rating
+      .get(
+        "http://localhost:8000/myapi/get_ratings/", //gets the user rating
       ) //need to get global
 
-      .then((response) => {//get diff?
+      .then((response) => {
+        //get diff?
         setReviews(response.data);
       })
       .catch((error) => {
@@ -130,7 +124,8 @@ export default function Page({ params }: { params: { location: number } }) {
       });
   }
 
-  function temper(food_name: string) {  //get the average rating for the food and return 0 if no exist yet
+  function temper(food_name: string) {
+    //get the average rating for the food and return 0 if no exist yet
 
     if (food_reviews[food_name] != null) {
       return food_reviews[food_name].average;
@@ -139,9 +134,7 @@ export default function Page({ params }: { params: { location: number } }) {
   }
 
   return (
-
     <main>
-
       <div className="container mx-auto">
         <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
           {location && location.name}
@@ -171,8 +164,9 @@ export default function Page({ params }: { params: { location: number } }) {
                 {/* Icon for accordion that will face up on false and down on true */}
                 <div className="flex justify-center items-center">
                   <svg
-                    className={`h-6 w-6 mr-6 ${showCategories && showCategories[i] ? "rotate-180" : ""
-                      }`}
+                    className={`h-6 w-6 mr-6 ${
+                      showCategories && showCategories[i] ? "rotate-180" : ""
+                    }`}
                     fill="#000000"
                     height="800px"
                     width="800px"

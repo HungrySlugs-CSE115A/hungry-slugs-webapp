@@ -2,7 +2,6 @@ from bs4.element import Tag
 
 
 class Food:
-
     restriction_image_map = {
         "eggs": "app/locations/Images/egg.jpg",
         "vegan": "app/locations/Images/vegan.jpg",

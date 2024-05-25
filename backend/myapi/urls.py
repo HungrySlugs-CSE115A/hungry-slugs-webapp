@@ -10,6 +10,6 @@ urlpatterns = [
     path("logout/", views.current_logout, name="current_logout"),
     path("foods/<str:name>/", foods_views.get_food, name="foods"),
     path("comments/", foods_views.add_comment, name="comments"),
-    path("rating_update/", foods_views.user_rating_update, name = "rating_update"),
-    path("get_ratings/", foods_views.get_ratings, name = "get_ratings")
+    path("rating_update/", foods_views.user_rating_update, name="rating_update"),
+    path("get_ratings/", foods_views.get_ratings, name="get_ratings"),
 ]
