@@ -94,36 +94,37 @@ def bulk_update_db(request):
     return Response(200)
 
 ## Ratings
-# update_user
 
-# @api_view(["POST"])
-# def get_ratings(request):
-    
-#     # get the food name from the request
-#     food_name = request.data.get("food_item")
-#     print("-"*20 + food_name + "-"*20)
-#     food = get_food_db( food_name)
-#     if(food ==None):
-#         return Response (404)
-
-#     rating = food['allergies']
-#     print(rating)
-
-#     return Response(200)
 from ...models import foods_collection
 
 @api_view(["GET"])
 def get_ratings(request):
 
     foods = {}
-    for n in foods_collection.find():
-        if(n == None) :return Response(404)
-        foods[n['name']] = n['ratings']
+    for rating in foods_collection.find():
+        if(rating == None) :return Response(404)
+        # create
+        reviews = {}
+        reviews['user_ratings'] = rating['ratings']
+        average = 0
 
+        for n in rating['ratings']:
+            average+= n['rating']
+
+        if(len(rating['ratings']) !=0):
+            reviews['average'] = average/len(rating['ratings'])
+        else:
+            reviews['average']  = 0
+
+        foods[rating['name']] = reviews
+    
     return Response(foods)
+##update ratings
+
 
 @api_view(["POST"])
 def user_rating_update(request):
+    print("POST")
     # get the food name from the request
     food_name = request.data.get("food_name")
     # get the user id from the request
@@ -135,19 +136,12 @@ def user_rating_update(request):
     print("Food: "+ food_name)
     print("User: "+ user_id)
     print(f"", end = "")
-    print({food_rating})
+    print(food_rating)
 
-    if(get_food_db(food_name) == None): #a bit redundant, no?
-        print("Food: "+ food_name)
-        return Response(status =  404 )
     
-    if(update_food_db(food_name, [], user_id, food_rating) == None):
-        print("No user")
-        return Response(status =  404 )
-    
-    if(update_user(user_id, food_name, food_rating) == None):
-        return Response(status =  404 )
-    
+    update_food_db(food_name, [], user_id, food_rating)
+        
+    update_user(user_id, food_name, food_rating)
     return Response(food_rating)
 
 

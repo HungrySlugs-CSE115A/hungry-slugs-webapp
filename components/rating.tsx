@@ -12,7 +12,7 @@ export default function Rating_bar({
     user_id: string;
 }) {
 
-
+    // https://flowbite.com/docs/forms/select/
     return (
         <div className="flex items-center justify-center pb-4 ">
             rating  -  -

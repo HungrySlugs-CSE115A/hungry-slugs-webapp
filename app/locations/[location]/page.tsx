@@ -4,23 +4,37 @@ import axios from "axios";
 import LocationFood from "@/components/location/food";
 
 import { Location } from "@/interfaces/Location";
+import { reverse } from "dns";
+import test from "node:test";
+import { Average } from "next/font/google";
 
 interface RestrictionImageMap {
   [key: string]: string;
 }
 
-function calc_average(food_name: string, foods: {}) {
-  return 0;
+interface food_reviews {
+  user_id: string;
+  rating: number;
 }
 
-function get_user_rating() {
+interface food_item {
+  user_ratings: Array<food_reviews>;
+  average: number;
+}
+
+interface test {
+  [key: string]: food_item;
 
 }
+
+
 
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location>();
   const [showCategories, setShowCategories] = useState<boolean[]>([]);
-  const [food_reviews, setReviews] = useState({});
+  // const [food_reviews, setReviews] = useState<food_item>();
+  const [food_reviews, setReviews] = useState<test>({});
+
 
   const restrictionImageMap: RestrictionImageMap = {
     eggs: "/Images/egg.jpg",
@@ -40,6 +54,8 @@ export default function Page({ params }: { params: { location: number } }) {
     alcohol: "/Images/alcohol.jpg",
   };
 
+
+
   useEffect(() => {
     axios
       .get<{ locations: Location[] }>("http://localhost:8000/myapi/locations/")
@@ -51,10 +67,12 @@ export default function Page({ params }: { params: { location: number } }) {
           .post("http://localhost:8000/myapi/db_update/", { dh_name: location.name })
           .then((response) => {//get diff?
             console.log(response.data);
+            temp();
           })
           .catch((error) => {
             console.log(error);
           });
+
 
         // Get current hour
         const currentHour = new Date().getHours();
@@ -76,20 +94,6 @@ export default function Page({ params }: { params: { location: number } }) {
             }
           }),
         );
-        let user_id = sessionStorage.getItem("token");
-        if (user_id == null) user_id = "";
-
-        axios
-          .get("http://localhost:8000/myapi/get_ratings/", //gets the user rating
-          ) //need to get global
-
-          .then((response) => {//get diff?
-            setReviews(response.data);
-            console.log(food_reviews);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
 
 
       })
@@ -97,6 +101,8 @@ export default function Page({ params }: { params: { location: number } }) {
         console.log(error);
       });
   }, [params.location]);
+
+
 
   const handleDiningHallSearch = () => {
     const searchResultPageUrl = `/locations/${params}/DH_Search`;
@@ -110,8 +116,32 @@ export default function Page({ params }: { params: { location: number } }) {
     }
   };
 
+
+  function temp() { //call only once on opening page and rating change
+    axios
+      .get("http://localhost:8000/myapi/get_ratings/", //gets the user rating
+      ) //need to get global
+
+      .then((response) => {//get diff?
+        setReviews(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function temper(food_name: string) {  //get the average rating for the food and return 0 if no exist yet
+
+    if (food_reviews[food_name] != null) {
+      return food_reviews[food_name].average;
+    }
+    return 0;
+  }
+
   return (
+
     <main>
+
       <div className="container mx-auto">
         <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
           {location && location.name}
@@ -168,7 +198,7 @@ export default function Page({ params }: { params: { location: number } }) {
                       {subCategory.foods.map((food, k) => (
                         <LocationFood
                           key={k}
-                          food_average={calc_average(food.name, food_reviews)}
+                          food_average={temper(food.name)}
                           food_name={food.name}
                           restriction_images={food.restrictions.map(
                             (restriction) => restrictionImageMap[restriction],
