@@ -2,29 +2,33 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../Search.module.css";
-
 import Image from "next/image";
 
+// Define the Food interface
 interface Food {
   name: string;
   restrictions: string[];
 }
 
+// Define the subCategory interface
 interface subCategory {
   name: string;
   foods: Array<Food>;
 }
 
+// Define the Category interface
 interface Category {
   name: string;
   sub_categories: Array<subCategory>;
 }
 
+// Define the DiningHall interface
 interface DiningHall {
   name: string;
   categories: Array<Category>;
 }
 
+// Map of restriction images
 const restrictionImageMap: { [key: string]: string } = {
   eggs: "/Images/egg.jpg",
   vegan: "/Images/vegan.jpg",
@@ -47,20 +51,19 @@ const HelloWorld: React.FC = () => {
   const [filteredFoods, setFilteredFoods] = useState<
     { food: Food; dhName: string; categoryName: string }[]
   >([]);
-
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
-
   const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
   const [diningHall, setDiningHall] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
 
+  // Retrieve the dining hall name from localStorage when the component mounts
   useEffect(() => {
-    // Retrieve the dining hall name from localStorage
     const storedDiningHall = localStorage.getItem("diningHall");
     setDiningHall(storedDiningHall);
   }, []);
 
+  // Handle search logic
   const handleSearch = () => {
     const currentDiningHallName = localStorage.getItem("diningHall");
 
@@ -70,8 +73,7 @@ const HelloWorld: React.FC = () => {
     );
 
     if (currentDiningHall) {
-      const allFoods: { food: Food; dhName: string; categoryName: string }[] =
-        [];
+      const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
 
       // Collect all foods from the current dining hall only
       currentDiningHall.categories.forEach((category) => {
@@ -112,7 +114,8 @@ const HelloWorld: React.FC = () => {
         });
       }
 
-      s(finalFilteredFoods.length === 0);
+      // Update the state based on the search results
+      setNoFoodsFound(finalFilteredFoods.length === 0);
       setFilteredFoods(finalFilteredFoods);
       setShowSearchResults(true);
     } else {
@@ -209,6 +212,7 @@ const BarebonesComponent: React.FC = () => {
     },
   );
 
+  // Fetch dining hall data from the API when the component mounts
   useEffect(() => {
     axios
       .get("http://localhost:8000/myapi/locations/")
@@ -221,16 +225,19 @@ const BarebonesComponent: React.FC = () => {
       });
   }, []);
 
+  // Handle search input change
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchInput(event.target.value);
   };
 
+  // Handle filter button click
   const handleFilter = () => {
     window.location.href = "Filter-Window";
   };
 
+  // Handle search logic
   const handleSearch = () => {
     const currentDiningHallName = localStorage.getItem("diningHall");
 
@@ -240,8 +247,7 @@ const BarebonesComponent: React.FC = () => {
     );
 
     if (currentDiningHall) {
-      const allFoods: { food: Food; dhName: string; categoryName: string }[] =
-        [];
+      const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
 
       // Collect all foods from the current dining hall only
       currentDiningHall.categories.forEach((category) => {
@@ -282,6 +288,7 @@ const BarebonesComponent: React.FC = () => {
         });
       }
 
+      // Update the state based on the search results
       setNoFoodsFound(finalFilteredFoods.length === 0);
       setFilteredFoods(finalFilteredFoods);
       setShowSearchResults(true);

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./AllergyFilterPage.module.css";
 
 const AllergyFilterPage = () => {
+  // State variables to manage selected allergies for hiding and showing
   const [selectedHideAllergies, setSelectedHideAllergies] = useState(() => {
     const storedHideAllergies = localStorage.getItem("hideAllergies");
     return storedHideAllergies ? JSON.parse(storedHideAllergies) : [];
@@ -13,6 +14,7 @@ const AllergyFilterPage = () => {
     return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
   });
 
+  // Allergy options for hiding and showing
   const hideAllergies = [
     "milk",
     "eggs",
@@ -44,17 +46,20 @@ const AllergyFilterPage = () => {
     "sesame",
   ];
 
+  // Handle resetting the selected allergies
   const handleReset = () => {
     setSelectedHideAllergies([]);
     setSelectedShowAllergies([]);
   };
 
+  // Handle cancel action and redirect to the search page
   const handleCancel = () => {
     setSelectedHideAllergies([]);
     setSelectedShowAllergies([]);
     window.location.href = "DH_Search";
   };
 
+  // Handle applying the selected allergies and saving them to localStorage
   const handleApply = () => {
     localStorage.setItem(
       "hideAllergies",
@@ -69,6 +74,7 @@ const AllergyFilterPage = () => {
     window.location.href = "DH_Search";
   };
 
+  // Handle checkbox change for hiding and showing allergies
   const handleCheckboxChange = (allergy, type) => {
     if (type === "hide") {
       if (selectedHideAllergies.includes(allergy)) {
@@ -91,9 +97,11 @@ const AllergyFilterPage = () => {
 
   return (
     <div className={styles.container}>
+      {/* Page title */}
       <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>Filter</h1>
       <div className={styles.columns}>
         <div className={styles.column}>
+          {/* Section for hiding items containing selected allergies */}
           <h2 className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
             Hide Items that contain:
           </h2>
@@ -114,6 +122,7 @@ const AllergyFilterPage = () => {
         </div>
 
         <div className={styles.column}>
+          {/* Section for showing items matching selected allergies */}
           <h2 className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
             Show items that match:
           </h2>
@@ -134,6 +143,7 @@ const AllergyFilterPage = () => {
         </div>
       </div>
 
+      {/* Buttons for cancel, reset, and apply actions */}
       <div className={styles.submitButtons}>
         <button
           className={`${styles.submitButton} flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5`}
