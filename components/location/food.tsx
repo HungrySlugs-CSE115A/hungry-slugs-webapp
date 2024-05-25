@@ -37,7 +37,7 @@ export default function LocationFood({
   return (
     <div>
 
-      <div className="relative flex flex-row justify-between hover:border-gray-300 hover:rounded-[2px] border-white border bg-[#F9F9F9] font-medium text-gray-700 py-1 my-1 text-sm">
+      <div className=" flex flex-row justify-between hover:border-gray-300 hover:rounded-[2px] border-white border bg-[#F9F9F9] font-medium text-gray-700 py-1 my-1 text-sm">
         <Link href={`/foods/${encodeURIComponent(food_name)}`}>
           <h4 className="ml-3">{food_name}</h4>
         </Link>
