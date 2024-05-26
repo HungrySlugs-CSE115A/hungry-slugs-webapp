@@ -131,3 +131,12 @@ def current_logout(request):
 
     print("Current session after logout:", request.session.get("current_user"))
     return JsonResponse({"message": "User has been logged out"})
+
+
+# @api_view(["GET"])
+# def get_user_rating(request):
+#     user = get_rating(request.user_ids)
+#     if(user==None):
+#         return Response({"message": "No user found"})
+#     else:
+#         return Response({"message": "User found: {user}", "user data": user})

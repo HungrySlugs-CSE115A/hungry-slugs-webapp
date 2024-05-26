@@ -73,7 +73,8 @@ const HelloWorld: React.FC = () => {
     );
 
     if (currentDiningHall) {
-      const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
+      const allFoods: { food: Food; dhName: string; categoryName: string }[] =
+        [];
 
       // Collect all foods from the current dining hall only
       currentDiningHall.categories.forEach((category) => {
@@ -247,7 +248,8 @@ const BarebonesComponent: React.FC = () => {
     );
 
     if (currentDiningHall) {
-      const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
+      const allFoods: { food: Food; dhName: string; categoryName: string }[] =
+        [];
 
       // Collect all foods from the current dining hall only
       currentDiningHall.categories.forEach((category) => {

@@ -4,14 +4,33 @@ import axios from "axios";
 import LocationFood from "@/components/location/food";
 
 import { Location } from "@/interfaces/Location";
+import { reverse } from "dns";
+import test from "node:test";
+import { Average } from "next/font/google";
 
 interface RestrictionImageMap {
   [key: string]: string;
 }
 
+interface food_reviews {
+  user_id: string;
+  rating: number;
+}
+
+interface food_item {
+  user_ratings: Array<food_reviews>;
+  average: number;
+}
+
+interface test {
+  [key: string]: food_item;
+}
+
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location>();
   const [showCategories, setShowCategories] = useState<boolean[]>([]);
+  // const [food_reviews, setReviews] = useState<food_item>();
+  const [food_reviews, setReviews] = useState<test>({});
 
   const restrictionImageMap: RestrictionImageMap = {
     eggs: "/Images/egg.jpg",
@@ -38,6 +57,18 @@ export default function Page({ params }: { params: { location: number } }) {
         const locations = response.data.locations;
         const location = locations[params.location];
         setLocation(location);
+        axios
+          .post("http://localhost:8000/myapi/db_update/", {
+            dh_name: location.name,
+          })
+          .then((response) => {
+            //get diff?
+            console.log(response.data);
+            temp();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
         // Get current hour
         const currentHour = new Date().getHours();
@@ -76,6 +107,31 @@ export default function Page({ params }: { params: { location: number } }) {
       console.error("Location not found");
     }
   };
+
+  function temp() {
+    //call only once on opening page and rating change
+    axios
+      .get(
+        "http://localhost:8000/myapi/get_ratings/", //gets the user rating
+      ) //need to get global
+
+      .then((response) => {
+        //get diff?
+        setReviews(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function temper(food_name: string) {
+    //get the average rating for the food and return 0 if no exist yet
+
+    if (food_reviews[food_name] != null) {
+      return food_reviews[food_name].average;
+    }
+    return 0;
+  }
 
   return (
     <main>
@@ -136,6 +192,7 @@ export default function Page({ params }: { params: { location: number } }) {
                       {subCategory.foods.map((food, k) => (
                         <LocationFood
                           key={k}
+                          food_average={temper(food.name)}
                           food_name={food.name}
                           restriction_images={food.restrictions.map(
                             (restriction) => restrictionImageMap[restriction],

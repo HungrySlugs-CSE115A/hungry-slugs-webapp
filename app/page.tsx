@@ -14,11 +14,14 @@ export default function Home() {
       .get("http://localhost:8000/myapi/locations/")
       .then((response) => {
         setLocations(response.data["locations"]);
+        // console.log(response.data["locations"][0]);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  // Just update the db?
 
   return (
     <main>

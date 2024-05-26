@@ -63,6 +63,7 @@ restrictions_schema = {
 ratings_schema_location = {
     "bsonType": "array",
     "items": {
+        "bsonType": "object",
         "properties": {
             "user_id": {"bsonType": "string"},
             "rating": {"bsonType": "double"},
