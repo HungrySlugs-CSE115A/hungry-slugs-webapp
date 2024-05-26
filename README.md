@@ -6,8 +6,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Formatting Code
 
-- For Python code run `black backend/**/*.py`
-- For All other code run `bun run prettier * --write`
+- For Python code run `black backend/*`
+- For All other code run `bunx prettier * --write`
 
 ## Running Code
 

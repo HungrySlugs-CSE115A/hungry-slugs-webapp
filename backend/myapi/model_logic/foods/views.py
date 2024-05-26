@@ -61,7 +61,6 @@ def get_food(request, name: str):
     return Response(food)
 
 
-
 ##bulk food get?
 @api_view(["POST"])
 def bulk_update_db(request):
@@ -70,9 +69,9 @@ def bulk_update_db(request):
     # get the location from the db
     location = get_locations([name])[0]
     if "categories" not in location:
-        print(f"-"*20 +" Cat")
+        print(f"-" * 20 + " Cat")
         return Response(status=400)
-    for category in location["categories"]: 
+    for category in location["categories"]:
         if "sub_categories" not in category:
             continue
         for subcategory in category["sub_categories"]:
@@ -81,44 +80,51 @@ def bulk_update_db(request):
             for food in subcategory["foods"]:
                 if "name" not in food:
                     continue
-                db_food = get_food_db(food['name'])
-                if db_food != None: #check if the food name is in the dh dict
+                db_food = get_food_db(food["name"])
+                if db_food != None:  # check if the food name is in the dh dict
 
-                    if(db_food["restrictions"] != food["restrictions"]): #udpate the restrinctions if not the same
+                    if (
+                        db_food["restrictions"] != food["restrictions"]
+                    ):  # udpate the restrinctions if not the same
                         update_food_db(food["name"], food["restrictions"])
                     continue
                 else:
-                    #add food to db
+                    # add food to db
                     set_food_db(food["name"], food["restrictions"])
 
     return Response(200)
 
+
 ## Ratings
 
 from ...models import foods_collection
+
 
 @api_view(["GET"])
 def get_ratings(request):
 
     foods = {}
     for rating in foods_collection.find():
-        if(rating == None) :return Response(404)
+        if rating == None:
+            return Response(404)
         # create
         reviews = {}
-        reviews['user_ratings'] = rating['ratings']
+        reviews["user_ratings"] = rating["ratings"]
         average = 0
 
-        for n in rating['ratings']:
-            average+= n['rating']
+        for n in rating["ratings"]:
+            average += n["rating"]
 
-        if(len(rating['ratings']) !=0):
-            reviews['average'] = average/len(rating['ratings'])
+        if len(rating["ratings"]) != 0:
+            reviews["average"] = average / len(rating["ratings"])
         else:
-            reviews['average']  = 0
+            reviews["average"] = 0
 
-        foods[rating['name']] = reviews
-    
+        foods[rating["name"]] = reviews
+
     return Response(foods)
+
+
 ##update ratings
 
 
@@ -131,16 +137,15 @@ def user_rating_update(request):
     user_id = request.data.get("user_id")
 
     food_rating = request.data.get("food_rating")
-    if(food_rating == None ):
+    if food_rating == None:
         print("none?")
-    print("Food: "+ food_name)
-    print("User: "+ user_id)
-    print(f"", end = "")
+    print("Food: " + food_name)
+    print("User: " + user_id)
+    print(f"", end="")
     print(food_rating)
 
-    
     update_food_db(food_name, [], user_id, food_rating)
-        
+
     update_user(user_id, food_name, food_rating)
     return Response(food_rating)
 

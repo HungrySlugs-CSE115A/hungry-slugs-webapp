@@ -77,12 +77,12 @@ def update_food(
             # update the ratings in the db
             foods_collection.update_one({"name": name}, {"$set": {"ratings": ratings}})
 
-        #update average
+        # update average
         total = 0
         for user_rating in food["ratings"]:
-            total+= user_rating["rating"]
+            total += user_rating["rating"]
             # print(user_rating['rating'])
-        food["average"] = total/ len(food["ratings"])
+        food["average"] = total / len(food["ratings"])
 
     # update comment
     if comment is not None and user_id is not None:
