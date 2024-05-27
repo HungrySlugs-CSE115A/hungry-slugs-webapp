@@ -1,13 +1,5 @@
 from ...models import users_collection
 
-"""
-username: str,
-id: str,
-ratings: {
-    food_name: int
-}
-"""
-
 ## Basic CRUD
 
 
@@ -24,17 +16,11 @@ def get_user(id: str) -> dict | None:
     return users_collection.find_one({"id": id})
 
 
-def update_user(id: str, food_name: str, rating: int | None = None) -> None:
+def update_user(id: str) -> None:
     # check if user exists
     user = users_collection.find_one({"id": id})
     if not user:
         return
-
-    if rating is not None:
-        # add/change rating
-        user["ratings"][food_name] = rating
-        # update user
-        users_collection.update_one({"id": id}, {"$set": {"ratings": user["ratings"]}})
 
 
 def delete_user(id: str) -> None:
