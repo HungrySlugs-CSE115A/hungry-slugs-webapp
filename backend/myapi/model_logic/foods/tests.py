@@ -1,12 +1,12 @@
 from django.test import TestCase
 
 # create tests for the foods model
-from myapi.model_logic.foods.actions import *
+from api.model_logic.foods.actions import *
 
 
 class FoodsTestCase(TestCase):
     def test_set_get_food(self):
-        food_name = "rice_test_set_get"
+        food_name = "Chicken & Rice test_set_get_food"
         # delete food from db if exists
         delete_food(food_name)
         # set food
@@ -16,7 +16,7 @@ class FoodsTestCase(TestCase):
             self.fail("Failed to set food")
         self.assertEquals(food["name"], food_name)
         self.assertEquals(food["restrictions"], [])
-        self.assertEquals(food["ratings"], [])
+        self.assertEquals(food["ratings"], {})
         self.assertEquals(food["comments"], [])
         self.assertEquals(food["images"], [])
 
@@ -41,10 +41,10 @@ class FoodsTestCase(TestCase):
         # check food
         if food is None:
             self.fail("Failed to update food")
-        if type(food["ratings"]) is not list:
-            self.fail("Ratings is not a list")
-        self.assertEquals(food["ratings"][0]["user_id"], user_id)
-        self.assertEquals(food["ratings"][0]["rating"], rating)
+        if type(food["ratings"]) is not dict:
+            self.fail("Ratings is not a dict")
+        self.assertTrue(user_id in food["ratings"])
+        self.assertEquals(food["ratings"][user_id]["rating"], rating)
         # update rating
         rating = 4
         update_food(food_name, user_id=user_id, rating=rating)
@@ -53,10 +53,10 @@ class FoodsTestCase(TestCase):
         # check food
         if food is None:
             self.fail("Failed to update food")
-        if type(food["ratings"]) is not list:
-            self.fail("Ratings is not a list")
-        self.assertEquals(food["ratings"][0]["user_id"], user_id)
-        self.assertEquals(food["ratings"][0]["rating"], rating)
+        if type(food["ratings"]) is not dict:
+            self.fail("Ratings is not a dict")
+        self.assertTrue(user_id in food["ratings"])
+        self.assertEquals(food["ratings"][user_id]["rating"], rating)
 
         # comments
         comment = "This is a comment"
