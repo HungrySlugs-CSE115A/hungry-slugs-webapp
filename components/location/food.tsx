@@ -1,42 +1,25 @@
-import axios from "axios";
+"use client";
+import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
-import Rating_bar from "@/components/rating";
-import Review_bar from "@/components/review";
-import { get } from "http";
+import { updateReview } from "@/app/db";
 
 export default function LocationFood({
   food_name,
   food_average,
+  user_rating,
   restriction_images,
+  user_id,
 }: {
   food_name: string;
-  food_average: any;
-  restriction_images: string[]; // Change the type to string array
+  food_average: number | null;
+  user_rating: number | null;
+  restriction_images: string[];
+  user_id: string | null;
 }) {
   const ratings = [1, 2, 3, 4, 5];
-  let user_token = sessionStorage.getItem("token");
-  if (user_token == null) {
-    user_token = "0";
-  }
-  // const [user_rating, setUserRating] = useState(0);
-
-  function handleRatingChange(newRating: number) {
-    alert("Rating changed to " + newRating);
-    axios
-      .post("http://localhost:8000/myapi/rating_update/", {
-        food_name: food_name,
-        user_id: user_token,
-        food_rating: newRating,
-      })
-      .then((response) => {
-        //get diff?
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  const [average, setAverage] = useState(food_average);
 
   return (
     <div>
@@ -48,16 +31,14 @@ export default function LocationFood({
           <ul className="flex flex-row px-1">
             {restriction_images.map((image, index) => (
               <li key={index} className="px-1">
-                <img src={image} height={20} width={20} alt={image} />{" "}
+                <Image src={image} height={20} width={20} alt={image} />{" "}
                 {/* Display the image */}
               </li>
             ))}
           </ul>
 
           <div>
-            <h4 className="flex justify-center "> {food_average} </h4>
-
-            {/* <Rating_bar food_name={food_name} user_id={'0'} /> */}
+            <h4 className="flex justify-center"> {average ? average : "?"} </h4>
           </div>
           <div>
             <h4 className="flex justify-center">
@@ -65,9 +46,20 @@ export default function LocationFood({
                 <select
                   name="rating"
                   id="rating"
-                  onChange={(e) => handleRatingChange(parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateReview({
+                      food_name: food_name,
+                      user_id: user_id || "anonymous",
+                      food_rating: parseInt(e.target.value),
+                    }).then((data) => {
+                      const newAverage = data.average;
+                      setAverage(newAverage);
+                    })
+                  }
                 >
-                  <option selected>Review</option>
+                  <option value={user_rating ? user_rating : 5}>
+                    {user_rating ? user_rating : "Rate"}
+                  </option>
                   {ratings.map((rating, index) => (
                     <option
                       className="flex justify-center"
