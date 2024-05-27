@@ -13,7 +13,7 @@ export default function Review_bar({
   // post get_rating
   // const [averageRating, setAverage] = useState<string>();
   // axios
-  //     .post("http://localhost:8000/myapi/average_rating/", //gets the user rating
+  //     .post("http://localhost:8000/api/average_rating/", //gets the user rating
   //         { food_item: food_name }) //need to get global
 
   //     .then((response) => {//get diff?

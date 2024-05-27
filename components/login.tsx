@@ -38,7 +38,7 @@ const LoginComponent = () => {
       //client side authentication retrieve user info from access token
       //send the token to backend
       axios
-        .post("http://localhost:8000/myapi/users", {
+        .post("http://localhost:8000/api/users", {
           tokenResponse: tokenResponse,
         })
         .then((res) => console.log("Backend login successful", res))
