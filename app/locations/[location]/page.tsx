@@ -2,7 +2,7 @@
 import { fetchLocations, fetchFoodReviewsBulk } from "@/app/db";
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
-
+import { getToken } from "@/app/token_manager";
 import LocationCategories from "@/components/location/categories";
 
 import Link from "next/link";
@@ -24,9 +24,12 @@ export default async function Page({
     )
   );
 
+  const token = getToken(); 
+  const userToken = token ? token : "anonymous"; // Use "anonymous" if token is null
+
   const foodReviews: FrontEndReviews = await fetchFoodReviewsBulk({
     food_names: food_names,
-    user_id: "anonymous",
+    user_id: userToken, 
   });
 
   return (

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-
+import { setToken, isTokenNull } from "@/app/token_manager";
 import { GOOGLE_CLIENT_ID } from "@/private/secrets";
 
 interface User {
@@ -30,8 +30,10 @@ const LoginComponent = () => {
 
     onSuccess: (tokenResponse) => {
       console.log(tokenResponse);
-      // Store authentication token in the browser's storage for navigation bar use
+      // Store authentication token in 2 places
       sessionStorage.setItem("token", tokenResponse.access_token);
+      setToken(tokenResponse.access_token);
+
       // Redirect the user to main page
       window.location.href = "/";
       //handleLoginSuccess
