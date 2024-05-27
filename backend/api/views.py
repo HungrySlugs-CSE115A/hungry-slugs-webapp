@@ -1,4 +1,6 @@
-from requests import get
+import json
+from .model_logic.foods.actions import get_food, set_food, update_food
+
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import requests
@@ -61,11 +63,56 @@ def get_locations(request):
         # Convert the list of dining halls to a list of dictionaries
         locations = [dh.to_dict() for dh in filtered_locations]
 
+        # create a set of all foods from the locations
+        all_foods: dict[str, list[str]] = {}
+        for dh in locations:
+            for category in dh["categories"]:
+                for sub_category in category["sub_categories"]:
+                    for food in sub_category["foods"]:
+                        if "restrictions" not in food:
+                            continue
+                        if not isinstance(food["restrictions"], list):
+                            continue
+
+                        all_foods[food["name"]] = food["restrictions"]
+
+        # check if if each food exists in the db
+        for food in all_foods:
+            # check if name is in the food
+            if "name" not in food:
+                continue
+            food_name = food[0]
+
+            # check if the food_name is a string
+            if not isinstance(food_name, str):
+                continue
+
+            # get the restrictions from the food
+            restrictions = []
+            if "restrictions" in food:
+                restrictions: list[str] = all_foods[food_name]
+
+            # get the food from the db
+            food_db = get_food(name=food_name)
+
+            # check if the food exists in the db
+            if food_db is None:
+                # add the food to the db
+                set_food(name=food_name, restrictions=restrictions)
+            else:
+                # check if the restrictions are the same
+                if food_db["restrictions"] != restrictions:
+                    # update the restrictions
+                    update_food(name=food_name, restrictions=restrictions)
+
         # Update the locations in the db
         update_locations(locations)
 
         # update the last update time
         update_task(task_name="locations")
+
+        # get all locations from the db
+        locations: list[dict] = get_locations_db()
 
     else:
         print("Locations are up to date. Getting from DB...")
@@ -80,7 +127,12 @@ def get_locations(request):
     # Convert the list of dining halls to json
     json_data = {"locations": locations}
 
-    return Response(json_data)
+    # import json
+
+    # # convert the json data to a string
+    # json_data = json.dumps(json_data)
+
+    return JsonResponse(json_data)
 
 
 class CurrentUser:

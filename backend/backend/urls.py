@@ -22,5 +22,5 @@ urlpatterns = [
     # For the admin page
     path("admin/", admin.site.urls),
     # For the api
-    path("myapi/", include("myapi.urls")),
+    path("api/", include("api.urls")),
 ]
