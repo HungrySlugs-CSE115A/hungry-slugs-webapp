@@ -15,7 +15,7 @@ def set_food(
     food = {
         "name": name,
         "restrictions": restrictions,
-        "ratings": [],
+        "ratings": {},
         "comments": [],
         "images": [],
         "average": 0,
@@ -59,30 +59,12 @@ def update_food(
         ratings = food["ratings"]
 
         # check if the user has already rated the food
-        old_rating_dict: dict | None = foods_collection.find_one(
-            {"name": name, "ratings.user_id": user_id}
-        )
+        if user_id not in ratings:
+            ratings[user_id] = {}
 
-        # if the user has already rated the food
-        if old_rating_dict:
-            # update the rating
-            foods_collection.update_one(
-                {"name": name, "ratings.user_id": user_id},
-                {"$set": {"ratings.$.rating": rating}},
-            )
-        else:
-            # add the rating
-            ratings.append({"user_id": user_id, "rating": rating, "date": date})
-
-            # update the ratings in the db
-            foods_collection.update_one({"name": name}, {"$set": {"ratings": ratings}})
-
-        # update average
-        total = 0
-        for user_rating in food["ratings"]:
-            total += user_rating["rating"]
-            # print(user_rating['rating'])
-        food["average"] = total / len(food["ratings"])
+        # update the rating
+        ratings[user_id]["rating"] = rating
+        foods_collection.update_one({"name": name}, {"$set": {"ratings": ratings}})
 
     # update comment
     if comment is not None and user_id is not None:
