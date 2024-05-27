@@ -29,7 +29,7 @@ export default function Comments({ food }: { food: Food }) {
     comment: string;
   }) => {
     axios
-      .post("http://localhost:8000/myapi/comments/", comment)
+      .post("http://localhost:8000/api/comments/", comment)
       .then((response) => {
         const updatedFood: Food = response.data;
         const updatedComments = updatedFood.comments;

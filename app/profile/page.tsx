@@ -43,7 +43,7 @@ const Page = () => {
   const handleLogout = () => {
     googleLogout();
     axios
-      .post("http://localhost:8000/myapi/logout/")
+      .post("http://localhost:8000/api/logout/")
       .then((res) => console.log("Backend logout successful", res))
       .catch((err) => console.error("Backend logout failed", err));
 
