@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -8,8 +9,7 @@ from .actions import (
 )
 from urllib.parse import unquote
 
-from ..locations.actions import get_locations, find_food_in_location
-from ..users.actions import update_user
+from ..locations.actions import get_locations, find_food_in_location, get_location
 
 
 # Get request that takes parameter of food name and returns the food object
@@ -61,68 +61,72 @@ def get_food(request, name: str):
     return Response(food)
 
 
-##bulk food get?
-@api_view(["POST"])
-def bulk_update_db(request):
-    name = request.data.get("dh_name")
-
-    # get the location from the db
-    location = get_locations([name])[0]
-    if "categories" not in location:
-        print(f"-" * 20 + " Cat")
-        return Response(status=400)
-    for category in location["categories"]:
-        if "sub_categories" not in category:
-            continue
-        for subcategory in category["sub_categories"]:
-            if "foods" not in subcategory:
-                continue
-            for food in subcategory["foods"]:
-                if "name" not in food:
-                    continue
-                db_food = get_food_db(food["name"])
-                if db_food != None:  # check if the food name is in the dh dict
-
-                    if (
-                        db_food["restrictions"] != food["restrictions"]
-                    ):  # udpate the restrinctions if not the same
-                        update_food_db(food["name"], food["restrictions"])
-                    continue
-                else:
-                    # add food to db
-                    set_food_db(food["name"], food["restrictions"])
-
-    return Response(200)
-
-
 ## Ratings
+@api_view(["POST"])
+def return_ratings_bulk(request):
+    food_names: list[str] = request.data.get("food_names")
+    user_id: str | None = request.data.get("user_id")
 
-from ...models import foods_collection
+    if food_names == None:
+        print("food_names is None")
+        return Response(404)
 
+    ratings = {}
 
-@api_view(["GET"])
-def get_ratings(request):
-
-    foods = {}
-    for rating in foods_collection.find():
-        if rating == None:
+    for food in food_names:
+        rating = {}
+        food_db = get_food_db(food)
+        if food_db == None:
+            set_food_db(food, [])
+            food_db = get_food_db(food)
+            if food_db == None:
+                print("food_db is None")
+                return Response(404)
+        ratings_db = food_db["ratings"]
+        if not isinstance(ratings_db, dict):
+            print("ratings_db is not a dict")
             return Response(404)
-        # create
-        reviews = {}
-        reviews["user_ratings"] = rating["ratings"]
-        average = 0
 
-        for n in rating["ratings"]:
-            average += n["rating"]
+        for user_id_db, rating_db in ratings_db.items():
+            # verify rating_db is dict
+            if not isinstance(rating_db, dict):
+                print("rating_db is not a dict")
+                return Response(404)
 
-        if len(rating["ratings"]) != 0:
-            reviews["average"] = average / len(rating["ratings"])
+            # add rating to the average
+            if "rating" not in rating_db:
+                print("rating not in rating_db")
+                return Response(404)
+
+            # check if the rating is a float
+            if not isinstance(rating_db["rating"], float):
+                print("rating is not a float")
+                return Response(404)
+
+            if "average" not in rating:
+                rating["average"] = rating_db["rating"]
+            else:
+                rating["average"] += rating_db["rating"]
+
+            if user_id and user_id == user_id_db:
+                rating["user_rating"] = rating_db["rating"]
+
+        if "user_rating" not in rating:
+            rating["user_rating"] = None
+
+        if len(ratings_db) > 0:
+            # divide the average by the number of ratings
+            rating["average"] = rating["average"] / len(ratings_db)
+
+            # round the average to 1 decimal places
+            rating["average"] = round(rating["average"], 1)
         else:
-            reviews["average"] = 0
+            rating["average"] = None
 
-        foods[rating["name"]] = reviews
+        # add the rating to the ratings dict
+        ratings[food] = rating
 
-    return Response(foods)
+    return Response(ratings)
 
 
 ##update ratings
@@ -130,24 +134,55 @@ def get_ratings(request):
 
 @api_view(["POST"])
 def user_rating_update(request):
-    print("POST")
     # get the food name from the request
     food_name = request.data.get("food_name")
     # get the user id from the request
     user_id = request.data.get("user_id")
-
+    # get the rating from the request
     food_rating = request.data.get("food_rating")
     if food_rating == None:
         print("none?")
+
     print("Food: " + food_name)
     print("User: " + user_id)
-    print(f"", end="")
     print(food_rating)
 
-    update_food_db(food_name, [], user_id, food_rating)
+    update_food_db(name=food_name, user_id=user_id, rating=food_rating)
 
-    update_user(user_id, food_name, food_rating)
-    return Response(food_rating)
+    # get the food from the db
+    food = get_food_db(name=food_name)
+
+    # check if the food is None
+    if food is None:
+        return Response(status=404)
+
+    # add up all the ratings
+    average = 0
+    ratings = food["ratings"]
+
+    # check if the ratings is a list
+    if not isinstance(ratings, dict):
+        return Response(status=404)
+
+    for _, rating in ratings.items():
+        if not isinstance(rating, dict):
+            return Response(status=404)
+
+        if "rating" not in rating:
+            return Response(status=404)
+
+        score = rating["rating"]
+        # check if the score is a float
+        if not isinstance(score, float):
+            return Response(status=404)
+        average += score
+
+    average = average / len(ratings)
+
+    if average == 0:
+        average = None
+
+    return JsonResponse({"average": average})
 
 
 ## Comments
