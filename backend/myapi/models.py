@@ -61,17 +61,17 @@ restrictions_schema = {
     "items": {"bsonType": "string"},
 }
 ratings_schema_location = {
-    "bsonType": "array",
-    "items": {
+    "bsonType": "object",
+    "additionalProperties": {  # the user_id is the key
         "bsonType": "object",
         "properties": {
-            "user_id": {"bsonType": "string"},
             "rating": {"bsonType": "double"},
             "date": {"bsonType": "string"},
         },
-        "required": ["user_id", "rating", "date"],
+        "required": ["rating"],
     },
 }
+
 # comments sorted by date
 comments_schema = {
     "bsonType": "array",
@@ -116,14 +116,6 @@ foods_collection = db["foods"]
 db.command(command="collMod", value="foods", validator=foods_validator)
 
 # Users Model
-ratings_schema_user = {
-    "bsonType": "object",
-    "properties": {
-        "rating": {"bsonType": "double"},
-        "food_name": {"bsonType": "string"},
-    },
-    "required": ["rating", "food_id"],
-}
 users_validator = {
     "$jsonSchema": {
         "title": "user",
@@ -131,9 +123,8 @@ users_validator = {
             "_id": {"bsonType": "objectId"},
             "name": {"bsonType": "string"},
             "user_id": {"bsonType": "string"},
-            "ratings": ratings_schema_user,
         },
-        "required": ["_id", "name", "user_id", "ratings"],
+        "required": ["_id", "name", "user_id"],
     }
 }
 users_collection = db["users"]
