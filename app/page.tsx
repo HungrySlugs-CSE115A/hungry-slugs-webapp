@@ -1,27 +1,12 @@
-"use client";
-import { useState, useEffect } from "react";
-import axios from "axios";
+"use server";
+
+import { fetchLocations } from "@/app/db";
+import { Location } from "@/interfaces/Location";
 
 import DhBar from "@/components/dh_bar_main";
 
-import { Location } from "@/interfaces/Location";
-
-export default function Home() {
-  const [locations, setLocations] = useState<Location[]>([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/myapi/locations/")
-      .then((response) => {
-        setLocations(response.data["locations"]);
-        // console.log(response.data["locations"][0]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  // Just update the db?
+export default async function Home() {
+  const locations: Location[] = await fetchLocations();
 
   return (
     <main>
