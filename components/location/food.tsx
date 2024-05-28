@@ -53,6 +53,7 @@ export default function LocationFood({
                       food_rating: parseInt(e.target.value),
                     }).then((data) => {
                       const newAverage = data.average;
+                      food_average = newAverage;
                       setAverage(newAverage);
                     })
                   }
