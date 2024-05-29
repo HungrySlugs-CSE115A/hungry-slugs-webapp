@@ -38,7 +38,6 @@ const Page = () => {
 
     // Remove the token from local storage
     sessionStorage.removeItem("token");
-    sessionStorage.removeItem("username");
     // Redirect the user to the main page after logging out
     window.location.href = "/";
     console.log("Logged out successfully");

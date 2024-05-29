@@ -13,7 +13,7 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
     parseInt(day),
     parseInt(hour),
     parseInt(minute),
-    parseInt(second)
+    parseInt(second),
   );
 }
 
@@ -21,6 +21,8 @@ export default function Comments({ food }: { food: Food }) {
   const [comments, setComments] = useState<Comment[]>(food.comments);
   const [textField, setTextField] = useState("");
   const [user_id, setUserId] = useState<string | null>(null);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editTextField, setEditTextField] = useState("");
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -37,7 +39,7 @@ export default function Comments({ food }: { food: Food }) {
 
   const postComment = (comment: {
     food_name: string;
-    user_id: string | null;
+    user_id: string;
     comment: string;
   }) => {
     axios
@@ -53,24 +55,72 @@ export default function Comments({ food }: { food: Food }) {
       });
   };
 
+  const editComment = (index: number) => {
+    setEditIndex(index);
+    setEditTextField(comments[index].comment); // Set textarea value to the comment text
+  };
+
+  const saveEditedComment = (commentId: number) => {
+    const updatedComments = [...comments];
+    updatedComments[editIndex!].comment = editTextField; // Update the comment text
+    setComments(updatedComments);
+    setEditIndex(null);
+    setEditTextField(""); // Clear the textarea
+  
+    // Make Axios call to update the comment on the backend
+    const editedComment = {
+      id: commentId, // Use the provided commentId
+      comment: editTextField,
+    };
+    
+    axios
+      .put(`http://localhost:8000/api/comments/${commentId}/`, editedComment)
+      .then((response) => {
+        console.log("Comment updated successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Failed to update comment:", error);
+      });
+  };  
+
   return (
     <div>
       <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">{food && food.name}</h1>
-      {/* <h2>Comments</h2> */}
       <div>
         {comments.map((comment, i) => (
-          <div key={i} className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3">
+          <div key={comment.id} className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3">
             <div className="flex-row items-center mb-1">
               <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">{comment.user_id}</span>
               <span className="text-gray-500 text-sm">{pythonDatetimeToJsDatetime(comment.date).toLocaleString()}</span>
+              {user_id === comment.user_id && (
+                <>
+                  {editIndex !== i ? (
+                    <button onClick={() => editComment(i)}>Edit</button>
+                  ) : (
+                    <>
+                      <button onClick={() => saveEditedComment(comments[i].id)}>Save</button>
+                      <button onClick={() => setEditIndex(null)}>Cancel</button>
+                    </>
+                  )}
+                </>
+              )}
             </div>
-            <p className="px-2 break-words">{comment.comment}</p>
+            <p className="px-2 break-words">
+              {editIndex !== i ? comment.comment : (
+                <input
+                  type="text"
+                  value={editTextField}
+                  onChange={(e) => setEditTextField(e.target.value)}
+                  className="w-full border border-gray-300 p-2 mb-2 mt-2 break-all max-w-full"
+                  style={{ borderColor: "rgb(107, 114, 128)" }}
+                />
+              )}
+            </p>
           </div>
         ))}
       </div>
 
       <div className="flex flex-row mt-4">
-        {/* text field */}
         <input
           type="text"
           value={textField}
@@ -78,8 +128,6 @@ export default function Comments({ food }: { food: Food }) {
           className="w-full h-10 border border-gray-300 p-2 mb-2 mt-2 break-all max-w-full"
           style={{ borderColor: "rgb(107, 114, 128)" }}
         />
-
-        {/* post button */}
         <button
           onClick={() =>
             postComment({
