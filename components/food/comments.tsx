@@ -39,7 +39,7 @@ export default function Comments({ food }: { food: Food }) {
 
   const postComment = (comment: {
     food_name: string;
-    user_id: string;
+    user_id: string | null;
     comment: string;
   }) => {
     axios
