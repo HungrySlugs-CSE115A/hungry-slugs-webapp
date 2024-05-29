@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios";
 
 export const fetchUserInfo = async () => {
@@ -13,8 +14,6 @@ export const fetchUserInfo = async () => {
     });
 
     const userInfo = response.data;
-
-    //sessionStorage.setItem("username", userInfo.email);
 
     return {
       name: userInfo.name,

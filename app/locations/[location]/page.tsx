@@ -2,9 +2,8 @@
 import { fetchLocations, fetchFoodReviewsBulk } from "@/app/db";
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
-
 import LocationCategories from "@/components/location/categories";
-
+import { fetchUserInfo } from "@/app/user_info";
 import Link from "next/link";
 
 export default async function Page({
@@ -24,9 +23,20 @@ export default async function Page({
     )
   );
 
+  // Fetch user info
+  let email = "anonymous";
+  try {
+    const userInfo = await fetchUserInfo();
+    email = userInfo.email;
+  } catch (error) {
+    console.error("Failed to fetch user info:", error);
+  }
+
+  console.log("email is: ", email);
+
   const foodReviews: FrontEndReviews = await fetchFoodReviewsBulk({
     food_names: food_names,
-    user_id: "anonymous",
+    user_id: email,
   });
 
   return (

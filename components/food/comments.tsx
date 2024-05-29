@@ -13,7 +13,7 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
     parseInt(day),
     parseInt(hour),
     parseInt(minute),
-    parseInt(second),
+    parseInt(second)
   );
 }
 
@@ -26,16 +26,14 @@ export default function Comments({ food }: { food: Food }) {
     const getUserInfo = async () => {
       try {
         const userInfo = await fetchUserInfo();
-        const email = userInfo.email
+        const email = userInfo.email;
         setUserId(email ? email : "anonymous");
       } catch (error) {
         console.error("Failed to fetch user info:", error);
       }
-    }; 
+    };
     getUserInfo(); // Call the function to fetch user info
   }, []);
-  // const username = sessionStorage.getItem("username")
-  // const user_id = username ? username : "anonymous";
 
   const postComment = (comment: {
     food_name: string;
@@ -57,15 +55,16 @@ export default function Comments({ food }: { food: Food }) {
 
   return (
     <div>
-      <h1>{food && food.name}</h1>
-      <h2>Comments</h2>
+      <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">{food && food.name}</h1>
+      {/* <h2>Comments</h2> */}
       <div>
         {comments.map((comment, i) => (
-          <div key={i} className="flex flex-row">
-            <p className="px-2">{comment.user_id}</p>
-            <p className="px-2">:{comment.comment}</p>
-            <p className="px-2">{pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
-            </p>
+          <div key={i} className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3">
+            <div className="flex-row items-center mb-1">
+              <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">{comment.user_id}</span>
+              <span className="text-gray-500 text-sm">{pythonDatetimeToJsDatetime(comment.date).toLocaleString()}</span>
+            </div>
+            <p className="px-2 break-words">{comment.comment}</p>
           </div>
         ))}
       </div>
