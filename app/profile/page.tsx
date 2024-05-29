@@ -2,7 +2,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
-import { removeToken } from "@/app/token_manager";
 import axios from "axios";
 interface User {
   name: string;
@@ -10,6 +9,7 @@ interface User {
   picture: string;
 }
 import Image from "next/image";
+import { useCookies } from 'next-client-cookies';
 const imageWidth = 100;
 const imageHeight = 100;
 
@@ -33,6 +33,11 @@ const Page = () => {
         email: userInfo.email,
         picture: userInfo.picture,
       });
+
+      sessionStorage.setItem("email", userInfo.email);
+      const cookies = useCookies();
+      cookies.set("username", userInfo.email);
+      
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
@@ -50,7 +55,7 @@ const Page = () => {
 
     // Remove the stored user login token
     sessionStorage.removeItem("token");
-    removeToken();
+    sessionStorage.removeItem("email");
     // Redirect the user to the main page after logging out
     window.location.href = "/";
     console.log("Logged out successfully");

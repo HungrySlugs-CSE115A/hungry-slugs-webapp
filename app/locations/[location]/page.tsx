@@ -1,22 +1,26 @@
-"use server";
 import { fetchLocations, fetchFoodReviewsBulk } from "@/app/db";
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
-import { getToken } from "@/app/token_manager";
 import LocationCategories from "@/components/location/categories";
-
 import Link from "next/link";
+import { getCookies } from 'next-client-cookies/server';
 
-export default async function Page({
-  params,
-}: {
+
+interface PageProps {
   params: { location: number };
-}) {
+  user_id: string; // Add user_id as a prop
+}
+
+export default async function ServerComponent({ params, user_id }: PageProps) {
   const locations: Location[] = await fetchLocations();
   if (params.location < 0 || params.location >= locations.length) {
     return <h1>Location not found</h1>;
   }
   const location: Location = locations[params.location];
+
+  const cookies = getCookies();
+  const username = cookies.get("username");
+  console.log("user id is: ", username);
 
   const food_names = location.categories.flatMap((category) =>
     category.sub_categories.flatMap((sub_category) =>
@@ -24,12 +28,9 @@ export default async function Page({
     )
   );
 
-  const token = getToken(); 
-  const userToken = token ? token : "anonymous"; // Use "anonymous" if token is null
-
   const foodReviews: FrontEndReviews = await fetchFoodReviewsBulk({
     food_names: food_names,
-    user_id: userToken, 
+    user_id: user_id, // Use the received user_id
   });
 
   return (

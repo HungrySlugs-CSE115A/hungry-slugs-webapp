@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
@@ -21,7 +22,7 @@ export default function Comments({ food }: { food: Food }) {
   const [textField, setTextField] = useState("");
 
   // Dummy account data
-  const user_id = "1234567890";
+  const user_id = sessionStorage.getItem("email");
 
   const postComment = (comment: {
     food_name: string;
@@ -49,6 +50,7 @@ export default function Comments({ food }: { food: Food }) {
       <div>
         {comments.map((comment, i) => (
           <div key={i} className="flex flex-row">
+            <p className="px-2">{comment.user_id}</p>
             <p className="px-2">body: {comment.comment}</p>
             <p className="px-2">
               date: {pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
