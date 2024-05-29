@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
+import { fetchUserInfo } from "@/app/user_info";
 
 function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
   const [date, time] = pythonDatetime.split("T");
@@ -19,13 +20,26 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
 export default function Comments({ food }: { food: Food }) {
   const [comments, setComments] = useState<Comment[]>(food.comments);
   const [textField, setTextField] = useState("");
+  const [user_id, setUserId] = useState<string | null>(null);
 
-  // Dummy account data
-  const user_id = "1234567890";
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const userInfo = await fetchUserInfo();
+        const email = userInfo.email
+        setUserId(email ? email : "anonymous");
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+      }
+    }; 
+    getUserInfo(); // Call the function to fetch user info
+  }, []);
+  // const username = sessionStorage.getItem("username")
+  // const user_id = username ? username : "anonymous";
 
   const postComment = (comment: {
     food_name: string;
-    user_id: string;
+    user_id: string | null;
     comment: string;
   }) => {
     axios
@@ -48,9 +62,9 @@ export default function Comments({ food }: { food: Food }) {
       <div>
         {comments.map((comment, i) => (
           <div key={i} className="flex flex-row">
-            <p className="px-2">body: {comment.comment}</p>
-            <p className="px-2">
-              date: {pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
+            <p className="px-2">{comment.user_id}</p>
+            <p className="px-2">:{comment.comment}</p>
+            <p className="px-2">{pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
             </p>
           </div>
         ))}

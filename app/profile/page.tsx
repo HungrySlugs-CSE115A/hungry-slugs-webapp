@@ -3,6 +3,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
+import { fetchUserInfo } from "@/app/user_info";
+
 interface User {
   name: string;
   email: string;
@@ -14,30 +16,17 @@ const imageHeight = 100;
 
 const Page = () => {
   const [user, setUser] = useState<User | null>(null);
-  const fetchUserInfo = async () => {
+  const getUserInfo = async () => {
     try {
-      // Retrieve the access token from storage
-      const access_token = sessionStorage.getItem("token");
-
-      // Fetch user info from Google OAuth2 API
-      const userInfo = await axios
-        .get("https://www.googleapis.com/oauth2/v3/userinfo", {
-          headers: { Authorization: `Bearer ${access_token}` },
-        })
-        .then((res) => res.data);
-
-      // Update the user state
-      setUser({
-        name: userInfo.name,
-        email: userInfo.email,
-        picture: userInfo.picture,
-      });
-    } catch (error) {
-      console.error("Error fetching user info:", error);
+      const userInfo = await fetchUserInfo();
+      setUser(userInfo);
+    }
+    catch (error) {
+      console.error("Failed to fetch user info:", error);
     }
   };
   useEffect(() => {
-    fetchUserInfo();
+    getUserInfo();
   }, []);
 
   const handleLogout = () => {
@@ -49,6 +38,7 @@ const Page = () => {
 
     // Remove the token from local storage
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("username");
     // Redirect the user to the main page after logging out
     window.location.href = "/";
     console.log("Logged out successfully");
