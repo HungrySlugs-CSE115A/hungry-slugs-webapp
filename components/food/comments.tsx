@@ -34,8 +34,7 @@ export default function Comments({ food }: { food: Food }) {
         const updatedFood: Food = response.data;
         const updatedComments = updatedFood.comments;
         setComments(updatedComments);
-        console.log(updatedComments[0]["date"]);
-        console.log(pythonDatetimeToJsDatetime(updatedComments[0]["date"]));
+        setTextField(""); // Clear the textarea after submission
       })
       .catch((error) => {
         console.error(error);
@@ -57,13 +56,14 @@ export default function Comments({ food }: { food: Food }) {
         ))}
       </div>
 
-      <div className="flex flex-row">
+      <div className="flex flex-row mt-4">
         {/* text field */}
         <input
           type="text"
           value={textField}
           onChange={(e) => setTextField(e.target.value)}
-          className="border border-gray-400"
+          className="w-full h-10 border border-gray-300 p-2 mb-2 mt-2 break-all max-w-full"
+          style={{ borderColor: "rgb(107, 114, 128)" }}
         />
 
         {/* post button */}
@@ -75,7 +75,10 @@ export default function Comments({ food }: { food: Food }) {
               comment: textField,
             })
           }
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"
+          className={`ml-2 text-white ${
+            textField.length === 0 ? "bg-gray-300 cursor-default" : "bg-blue-500 hover:bg-blue-700"
+          } rounded-md px-4 py-2`}
+          disabled={textField.length === 0}
         >
           Post
         </button>
