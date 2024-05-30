@@ -20,7 +20,7 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
 export default function Comments({ food }: { food: Food }) {
   const [comments, setComments] = useState<Comment[]>(food.comments);
   const [textField, setTextField] = useState("");
-  const [user_id, setUserId] = useState<string | null>(null);
+  const [user_id, setUserId] = useState("anonymous");
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editTextField, setEditTextField] = useState("");
 
@@ -39,7 +39,7 @@ export default function Comments({ food }: { food: Food }) {
 
   const postComment = (comment: {
     food_name: string;
-    user_id: string | null;
+    user_id: string;
     comment: string;
   }) => {
     axios
@@ -95,10 +95,10 @@ export default function Comments({ food }: { food: Food }) {
               {user_id === comment.user_id && (
                 <>
                   {editIndex !== i ? (
-                    <button onClick={() => editComment(i)}>Edit</button>
+                    <button onClick={() => editComment(i)} className="mr-2 px-4">Edit</button>
                   ) : (
                     <>
-                      <button onClick={() => saveEditedComment(comments[i].id)}>Save</button>
+                      <button onClick={() => saveEditedComment(comments[i].id)} className="ml-4 mr-2 px-2 py-1 bg-blue-500 text-white rounded-md">Save</button>
                       <button onClick={() => setEditIndex(null)}>Cancel</button>
                     </>
                   )}
