@@ -3,21 +3,32 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
+import { useCookies } from "react-cookie";
+import { fetchFoodReviewsBulk } from "../db";
 interface User {
   name: string;
   email: string;
   picture: string;
 }
 import Image from "next/image";
+import { FrontEndReviews } from "@/interfaces/Review";
 const imageWidth = 100;
 const imageHeight = 100;
 
 const Page = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['authToken']);
   const fetchUserInfo = async () => {
     try {
       // Retrieve the access token from storage
-      const access_token = sessionStorage.getItem("token");
+      //const access_token = sessionStorage.getItem("token");
+      const access_token = cookies.authToken;
+
+      if (!access_token) {
+        console.error("No access token found");
+        return;
+      }
 
       // Fetch user info from Google OAuth2 API
       const userInfo = await axios
@@ -25,7 +36,7 @@ const Page = () => {
           headers: { Authorization: `Bearer ${access_token}` },
         })
         .then((res) => res.data);
-
+        
       // Update the user state
       setUser({
         name: userInfo.name,
@@ -39,7 +50,7 @@ const Page = () => {
   useEffect(() => {
     fetchUserInfo();
   }, []);
-
+  
   const handleLogout = () => {
     googleLogout();
     axios
@@ -48,12 +59,16 @@ const Page = () => {
       .catch((err) => console.error("Backend logout failed", err));
 
     // Remove the token from local storage
-    sessionStorage.removeItem("token");
+    //sessionStorage.removeItem("token");
+    removeCookie("authToken", { path: '/' });
     // Redirect the user to the main page after logging out
     window.location.href = "/";
     console.log("Logged out successfully");
   };
 
+  const toggleNotifications = () => {
+    setNotificationsEnabled(!notificationsEnabled);
+  };
   return (
     <div>
       <h1>Profile</h1>
@@ -70,6 +85,12 @@ const Page = () => {
           </h2>
         </div>
       )}
+      <button
+        onClick={toggleNotifications}
+        className="hover:underline decoration-yellow-400 underline-offset-8 top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl"
+      >
+        {notificationsEnabled ? "Disable Notifications" : "Enable Notifications"}
+      </button>
       <button
         onClick={() => handleLogout()}
         className="hover:underline decoration-yellow-400 underline-offset-8 top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl"

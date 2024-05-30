@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 import { GOOGLE_CLIENT_ID } from "@/private/secrets";
 
@@ -20,6 +21,8 @@ const LoginPage = () => {
 
 const LoginComponent = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [cookies, setCookie] = useCookies(['authToken']);
 
   useEffect(() => {
     console.log("LoginPage component mounted");
@@ -31,7 +34,10 @@ const LoginComponent = () => {
     onSuccess: (tokenResponse) => {
       console.log(tokenResponse);
       // Store authentication token in the browser's storage for navigation bar use
-      sessionStorage.setItem("token", tokenResponse.access_token);
+      //sessionStorage.setItem("token", tokenResponse.access_token);
+      const expires = new Date();
+      expires.setHours(expires.getHours() + 3); 
+      setCookie("authToken", tokenResponse.access_token, { path: '/', expires });
       // Redirect the user to main page
       window.location.href = "/";
       //handleLoginSuccess
