@@ -3,11 +3,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Search.module.css";
 import Image from "next/image";
+import { Location, Food } from "@/interfaces/Location";
 
-interface Food {
-  name: string;
-  restrictions: string[];
-}
+
+
 
 interface subCategory {
   name: string;
