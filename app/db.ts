@@ -8,6 +8,10 @@ export async function fetchLocations(): Promise<Location[]> {
     next: {
       revalidate: 1800, // every 30 minutes
     },
+    mode: "cors",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
   });
   const data: { locations: Location[] } = await res.json();
   return data.locations;
@@ -21,9 +25,13 @@ export async function fetchFoodReviewsBulk(data: {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify(data),
-    cache: "no-store",
+    next: {
+      revalidate: 5, // every 5 seconds
+    },
+    mode: "cors",
   });
   const response_json = await res.json();
   return response_json;
@@ -38,8 +46,10 @@ export async function updateReview(data: {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify(data),
+    mode: "cors",
   });
   const response_json = await res.json();
   return response_json;
