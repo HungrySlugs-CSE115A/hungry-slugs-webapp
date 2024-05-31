@@ -28,30 +28,8 @@ export default function LocationCategories({
         default:
           return false;
       }
-    }),
+    })
   );
-
-  interface RestrictionImageMap {
-    [key: string]: string;
-  }
-
-  const restrictionImageMap: RestrictionImageMap = {
-    eggs: "/Images/egg.jpg",
-    vegan: "/Images/vegan.jpg",
-    fish: "/Images/fish.jpg",
-    veggie: "/Images/veggie.jpg",
-    gluten: "/Images/gluten.jpg",
-    pork: "/Images/pork.jpg",
-    milk: "/Images/milk.jpg",
-    beef: "/Images/beef.jpg",
-    nuts: "/Images/nuts.jpg",
-    halal: "/Images/halal.jpg",
-    soy: "/Images/soy.jpg",
-    shellfish: "/Images/shellfish.jpg",
-    treenut: "/Images/treenut.jpg",
-    sesame: "/Images/sesame.jpg",
-    alcohol: "/Images/alcohol.jpg",
-  };
 
   const menuArrow = (rotate180: boolean) => (
     <svg
@@ -104,9 +82,7 @@ export default function LocationCategories({
                       food_average={reviews[food.name]?.average}
                       food_name={food.name}
                       user_rating={reviews[food.name]?.user_rating}
-                      restriction_images={food.restrictions.map(
-                        (restriction) => restrictionImageMap[restriction],
-                      )}
+                      restrictions={food.restrictions}
                       user_id={null}
                     />
                   ))}
