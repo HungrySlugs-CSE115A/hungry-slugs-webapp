@@ -28,7 +28,7 @@ export default function LocationCategories({
         default:
           return false;
       }
-    })
+    }),
   );
 
   interface RestrictionImageMap {
@@ -105,7 +105,7 @@ export default function LocationCategories({
                       food_name={food.name}
                       user_rating={reviews[food.name]?.user_rating}
                       restriction_images={food.restrictions.map(
-                        (restriction) => restrictionImageMap[restriction]
+                        (restriction) => restrictionImageMap[restriction],
                       )}
                       user_id={null}
                     />
