@@ -6,7 +6,6 @@ import { FrontEndReviews } from "@/interfaces/Review";
 import { useState, useEffect } from "react";
 
 import LocationCategories from "@/components/location/categories";
-
 import Link from "next/link";
 
 export default function Page({ params }: { params: { location: number } }) {
