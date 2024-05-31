@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Hungry Slugs",
   description: "Review foods at UCSC food locations",
   icons: {
-    icon: "images/logos/UCSC-menu-logo.png",
+    icon: "images/logos/UCSC-dining-logo.png",
   },
 };
 
