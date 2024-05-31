@@ -3,8 +3,45 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Search.module.css";
 import Image from "next/image";
-
 import { Location, Food } from "@/interfaces/Location";
+
+
+
+
+
+interface subCategory {
+  name: string;
+  foods: Array<Food>;
+}
+
+interface Category {
+  name: string;
+  sub_categories: Array<subCategory>;
+}
+
+interface DiningHall {
+  name: string;
+  categories: Array<Category>;
+}
+
+const restrictionImageMap: { [key: string]: string } = {
+  eggs: "/Images/egg.jpg",
+  vegan: "/Images/vegan.jpg",
+  fish: "/Images/fish.jpg",
+  veggie: "/Images/veggie.jpg",
+  gluten: "/Images/gluten.jpg",
+  pork: "/Images/pork.jpg",
+  milk: "/Images/milk.jpg",
+  beef: "/Images/beef.jpg",
+  nuts: "/Images/nuts.jpg",
+  halal: "/Images/halal.jpg",
+  soy: "/Images/soy.jpg",
+  shellfish: "/Images/shellfish.jpg",
+  treenut: "/Images/treenut.jpg",
+  sesame: "/Images/sesame.jpg",
+  alcohol: "/Images/alcohol.jpg",
+};
+
 
 const BarebonesComponent = () => {
   const [dhs, setDhs] = useState<Location[]>([]);
@@ -85,8 +122,10 @@ const BarebonesComponent = () => {
           selectedShowAllergies.every((allergy) =>
             food.name.toLowerCase().includes(allergy.toLowerCase())
           );
-        const hasHideAllergy = selectedHideAllergies.some(
-          (allergy) => food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
+
+        const hasHideAllergy = selectedHideAllergies.some((allergy) =>
+          food.restrictions.includes(allergy.toLowerCase())
+
         );
         return hasShowAllergy && !hasHideAllergy;
       });
@@ -98,64 +137,40 @@ const BarebonesComponent = () => {
   };
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      {/* Title and Search bar */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>
-          Global Search
-        </h1>
-        <div
-          className="search-bar"
-          style={{ marginTop: "100px", display: "flex", alignItems: "center" }}
-        >
-          <input
-            type="text"
-            placeholder="Search foods..."
-            value={searchInput}
-            onChange={handleSearchInputChange}
-          />
-          <button onClick={handleSearch}>Search</button>
-          {/* Filter button */}
-          <div
-            style={{
-              marginLeft: "10px",
-              padding: "10px 20px",
-              backgroundColor: "#4CAF50",
-              color: "white",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={handleFilter}
-          >
-            Filter
-          </div>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Global Search</h2>
+      <div className={styles.searchBar}>
+        <input
+          type="text"
+          placeholder="Search foods..."
+          value={searchInput}
+          onChange={handleSearchInputChange}
+          className={styles.searchInput}
+        />
+        <button onClick={handleSearch} className={styles.searchButton}>
+          Search
+        </button>
+        <div className={styles.filterButton} onClick={handleFilter}>
+          Filter
         </div>
       </div>
 
-      {/* Display search results if button clicked */}
       {showSearchResults && (
-        <div>
+        <div className={styles.results}>
           <h3>Search Results:</h3>
-          <ul>
+          <ul className={styles.resultList}>
             {filteredFoods.map(({ food, dhName, categoryName }, index) => (
-              <li key={index}>
+              <li key={index} className={styles.resultItem}>
                 {food.name} - {categoryName} ({dhName})
-                <div style={{ display: "flex", flexWrap: "nowrap" }}>
+                <div className={styles.restrictionIcons}>
                   {food.restrictions.map((restriction, index) => (
                     <Image
                       key={index}
                       src={`/images/restrictions/${restriction}.jpg`}
                       alt={restriction}
-                      style={{ width: "25px", height: "25px", margin: "5px" }}
+                      width={25}
+                      height={25}
+                      className={styles.restrictionIcon}
                     />
                   ))}
                 </div>
@@ -166,8 +181,8 @@ const BarebonesComponent = () => {
       )}
 
       {noFoodsFound && (
-        <div>
-          <h3>No foods found at this dining hall.</h3>
+        <div className={styles.noResults}>
+          <h3>No foods found.</h3>
         </div>
       )}
     </div>
