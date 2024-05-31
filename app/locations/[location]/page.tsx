@@ -1,33 +1,43 @@
-"use server";
+"use client";
 import { fetchLocations, fetchFoodReviewsBulk } from "@/app/db";
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
 
-import LocationCategories from "@/components/location/categories";
+import { useState, useEffect } from "react";
 
+import LocationCategories from "@/components/location/categories";
 import Link from "next/link";
 
-export default async function Page({
-  params,
-}: {
-  params: { location: number };
-}) {
-  const locations: Location[] = await fetchLocations();
-  if (params.location < 0 || params.location >= locations.length) {
-    return <h1>Location not found</h1>;
+export default function Page({ params }: { params: { location: number } }) {
+  const [location, setLocation] = useState<Location | null>(null);
+  const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
+
+  useEffect(() => {
+    fetchLocations().then((locations: Location[]) => {
+      if (params.location < 0 || params.location >= locations.length) {
+        return <h1>Location not found</h1>;
+      }
+      const location: Location = locations[params.location];
+
+      const food_names = location.categories.flatMap((category) =>
+        category.sub_categories.flatMap((sub_category) =>
+          sub_category.foods.map((food) => food.name)
+        )
+      );
+
+      fetchFoodReviewsBulk({
+        food_names: food_names,
+        user_id: "anonymous",
+      }).then((reviews: FrontEndReviews) => {
+        setLocation(location);
+        setFoodReviews(reviews);
+      });
+    });
+  }, [params.location]);
+
+  if (!location || !foodReviews) {
+    return <h1>Loading...</h1>;
   }
-  const location: Location = locations[params.location];
-
-  const food_names = location.categories.flatMap((category) =>
-    category.sub_categories.flatMap((sub_category) =>
-      sub_category.foods.map((food) => food.name)
-    )
-  );
-
-  const foodReviews: FrontEndReviews = await fetchFoodReviewsBulk({
-    food_names: food_names,
-    user_id: "anonymous",
-  });
 
   return (
     <main>

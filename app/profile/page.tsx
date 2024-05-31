@@ -5,6 +5,8 @@ import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { fetchFoodReviewsBulk } from "../db";
+import { fetchUserInfo } from "@/app/user_info";
+
 interface User {
   name: string;
   email: string;
@@ -19,7 +21,7 @@ const Page = () => {
   const [user, setUser] = useState<User | null>(null);
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(false);
   const [cookies, setCookie, removeCookie] = useCookies(['authToken']);
-  const fetchUserInfo = async () => {
+  const getUserInfo = async () => {
     try {
       // Retrieve the access token from storage
       //const access_token = sessionStorage.getItem("token");
@@ -48,7 +50,7 @@ const Page = () => {
     }
   };
   useEffect(() => {
-    fetchUserInfo();
+    getUserInfo();
   }, []);
   
   const handleLogout = () => {
