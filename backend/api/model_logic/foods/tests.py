@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 # create tests for the foods model
-from api.model_logic.foods.actions import *
+from .actions import *
 
 
 class FoodsTestCase(TestCase):
