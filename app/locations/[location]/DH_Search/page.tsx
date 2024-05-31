@@ -11,6 +11,7 @@ interface FoodWithCategory {
   category: string;
 }
 
+
 // Map of restriction images
 const restrictionImageMap: { [key: string]: string } = {
   eggs: "/Images/egg.jpg",
@@ -30,11 +31,13 @@ const restrictionImageMap: { [key: string]: string } = {
   alcohol: "/Images/alcohol.jpg",
 };
 
+
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location | null>(null);
   const [foods, setFoods] = useState<FoodWithCategory[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const [foundFoods, setFoundFoods] = useState<FoodWithCategory[]>([]);
+
   const [selectedRestrictions, setSelectedRestrictions] = useState<string[]>(
     () => {
       const storedRestrictions = localStorage.getItem("selectedRestrictions");
@@ -43,6 +46,7 @@ export default function Page({ params }: { params: { location: number } }) {
   );
   const [isFilterPopupOpen, setIsFilterPopupOpen] = useState<boolean>(false);
   const [filterApplied, setFilterApplied] = useState<boolean>(false);
+
 
   useEffect(() => {
     fetchLocations().then((locations: Location[]) => {
@@ -67,6 +71,7 @@ export default function Page({ params }: { params: { location: number } }) {
   if (!location || !foods) {
     return <h1>Loading...</h1>;
   }
+
 
   const searchForFood = (food_name: string) => {
     const foundFoods = foods.filter((foodWithCategory) =>
@@ -103,16 +108,20 @@ export default function Page({ params }: { params: { location: number } }) {
     setFilterApplied(true);
     searchForFood(searchInput);
     toggleFilterPopup();
+
   };
 
   return (
     <main>
       <div className="container mx-auto">
+
         <div className="flex flex-col items-center">
+
           <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
             {location.name}
           </h1>
         </div>
+
 
         <div className="flex flex-col items-center mb-5">
           <div className="search-bar flex justify-center items-center mb-2">
@@ -185,6 +194,7 @@ export default function Page({ params }: { params: { location: number } }) {
           {filterApplied && foundFoods.length === 0 ? (
             <p>No foods found with the specified allergy constraints</p>
           ) : (
+
             foundFoods.map((foodWithCategory, index) => (
               <div
                 key={index}
@@ -204,7 +214,10 @@ export default function Page({ params }: { params: { location: number } }) {
                     (restriction, index) => (
                       <li key={index} className="px-2">
                         <Image
+
                           src={restrictionImageMap[restriction]}
+
+                          
                           alt={restriction}
                           width={25}
                           height={25}
@@ -214,13 +227,16 @@ export default function Page({ params }: { params: { location: number } }) {
                   )}
                 </ul>
               </div>
+
             ))
           )}
+
         </div>
       </div>
     </main>
   );
 }
+
 
 
 
@@ -562,3 +578,4 @@ export default function Page({ params }: { params: { location: number } }) {
 // export default BarebonesComponent;
 
 // import Link from "next/link";
+

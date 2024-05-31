@@ -8,6 +8,7 @@ import { Location, Food } from "@/interfaces/Location";
 
 
 
+
 interface subCategory {
   name: string;
   foods: Array<Food>;
@@ -41,8 +42,9 @@ const restrictionImageMap: { [key: string]: string } = {
   alcohol: "/Images/alcohol.jpg",
 };
 
+
 const BarebonesComponent = () => {
-  const [dhs, setDhs] = useState<DiningHall[]>([]);
+  const [dhs, setDhs] = useState<Location[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const [filteredFoods, setFilteredFoods] = useState<
     { food: Food; dhName: string; categoryName: string }[]
@@ -69,7 +71,7 @@ const BarebonesComponent = () => {
     axios
       .get("http://localhost:8000/api/locations/")
       .then((response) => {
-        const dhsData: DiningHall[] = response.data.locations;
+        const dhsData: Location[] = response.data.locations;
         setDhs(dhsData);
       })
       .catch((error) => {
@@ -120,8 +122,10 @@ const BarebonesComponent = () => {
           selectedShowAllergies.every((allergy) =>
             food.name.toLowerCase().includes(allergy.toLowerCase())
           );
+
         const hasHideAllergy = selectedHideAllergies.some((allergy) =>
           food.restrictions.includes(allergy.toLowerCase())
+
         );
         return hasShowAllergy && !hasHideAllergy;
       });
@@ -162,7 +166,7 @@ const BarebonesComponent = () => {
                   {food.restrictions.map((restriction, index) => (
                     <Image
                       key={index}
-                      src={restrictionImageMap[restriction]}
+                      src={`/images/restrictions/${restriction}.jpg`}
                       alt={restriction}
                       width={25}
                       height={25}
