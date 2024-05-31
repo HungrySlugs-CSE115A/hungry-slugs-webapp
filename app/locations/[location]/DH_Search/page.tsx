@@ -381,8 +381,8 @@ export default function Page({ params }: { params: { location: number } }) {
           sub_category.foods.map((food) => ({
             food: food,
             category: category.name,
-          }))
-        )
+          })),
+        ),
       );
       setFoods(foods_db);
     });
@@ -397,7 +397,9 @@ export default function Page({ params }: { params: { location: number } }) {
   const searchForFood = (food_name: string) => {
     // search for food
     const foundFoods = foods.filter((foodWithCategory) =>
-      foodWithCategory.food.name.toLowerCase().includes(food_name.toLowerCase())
+      foodWithCategory.food.name
+        .toLowerCase()
+        .includes(food_name.toLowerCase()),
     );
 
     // apply filters
@@ -456,7 +458,7 @@ export default function Page({ params }: { params: { location: number } }) {
                           height={25}
                         />
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               </div>
