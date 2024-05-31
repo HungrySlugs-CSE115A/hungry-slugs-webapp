@@ -7,14 +7,15 @@ import { useState, useEffect } from "react";
 
 import LocationCategories from "@/components/location/categories";
 import Link from "next/link";
-import { getCookies } from 'next-client-cookies/server';
+import { fetchUserInfo } from "@/app/user_info";
 
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location | null>(null);
   const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
+  const [userId, setUserId] = useState<string>("anonymous");
 
   useEffect(() => {
-    fetchLocations().then((locations: Location[]) => {
+    fetchLocations().then(async (locations: Location[]) => {
       if (params.location < 0 || params.location >= locations.length) {
         return <h1>Location not found</h1>;
       }
@@ -26,9 +27,14 @@ export default function Page({ params }: { params: { location: number } }) {
         )
       );
 
+      //get username and set it
+      const userInfo = await fetchUserInfo();
+      const username = userInfo?.email || "anonymous";
+      setUserId(username);
+      
       fetchFoodReviewsBulk({
         food_names: food_names,
-        user_id: "anonymous",
+        user_id: userId,
       }).then((reviews: FrontEndReviews) => {
         setLocation(location);
         setFoodReviews(reviews);
