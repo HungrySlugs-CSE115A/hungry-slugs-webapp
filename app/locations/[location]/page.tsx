@@ -1,37 +1,44 @@
+"use client";
 import { fetchLocations, fetchFoodReviewsBulk } from "@/app/db";
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
+
+import { useState, useEffect } from "react";
+
 import LocationCategories from "@/components/location/categories";
 import Link from "next/link";
 import { getCookies } from 'next-client-cookies/server';
 
+export default function Page({ params }: { params: { location: number } }) {
+  const [location, setLocation] = useState<Location | null>(null);
+  const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
 
-interface PageProps {
-  params: { location: number };
-  user_id: string; // Add user_id as a prop
-}
+  useEffect(() => {
+    fetchLocations().then((locations: Location[]) => {
+      if (params.location < 0 || params.location >= locations.length) {
+        return <h1>Location not found</h1>;
+      }
+      const location: Location = locations[params.location];
 
-export default async function ServerComponent({ params, user_id }: PageProps) {
-  const locations: Location[] = await fetchLocations();
-  if (params.location < 0 || params.location >= locations.length) {
-    return <h1>Location not found</h1>;
+      const food_names = location.categories.flatMap((category) =>
+        category.sub_categories.flatMap((sub_category) =>
+          sub_category.foods.map((food) => food.name)
+        )
+      );
+
+      fetchFoodReviewsBulk({
+        food_names: food_names,
+        user_id: "anonymous",
+      }).then((reviews: FrontEndReviews) => {
+        setLocation(location);
+        setFoodReviews(reviews);
+      });
+    });
+  }, [params.location]);
+
+  if (!location || !foodReviews) {
+    return <h1>Loading...</h1>;
   }
-  const location: Location = locations[params.location];
-
-  const cookies = getCookies();
-  const username = cookies.get("username");
-  console.log("user id is: ", username);
-
-  const food_names = location.categories.flatMap((category) =>
-    category.sub_categories.flatMap((sub_category) =>
-      sub_category.foods.map((food) => food.name)
-    )
-  );
-
-  const foodReviews: FrontEndReviews = await fetchFoodReviewsBulk({
-    food_names: food_names,
-    user_id: user_id, // Use the received user_id
-  });
 
   return (
     <main>
