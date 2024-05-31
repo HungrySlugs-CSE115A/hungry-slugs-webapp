@@ -9,9 +9,12 @@ export const fetchUserInfo = async () => {
       throw new Error("No access token found in session storage.");
     }
 
-    const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
-      headers: { Authorization: `Bearer ${access_token}` },
-    });
+    const response = await axios.get(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        headers: { Authorization: `Bearer ${access_token}` },
+      },
+    );
 
     const userInfo = response.data;
 

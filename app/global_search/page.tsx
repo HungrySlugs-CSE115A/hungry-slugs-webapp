@@ -4,49 +4,10 @@ import axios from "axios";
 import styles from "./Search.module.css";
 import Image from "next/image";
 
-interface Food {
-  name: string;
-  restrictions: string[]; // Change to string array
-}
-
-interface subCategory {
-  name: string;
-  foods: Array<Food>;
-}
-
-interface Category {
-  name: string;
-  sub_categories: Array<subCategory>;
-}
-
-interface DiningHall {
-  name: string;
-  categories: Array<Category>;
-}
-interface RestrictionImageMap {
-  [key: string]: string;
-}
-
-const restrictionImageMap = {
-  eggs: "/Images/egg.jpg",
-  vegan: "/Images/vegan.jpg",
-  fish: "/Images/fish.jpg",
-  veggie: "/Images/veggie.jpg",
-  gluten: "/Images/gluten.jpg",
-  pork: "/Images/pork.jpg",
-  milk: "/Images/milk.jpg",
-  beef: "/Images/beef.jpg",
-  nuts: "/Images/nuts.jpg",
-  halal: "/Images/halal.jpg",
-  soy: "/Images/soy.jpg",
-  shellfish: "/Images/shellfish.jpg",
-  treenut: "/Images/treenut.jpg",
-  sesame: "/Images/sesame.jpg",
-  alcohol: "/Images/alcohol.jpg",
-};
+import { Location, Food } from "@/interfaces/Location";
 
 const BarebonesComponent = () => {
-  const [dhs, setDhs] = useState<DiningHall[]>([]);
+  const [dhs, setDhs] = useState<Location[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const [filteredFoods, setFilteredFoods] = useState<
     { food: Food; dhName: string; categoryName: string }[]
@@ -73,7 +34,7 @@ const BarebonesComponent = () => {
     axios
       .get("http://localhost:8000/api/locations/")
       .then((response) => {
-        const dhsData: DiningHall[] = response.data.locations;
+        const dhsData: Location[] = response.data.locations;
         setDhs(dhsData);
       })
       .catch((error) => {
@@ -190,9 +151,9 @@ const BarebonesComponent = () => {
                 {food.name} - {categoryName} ({dhName})
                 <div style={{ display: "flex", flexWrap: "nowrap" }}>
                   {food.restrictions.map((restriction, index) => (
-                    <img
+                    <Image
                       key={index}
-                      src={restrictionImageMap[restriction]}
+                      src={`/images/restrictions/${restriction}.jpg`}
                       alt={restriction}
                       style={{ width: "25px", height: "25px", margin: "5px" }}
                     />

@@ -1,14 +1,14 @@
-interface Food {
+export interface Food {
   name: string;
   restrictions: Array<string>;
 }
 
-interface subCategory {
+export interface subCategory {
   name: string;
   foods: Array<Food>;
 }
 
-interface Category {
+export interface Category {
   name: string;
   sub_categories: Array<subCategory>;
 }

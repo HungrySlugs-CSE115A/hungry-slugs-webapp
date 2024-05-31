@@ -21,8 +21,7 @@ const Page = () => {
     try {
       const userInfo = await fetchUserInfo();
       setUser(userInfo);
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Failed to fetch user info:", error);
     }
   };
