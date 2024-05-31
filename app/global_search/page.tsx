@@ -5,44 +5,6 @@ import styles from "./Search.module.css";
 import Image from "next/image";
 import { Location, Food } from "@/interfaces/Location";
 
-
-
-
-
-interface subCategory {
-  name: string;
-  foods: Array<Food>;
-}
-
-interface Category {
-  name: string;
-  sub_categories: Array<subCategory>;
-}
-
-interface DiningHall {
-  name: string;
-  categories: Array<Category>;
-}
-
-const restrictionImageMap: { [key: string]: string } = {
-  eggs: "/Images/egg.jpg",
-  vegan: "/Images/vegan.jpg",
-  fish: "/Images/fish.jpg",
-  veggie: "/Images/veggie.jpg",
-  gluten: "/Images/gluten.jpg",
-  pork: "/Images/pork.jpg",
-  milk: "/Images/milk.jpg",
-  beef: "/Images/beef.jpg",
-  nuts: "/Images/nuts.jpg",
-  halal: "/Images/halal.jpg",
-  soy: "/Images/soy.jpg",
-  shellfish: "/Images/shellfish.jpg",
-  treenut: "/Images/treenut.jpg",
-  sesame: "/Images/sesame.jpg",
-  alcohol: "/Images/alcohol.jpg",
-};
-
-
 const BarebonesComponent = () => {
   const [dhs, setDhs] = useState<Location[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
@@ -125,7 +87,6 @@ const BarebonesComponent = () => {
 
         const hasHideAllergy = selectedHideAllergies.some((allergy) =>
           food.restrictions.includes(allergy.toLowerCase())
-
         );
         return hasShowAllergy && !hasHideAllergy;
       });
