@@ -28,7 +28,7 @@ export default function LocationCategories({
         default:
           return false;
       }
-    })
+    }),
   );
 
   const menuArrow = (rotate180: boolean) => (

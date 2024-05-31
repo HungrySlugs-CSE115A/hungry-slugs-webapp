@@ -40,7 +40,7 @@ export default function Page({ params }: { params: { location: number } }) {
     () => {
       const storedRestrictions = localStorage.getItem("selectedRestrictions");
       return storedRestrictions ? JSON.parse(storedRestrictions) : [];
-    }
+    },
   );
   const [isFilterPopupOpen, setIsFilterPopupOpen] = useState<boolean>(false);
   const [filterApplied, setFilterApplied] = useState<boolean>(false);
@@ -58,8 +58,8 @@ export default function Page({ params }: { params: { location: number } }) {
           sub_category.foods.map((food) => ({
             food: food,
             category: category.name,
-          }))
-        )
+          })),
+        ),
       );
       setFoods(foods_db);
     });
@@ -71,13 +71,15 @@ export default function Page({ params }: { params: { location: number } }) {
 
   const searchForFood = (food_name: string) => {
     const foundFoods = foods.filter((foodWithCategory) =>
-      foodWithCategory.food.name.toLowerCase().includes(food_name.toLowerCase())
+      foodWithCategory.food.name
+        .toLowerCase()
+        .includes(food_name.toLowerCase()),
     );
 
     const filteredFoods = foundFoods.filter(({ food }) =>
       selectedRestrictions.every((restriction) =>
-        food.restrictions.includes(restriction)
-      )
+        food.restrictions.includes(restriction),
+      ),
     );
 
     setFoundFoods(filteredFoods);
@@ -94,7 +96,7 @@ export default function Page({ params }: { params: { location: number } }) {
     setSelectedRestrictions(newRestrictions);
     localStorage.setItem(
       "selectedRestrictions",
-      JSON.stringify(newRestrictions)
+      JSON.stringify(newRestrictions),
     );
   };
 
@@ -214,7 +216,7 @@ export default function Page({ params }: { params: { location: number } }) {
                           height={25}
                         />
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               </div>

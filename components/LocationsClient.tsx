@@ -21,9 +21,15 @@ export default function LocationsClient({ locations }: LocationsClientProps) {
     } else if (selectedCategory === "Dining Halls") {
       return location.name.toLowerCase().includes("dining hall");
     } else if (selectedCategory === "Markets") {
-      return location.name.toLowerCase().includes("market") || location.name.toLowerCase().includes("stop");
+      return (
+        location.name.toLowerCase().includes("market") ||
+        location.name.toLowerCase().includes("stop")
+      );
     } else if (selectedCategory === "Cafes & Other") {
-      return location.name.toLowerCase().includes("cafe") || location.name.toLowerCase().includes("other");
+      return (
+        location.name.toLowerCase().includes("cafe") ||
+        location.name.toLowerCase().includes("other")
+      );
     }
     return true;
   });

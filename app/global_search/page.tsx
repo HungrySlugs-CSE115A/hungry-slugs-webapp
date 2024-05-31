@@ -19,14 +19,14 @@ const BarebonesComponent = () => {
     () => {
       const storedHideAllergies = localStorage.getItem("hideAllergies");
       return storedHideAllergies ? JSON.parse(storedHideAllergies) : [];
-    }
+    },
   );
 
   const [selectedShowAllergies, setSelectedShowAllergies] = useState<string[]>(
     () => {
       const storedShowAllergies = localStorage.getItem("showAllergies");
       return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
-    }
+    },
   );
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const BarebonesComponent = () => {
   }, []);
 
   const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchInput(event.target.value);
   };
@@ -68,7 +68,7 @@ const BarebonesComponent = () => {
     });
 
     const filtered = allFoods.filter(({ food }) =>
-      food.name.toLowerCase().includes(searchInput.toLowerCase())
+      food.name.toLowerCase().includes(searchInput.toLowerCase()),
     );
 
     // Check if all boxes are unchecked
@@ -82,11 +82,11 @@ const BarebonesComponent = () => {
         const hasShowAllergy =
           selectedShowAllergies.length === 0 ||
           selectedShowAllergies.every((allergy) =>
-            food.name.toLowerCase().includes(allergy.toLowerCase())
+            food.name.toLowerCase().includes(allergy.toLowerCase()),
           );
 
         const hasHideAllergy = selectedHideAllergies.some((allergy) =>
-          food.restrictions.includes(allergy.toLowerCase())
+          food.restrictions.includes(allergy.toLowerCase()),
         );
         return hasShowAllergy && !hasHideAllergy;
       });
