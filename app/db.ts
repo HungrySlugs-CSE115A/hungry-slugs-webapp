@@ -5,6 +5,7 @@ const backend = "http://localhost:8000";
 
 export async function fetchLocations(): Promise<Location[]> {
   const res = await fetch("http://localhost:8000/api/locations", {
+    method: "GET",
     next: {
       revalidate: 1800, // every 30 minutes
     },
