@@ -27,10 +27,10 @@ export default function Page({ params }: { params: { location: number } }) {
       );
 
       //get username and set it
-      const username = "anonymous";
+      let username = "";
       try {
         const userInfo = await fetchUserInfo();
-        const username = userInfo.email ? userInfo.email : "anonymous";
+        username = userInfo.email ? userInfo.email : "anonymous";
         //console.log("username is: ", username);
       } catch (error) {
         console.error("Failed to fetch user info:", error);
