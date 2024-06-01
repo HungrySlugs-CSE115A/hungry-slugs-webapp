@@ -68,7 +68,9 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     'authorization',
     'content-type',
+    'Access-Control-Allow-Origin',
 ]
+
 ROOT_URLCONF = "backend.urls"
 
 TEMPLATES = [

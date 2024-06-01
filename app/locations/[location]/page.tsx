@@ -3,7 +3,8 @@ import { fetchLocations, fetchFoodReviewsBulk } from "@/app/db";
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useCookies } from "react-cookie";
 
 import LocationCategories from "@/components/location/categories";
 import Link from "next/link";
@@ -11,7 +12,13 @@ import Link from "next/link";
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location | null>(null);
   const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
-
+  const [cookies] = useCookies(["userEmail", "notificationsEnabled"]);
+  const alertShown = useRef(false);
+  //console.log(cookies.notificationsEnabled);
+  const notificationsEnabled = cookies.notificationsEnabled === true;
+  //console.log(cookies.notificationsEnabled);
+  const user_email = cookies.userEmail || 'anonymous';
+  //console.log(cookies.userEmail);
   useEffect(() => {
     fetchLocations().then((locations: Location[]) => {
       if (params.location < 0 || params.location >= locations.length) {
@@ -27,12 +34,25 @@ export default function Page({ params }: { params: { location: number } }) {
 
       fetchFoodReviewsBulk({
         food_names: food_names,
-        user_id: "anonymous",
+        user_id: user_email,
       }).then((reviews: FrontEndReviews) => {
         setLocation(location);
         setFoodReviews(reviews);
+        //console.log(notificationsEnabled)
+        if(notificationsEnabled && !alertShown.current){
+          Object.keys(reviews).forEach(foodName => {
+            const review = reviews[foodName];
+            if (user_email != 'anonymous' && review.user_rating === 5) {
+              alert(`One of your favorite foods is being served! Food: ${foodName}`);
+              alertShown.current = true;
+            }
+          });
+        }
       });
     });
+
+
+
   }, [params.location]);
 
   if (!location || !foodReviews) {

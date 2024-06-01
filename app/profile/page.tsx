@@ -1,76 +1,88 @@
 "use client";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { fetchFoodReviewsBulk } from "../db";
 import { fetchUserInfo } from "@/app/user_info";
+import Image from "next/image";
+import { FrontEndReviews } from "@/interfaces/Review";
 
 interface User {
   name: string;
   email: string;
   picture: string;
 }
-import Image from "next/image";
-import { FrontEndReviews } from "@/interfaces/Review";
+
 const imageWidth = 100;
 const imageHeight = 100;
 
 const Page = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(false);
-  const [cookies, setCookie, removeCookie] = useCookies(['authToken']);
-  const getUserInfo = async () => {
-    try {
-      // Retrieve the access token from storage
-      //const access_token = sessionStorage.getItem("token");
-      const access_token = cookies.authToken;
+  const [cookies, setCookie, removeCookie] = useCookies(['authToken', 'userEmail', 'notificationsEnabled']);
+  const [reviews, setReviews] = useState<FrontEndReviews>({});
+  const [notificationsEnabled, setNotificationsEnabled] = useState(cookies.notificationsEnabled === 'true');
 
-      if (!access_token) {
-        console.error("No access token found");
-        return;
-      }
-
-      // Fetch user info from Google OAuth2 API
-      const userInfo = await axios
-        .get("https://www.googleapis.com/oauth2/v3/userinfo", {
-          headers: { Authorization: `Bearer ${access_token}` },
-        })
-        .then((res) => res.data);
-        
-      // Update the user state
-      setUser({
-        name: userInfo.name,
-        email: userInfo.email,
-        picture: userInfo.picture,
-      });
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-    }
-  };
   useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const access_token = cookies.authToken;
+
+        if (!access_token) {
+          console.error("No access token found");
+          return;
+        }
+
+        const userInfo = await axios
+          .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+            headers: { Authorization: `Bearer ${access_token}` },
+          })
+          .then((res) => res.data);
+
+        setUser({
+          name: userInfo.name,
+          email: userInfo.email,
+          picture: userInfo.picture,
+        });
+        setCookie("userEmail", userInfo.email, { path: '/' });
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
     getUserInfo();
-  }, []);
-  
+    setNotificationsEnabled(cookies.notificationsEnabled === 'true');
+  }, [cookies.authToken, cookies.notificationsEnabled, setCookie]);
+
   const handleLogout = () => {
     googleLogout();
-    axios
-      .post("http://localhost:8000/api/logout/")
-      .then((res) => console.log("Backend logout successful", res))
-      .catch((err) => console.error("Backend logout failed", err));
-
-    // Remove the token from local storage
-    //sessionStorage.removeItem("token");
     removeCookie("authToken", { path: '/' });
-    // Redirect the user to the main page after logging out
+    removeCookie("userEmail", { path: '/' });
     window.location.href = "/";
     console.log("Logged out successfully");
   };
 
-  const toggleNotifications = () => {
-    setNotificationsEnabled(!notificationsEnabled);
+  const fetchReviews = async (userEmail: string) => {
+    try {
+      const reviews = await fetchFoodReviewsBulk({
+        food_names: [],
+        user_id: userEmail,
+      });
+      setReviews(reviews);
+      console.log("Fetched Reviews:", reviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
   };
+
+  const toggleNotifications = () => {
+    const newState = !notificationsEnabled;
+    setNotificationsEnabled(newState);
+    setCookie('notificationsEnabled', newState.toString(), { path: '/' });
+    
+    console.log(`Notifications are now ${newState ? 'enabled' : 'disabled'}`);
+  };
+
   return (
     <div>
       <h1>Profile</h1>
@@ -94,7 +106,7 @@ const Page = () => {
         {notificationsEnabled ? "Disable Notifications" : "Enable Notifications"}
       </button>
       <button
-        onClick={() => handleLogout()}
+        onClick={handleLogout}
         className="hover:underline decoration-yellow-400 underline-offset-8 top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl"
       >
         Logout
