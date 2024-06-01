@@ -24,6 +24,7 @@ const Page = () => {
   const [reviews, setReviews] = useState<FrontEndReviews>({});
   const [notificationsEnabled, setNotificationsEnabled] = useState(cookies.notificationsEnabled === 'true');
   const [foodNames, setFoodNames] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -98,6 +99,7 @@ const Page = () => {
         Object.entries(reviews).filter(([_, review]) => review.user_rating != null)
       );
       setReviews(filteredReviews);
+      setLoading(false);
       console.log("Fetched Reviews:", filteredReviews);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -131,14 +133,18 @@ const Page = () => {
       )}
       <div>
         <h2 className="text-[#003C6C] font-medium text-xl">Your Food Reviews:</h2>
-        <ul className="bg-gray-100 p-4 rounded-lg">
-          {Object.entries(reviews).map(([food_name, review]) => (
-            <li key={food_name} className="mb-2 text-[#003C6C]">
-              <h3>{food_name}</h3>
-              <p>Rating: {review.user_rating}</p>
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <h1>Loading...</h1>
+        ) : (
+          <ul className="bg-gray-100 p-4 rounded-lg">
+            {Object.entries(reviews).map(([food_name, review]) => (
+              <li key={food_name} className="mb-2 text-[#003C6C]">
+                <h3 className="font-bold">{food_name}</h3>
+                <p>Rating: {review.user_rating}</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       <button
         onClick={toggleNotifications}

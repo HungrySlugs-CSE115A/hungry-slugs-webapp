@@ -38,22 +38,20 @@ export default function Page({ params }: { params: { location: number } }) {
       }).then((reviews: FrontEndReviews) => {
         setLocation(location);
         setFoodReviews(reviews);
-        //console.log(notificationsEnabled)
-        if(notificationsEnabled && !alertShown.current){
-          Object.keys(reviews).forEach(foodName => {
-            const review = reviews[foodName];
-            if (user_email != 'anonymous' && review.user_rating === 5) {
-              alert(`One of your favorite foods is being served! Food: ${foodName}`);
-              alertShown.current = true;
-            }
-          });
-        }
       });
     });
-
-
-
   }, [params.location]);
+  useEffect(() => {
+    if (location && foodReviews && notificationsEnabled && !alertShown.current) {
+      Object.keys(foodReviews).forEach(foodName => {
+        const review = foodReviews[foodName];
+        if (user_email !== 'anonymous' && review.user_rating === 5) {
+          alert(`One of your favorite foods is being served! Food: ${foodName}`);
+          alertShown.current = true;
+        }
+      });
+    }
+  }, [location, foodReviews, notificationsEnabled, user_email]);
 
   if (!location || !foodReviews) {
     return <h1>Loading...</h1>;
