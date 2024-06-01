@@ -14,7 +14,7 @@ export default function Page({ params }: { params: { location: number } }) {
   const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
 
   useEffect(() => {
-    fetchLocations().then((locations: Location[]) => {
+    fetchLocations().then(async (locations: Location[]) => {
       if (params.location < 0 || params.location >= locations.length) {
         return <h1>Location not found</h1>;
       }
