@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import LocationFood from "@/components/location/food";
 
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
+import { fetchUserInfo } from "@/app/user_info";
 
 export default function LocationCategories({
   location,
@@ -30,6 +31,23 @@ export default function LocationCategories({
       }
     })
   );
+
+  const [userId, setUserId] = useState<string>("anonymous");
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const userInfo = await fetchUserInfo();
+        const username = userInfo.email ? userInfo.email : "anonymous";
+        setUserId(username);
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+        setUserId("anonymous");
+      }
+    };
+    getUserInfo();
+    //console.log("userId =", userId);
+  }, [userId]);
 
   const menuArrow = (rotate180: boolean) => (
     <svg
@@ -77,13 +95,14 @@ export default function LocationCategories({
                     {subCategory.name}
                   </h3>
                   {subCategory.foods.map((food, k) => (
+                    //this is where user_id is actually set for the reviews smh
                     <LocationFood
                       key={k}
                       food_average={reviews[food.name]?.average}
                       food_name={food.name}
                       user_rating={reviews[food.name]?.user_rating}
                       restrictions={food.restrictions}
-                      user_id={null}
+                      user_id={userId}
                     />
                   ))}
                 </div>

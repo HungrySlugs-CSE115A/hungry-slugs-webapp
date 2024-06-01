@@ -12,7 +12,6 @@ import { fetchUserInfo } from "@/app/user_info";
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location | null>(null);
   const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
-  const [userId, setUserId] = useState<string>("anonymous");
 
   useEffect(() => {
     fetchLocations().then(async (locations: Location[]) => {
@@ -28,13 +27,18 @@ export default function Page({ params }: { params: { location: number } }) {
       );
 
       //get username and set it
-      const userInfo = await fetchUserInfo();
-      const username = userInfo?.email || "anonymous";
-      setUserId(username);
-      
+      const username = "anonymous";
+      try {
+        const userInfo = await fetchUserInfo();
+        const username = userInfo.email ? userInfo.email : "anonymous";
+        //console.log("username is: ", username);
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+      }
+
       fetchFoodReviewsBulk({
         food_names: food_names,
-        user_id: userId,
+        user_id: username,
       }).then((reviews: FrontEndReviews) => {
         setLocation(location);
         setFoodReviews(reviews);
