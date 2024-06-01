@@ -29,7 +29,7 @@ export default function LocationCategories({
         default:
           return false;
       }
-    })
+    }),
   );
 
   const [userId, setUserId] = useState<string>("anonymous");
