@@ -11,7 +11,6 @@ interface User {
   picture: string;
 }
 import Image from "next/image";
-import { useCookies } from 'next-client-cookies';
 const imageWidth = 100;
 const imageHeight = 100;
 
@@ -32,13 +31,12 @@ const Page = () => {
   const handleLogout = () => {
     googleLogout();
     axios
-      .post("http://localhost:8000/myapi/logout/")
+      .post("http://localhost:8000/api/logout/")
       .then((res) => console.log("Backend logout successful", res))
       .catch((err) => console.error("Backend logout failed", err));
 
-    // Remove the stored user login token
+    // Remove the token from sessionStorage
     sessionStorage.removeItem("token");
-    sessionStorage.removeItem("email");
     // Redirect the user to the main page after logging out
     window.location.href = "/";
     console.log("Logged out successfully");
@@ -49,7 +47,12 @@ const Page = () => {
       <h1>Profile</h1>
       {user && (
         <div>
-          <Image src={user.picture} alt="User profile" width={imageWidth} height={imageHeight}/>
+          <Image
+            src={user.picture}
+            alt="User profile"
+            width={imageWidth}
+            height={imageHeight}
+          />
           <h2>
             Welcome, {user.name} - {user.email}
           </h2>

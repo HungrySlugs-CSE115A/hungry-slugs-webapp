@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { GOOGLE_CLIENT_ID } from "@/private/secrets";
-import Cookies from 'js-cookie';
 
 interface User {
   name: string;
@@ -19,8 +18,6 @@ const LoginPage = () => {
 };
 
 const LoginComponent = () => {
-  const [user, setUser] = useState<User | null>(null);
-
   useEffect(() => {
     console.log("LoginPage component mounted");
   }, []);
@@ -30,9 +27,8 @@ const LoginComponent = () => {
 
     onSuccess: (tokenResponse) => {
       console.log(tokenResponse);
-      // Store authentication token
+      // Store authentication token in the browser's storage for navigation bar use
       sessionStorage.setItem("token", tokenResponse.access_token);
-
       // Redirect the user to main page
       window.location.href = "/";
       //handleLoginSuccess
