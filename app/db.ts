@@ -4,7 +4,7 @@ import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000/api"
+  baseURL: "http://localhost:8000/api",
 });
 
 export async function fetchLocations(): Promise<Location[]> {
@@ -23,11 +23,9 @@ export async function fetchFoodReviewsBulk(data: {
   food_names: string[];
   user_id: string | null;
 }): Promise<FrontEndReviews> {
-  const res = await api
-    .post(`/get_ratings_bulk/`, data)
-    .catch((err) => {
-      console.error(err);
-    });
+  const res = await api.post(`/get_ratings_bulk/`, data).catch((err) => {
+    console.error(err);
+  });
 
   if (!res) {
     return {};
@@ -41,11 +39,9 @@ export async function updateReview(data: {
   user_id: string;
   food_rating: number;
 }): Promise<{ average: number | null }> {
-  const res = await api
-    .post(`/rating_update/`, data)
-    .catch((err) => {
-      console.error(err);
-    });
+  const res = await api.post(`/rating_update/`, data).catch((err) => {
+    console.error(err);
+  });
 
   if (!res) {
     return { average: null };

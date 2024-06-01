@@ -28,8 +28,8 @@ export default function Page({ params }: { params: { location: number } }) {
 
       const food_names = location.categories.flatMap((category) =>
         category.sub_categories.flatMap((sub_category) =>
-          sub_category.foods.map((food) => food.name)
-        )
+          sub_category.foods.map((food) => food.name),
+        ),
       );
 
       fetchFoodReviewsBulk({

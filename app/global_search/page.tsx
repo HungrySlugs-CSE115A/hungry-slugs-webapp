@@ -1,216 +1,230 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./Search.module.css";
 import Image from "next/image";
+import Link from "next/link";
+import styles from "./Search.module.css";
+import { fetchLocations } from "@/app/db";
+import { Location, Food } from "@/interfaces/Location";
 
-interface Food {
-  name: string;
-  restrictions: string[]; // Change to string array
+interface FoodWithCategory {
+  food: Food;
+  category: string;
+  diningHall: string; // Added dining hall name
 }
 
-interface subCategory {
-  name: string;
-  foods: Array<Food>;
-}
+const restrictions: string[] = [
+  "eggs",
+  "vegan",
+  "fish",
+  "veggie",
+  "gluten",
+  "pork",
+  "milk",
+  "beef",
+  "nuts",
+  "halal",
+  "soy",
+  "shellfish",
+  "treenut",
+  "sesame",
+  "alcohol",
+];
 
-interface Category {
-  name: string;
-  sub_categories: Array<subCategory>;
-}
-
-interface DiningHall {
-  name: string;
-  categories: Array<Category>;
-}
-interface RestrictionImageMap {
-  [key: string]: string;
-}
-
-const restrictionImageMap = {
-  eggs: "/Images/egg.jpg",
-  vegan: "/Images/vegan.jpg",
-  fish: "/Images/fish.jpg",
-  veggie: "/Images/veggie.jpg",
-  gluten: "/Images/gluten.jpg",
-  pork: "/Images/pork.jpg",
-  milk: "/Images/milk.jpg",
-  beef: "/Images/beef.jpg",
-  nuts: "/Images/nuts.jpg",
-  halal: "/Images/halal.jpg",
-  soy: "/Images/soy.jpg",
-  shellfish: "/Images/shellfish.jpg",
-  treenut: "/Images/treenut.jpg",
-  sesame: "/Images/sesame.jpg",
-  alcohol: "/Images/alcohol.jpg",
-};
-
-const BarebonesComponent = () => {
-  const [dhs, setDhs] = useState<DiningHall[]>([]);
+const GlobalSearch = () => {
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [foods, setFoods] = useState<FoodWithCategory[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
-  const [filteredFoods, setFilteredFoods] = useState<
-    { food: Food; dhName: string; categoryName: string }[]
-  >([]);
-  const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
-  const [noFoodsFound, setNoFoodsFound] = useState<boolean>(false);
-
-  // Retrieve hide and show allergies from local storage
-  const [selectedHideAllergies, setSelectedHideAllergies] = useState<string[]>(
+  const [foundFoods, setFoundFoods] = useState<FoodWithCategory[]>([]);
+  const [isFilterPopupOpen, setIsFilterPopupOpen] = useState<boolean>(false);
+  const [selectedRestrictions, setSelectedRestrictions] = useState<string[]>(
     () => {
-      const storedHideAllergies = localStorage.getItem("hideAllergies");
-      return storedHideAllergies ? JSON.parse(storedHideAllergies) : [];
+      const storedRestrictions = localStorage.getItem("selectedRestrictions");
+      return storedRestrictions ? JSON.parse(storedRestrictions) : [];
     }
   );
-
-  const [selectedShowAllergies, setSelectedShowAllergies] = useState<string[]>(
-    () => {
-      const storedShowAllergies = localStorage.getItem("showAllergies");
-      return storedShowAllergies ? JSON.parse(storedShowAllergies) : [];
-    }
-  );
+  const [filterApplied, setFilterApplied] = useState<boolean>(false);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/locations/")
-      .then((response) => {
-        const dhsData: DiningHall[] = response.data.locations;
-        setDhs(dhsData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchLocations().then((locations: Location[]) => {
+      setLocations(locations);
+
+      const allFoods = locations.flatMap(location =>
+        location.categories.flatMap(category =>
+          category.sub_categories.flatMap(subCategory =>
+            subCategory.foods.map(food => ({
+              food: food,
+              category: category.name,
+              diningHall: location.name // Added dining hall name
+            }))
+          )
+        )
+      );
+      setFoods(allFoods);
+    });
   }, []);
 
-  const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInput(event.target.value);
-  };
-
-  const handleFilter = () => {
-    window.location.href = "Filter-Window";
-  };
-
-  const handleSearch = () => {
-    const allFoods: { food: Food; dhName: string; categoryName: string }[] = [];
-    dhs.forEach((dh) => {
-      dh.categories.forEach((category) => {
-        category.sub_categories.forEach((subCategory) => {
-          subCategory.foods.forEach((food) => {
-            allFoods.push({
-              food,
-              dhName: dh.name,
-              categoryName: category.name,
-            });
-          });
-        });
-      });
-    });
-
-    const filtered = allFoods.filter(({ food }) =>
-      food.name.toLowerCase().includes(searchInput.toLowerCase())
+  const searchForFood = (food_name: string) => {
+    const foundFoods = foods.filter(foodWithCategory =>
+      foodWithCategory.food.name
+        .toLowerCase()
+        .includes(food_name.toLowerCase())
     );
 
-    // Check if all boxes are unchecked
-    const allBoxesUnchecked =
-      selectedShowAllergies.length === 0 && selectedHideAllergies.length === 0;
+    const filteredFoods = foundFoods.filter(({ food }) =>
+      selectedRestrictions.every(restriction =>
+        food.restrictions.includes(restriction)
+      )
+    );
 
-    let finalFilteredFoods = filtered;
-    if (!allBoxesUnchecked) {
-      // Filter foods based on selectedShowAllergies and selectedHideAllergies
-      finalFilteredFoods = filtered.filter(({ food }) => {
-        const hasShowAllergy =
-          selectedShowAllergies.length === 0 ||
-          selectedShowAllergies.every((allergy) =>
-            food.name.toLowerCase().includes(allergy.toLowerCase())
-          );
-        const hasHideAllergy = selectedHideAllergies.some(
-          (allergy) => food.restrictions.includes(allergy.toLowerCase()) // Check if food's restrictions include the hide allergy
-        );
-        return hasShowAllergy && !hasHideAllergy;
-      });
-    }
+    setFoundFoods(filteredFoods);
+  };
 
-    setNoFoodsFound(finalFilteredFoods.length === 0);
-    setFilteredFoods(finalFilteredFoods);
-    setShowSearchResults(true);
+  const toggleFilterPopup = () => {
+    setIsFilterPopupOpen(!isFilterPopupOpen);
+  };
+
+  const handleRestrictionChange = (restriction: string, checked: boolean) => {
+    const newRestrictions = checked
+      ? [...selectedRestrictions, restriction]
+      : selectedRestrictions.filter(r => r !== restriction);
+    setSelectedRestrictions(newRestrictions);
+    localStorage.setItem(
+      "selectedRestrictions",
+      JSON.stringify(newRestrictions)
+    );
+  };
+
+  const applyFilter = () => {
+    setFilterApplied(true);
+    searchForFood(searchInput);
+    toggleFilterPopup();
   };
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      {/* Title and Search bar */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <h1 className={`${styles.filterText} ${styles.filterTopLeft}`}>
-          Global Search
-        </h1>
-        <div
-          className="search-bar"
-          style={{ marginTop: "100px", display: "flex", alignItems: "center" }}
-        >
-          <input
-            type="text"
-            placeholder="Search foods..."
-            value={searchInput}
-            onChange={handleSearchInputChange}
-          />
-          <button onClick={handleSearch}>Search</button>
-          {/* Filter button */}
-          <div
-            style={{
-              marginLeft: "10px",
-              padding: "10px 20px",
-              backgroundColor: "#4CAF50",
-              color: "white",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={handleFilter}
-          >
-            Filter
+    <main>
+      <div className={styles.container}>
+        <div className={styles.flexCenter}>
+          <h1 className="font-semibold py-5 text-4xl text-[#003C6C]">
+            Global Search
+          </h1>
+        </div>
+  
+        <div className={styles.flexCenter}>
+          <div className="search-bar flex justify-center items-center mb-2">
+            <input
+              type="text"
+              placeholder="Search foods..."
+              className="border border-gray-400 p-2 rounded"
+              onChange={e => setSearchInput(e.target.value)}
+            />
+            <button
+              onClick={() => searchForFood(searchInput)}
+              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Search
+            </button>
           </div>
         </div>
-      </div>
+  
+        <div className={styles.flexCenter}>
+          <button
+            onClick={toggleFilterPopup}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Filter
+          </button>
+        </div>
 
-      {/* Display search results if button clicked */}
-      {showSearchResults && (
-        <div>
-          <h3>Search Results:</h3>
-          <ul>
-            {filteredFoods.map(({ food, dhName, categoryName }, index) => (
-              <li key={index}>
-                {food.name} - {categoryName} ({dhName})
-                <div style={{ display: "flex", flexWrap: "nowrap" }}>
-                  {food.restrictions.map((restriction, index) => (
-                    <img
-                      key={index}
-                      src={restrictionImageMap[restriction]}
-                      alt={restriction}
-                      style={{ width: "25px", height: "25px", margin: "5px" }}
+        {isFilterPopupOpen && (
+          <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-5 rounded-lg shadow-lg">
+              <h2 className="font-semibold text-xl mb-4">
+                Filter by Restrictions
+              </h2>
+              <div className="flex flex-wrap">
+                {restrictions.map(restriction => (
+                  <div
+                    key={restriction}
+                    className="flex items-center mr-4 mb-2"
+                  >
+                    <input
+                      type="checkbox"
+                      id={restriction}
+                      className="mr-2"
+                      checked={selectedRestrictions.includes(restriction)}
+                      onChange={e =>
+                        handleRestrictionChange(restriction, e.target.checked)
+                      }
                     />
-                  ))}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+                    <label htmlFor={restriction} className="flex items-center">
+                      <Image
+                        src={`/images/restrictions/${restriction}.jpg`}
+                        alt={restriction}
+                        width={25}
+                        height={25}
+                      />
+                      <span className="ml-1">{restriction}</span>
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={applyFilter}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Apply
+              </button>
+              <button
+                onClick={toggleFilterPopup}
+                className="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
 
-      {noFoodsFound && (
         <div>
-          <h3>No foods found at this dining hall.</h3>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default BarebonesComponent;
+          {filterApplied && foundFoods.length === 0 ? (
+            <p>No foods found with the specified allergy constraints</p>
+          ) : (
+            foundFoods.map((foodWithCategory, index) => (
+              <div
+                key={index}
+                className="flex flex-row justify-between hover:border-gray-300 hover:rounded-[2px] border-white border bg-[#F9F9F9] font-medium text-gray-700 py-1 my-1 text-sm"
+              >
+                <Link
+                  className="flex flex-row ml-3"
+                  href={`/foods/${encodeURIComponent(foodWithCategory.food.name)}`}
+                >
+                  <h4 className="px-2">{foodWithCategory.food.name}</h4>
+                  <h5 className="font-normal text-gray-400 px-2">
+                    {foodWithCategory.category} @ {foodWithCategory.diningHall} {/* Added dining hall name */}
+                  </h5>
+                </Link>
+                <ul className="flex flex-row mr-3">
+                  {foodWithCategory.food.restrictions.map(
+                    (restriction, index) => (
+                      <li key={index} className="px-2">
+                        <Image
+                          src={`/images/restrictions/${restriction}.jpg`}
+                          alt={restriction}
+                          width={25}
+                          height={25}
+                        />
+                      </li>
+                    )
+                  )}                
+                   </ul>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </main>
+      );
+    };
+    
+    export default GlobalSearch;
+    
