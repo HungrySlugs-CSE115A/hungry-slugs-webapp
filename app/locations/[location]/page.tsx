@@ -14,11 +14,11 @@ export default function Page({ params }: { params: { location: number } }) {
   const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
   const [cookies] = useCookies(["userEmail", "notificationsEnabled"]);
   const alertShown = useRef(false);
-  //console.log(cookies.notificationsEnabled);
+
   const notificationsEnabled = cookies.notificationsEnabled === true;
-  //console.log(cookies.notificationsEnabled);
-  const user_email = cookies.userEmail || 'anonymous';
-  //console.log(cookies.userEmail);
+
+  const user_email = cookies.userEmail || "anonymous";
+
   useEffect(() => {
     fetchLocations().then((locations: Location[]) => {
       if (params.location < 0 || params.location >= locations.length) {
@@ -42,11 +42,18 @@ export default function Page({ params }: { params: { location: number } }) {
     });
   }, [params.location]);
   useEffect(() => {
-    if (location && foodReviews && notificationsEnabled && !alertShown.current) {
-      Object.keys(foodReviews).forEach(foodName => {
+    if (
+      location &&
+      foodReviews &&
+      notificationsEnabled &&
+      !alertShown.current
+    ) {
+      Object.keys(foodReviews).forEach((foodName) => {
         const review = foodReviews[foodName];
-        if (user_email !== 'anonymous' && review.user_rating === 5) {
-          alert(`One of your favorite foods is being served! Food: ${foodName}`);
+        if (user_email !== "anonymous" && review.user_rating === 5) {
+          alert(
+            `One of your favorite foods is being served! Food: ${foodName}`,
+          );
           alertShown.current = true;
         }
       });

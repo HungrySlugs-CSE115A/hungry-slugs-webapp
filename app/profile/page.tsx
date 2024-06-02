@@ -20,9 +20,15 @@ const imageHeight = 100;
 
 const Page = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [cookies, setCookie, removeCookie] = useCookies(['authToken', 'userEmail', 'notificationsEnabled']);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "authToken",
+    "userEmail",
+    "notificationsEnabled",
+  ]);
   const [reviews, setReviews] = useState<FrontEndReviews>({});
-  const [notificationsEnabled, setNotificationsEnabled] = useState(cookies.notificationsEnabled === 'true');
+  const [notificationsEnabled, setNotificationsEnabled] = useState(
+    cookies.notificationsEnabled === "true",
+  );
   const [foodNames, setFoodNames] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -46,11 +52,10 @@ const Page = () => {
           email: userInfo.email,
           picture: userInfo.picture,
         });
-        setCookie("userEmail", userInfo.email, { path: '/' });
+        setCookie("userEmail", userInfo.email, { path: "/" });
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
-      
     };
     const getLocationsAndFoodNames = async () => {
       try {
@@ -58,9 +63,9 @@ const Page = () => {
         const allFoodNames = locations.flatMap((location) =>
           location.categories.flatMap((category) =>
             category.sub_categories.flatMap((sub_category) =>
-              sub_category.foods.map((food) => food.name)
-            )
-          )
+              sub_category.foods.map((food) => food.name),
+            ),
+          ),
         );
         setFoodNames(allFoodNames);
         console.log("Food Names:", allFoodNames);
@@ -69,17 +74,14 @@ const Page = () => {
       }
     };
     getUserInfo();
-    
-    getLocationsAndFoodNames();
-    
 
-    //setNotificationsEnabled(cookies.notificationsEnabled === 'true');
+    getLocationsAndFoodNames();
   }, [cookies.authToken, cookies.notificationsEnabled, setCookie]);
 
   const handleLogout = () => {
     googleLogout();
-    removeCookie("authToken", { path: '/' });
-    removeCookie("userEmail", { path: '/' });
+    removeCookie("authToken", { path: "/" });
+    removeCookie("userEmail", { path: "/" });
     window.location.href = "/";
     console.log("Logged out successfully");
   };
@@ -96,7 +98,9 @@ const Page = () => {
         user_id: userEmail,
       });
       const filteredReviews = Object.fromEntries(
-        Object.entries(reviews).filter(([_, review]) => review.user_rating != null)
+        Object.entries(reviews).filter(
+          ([_, review]) => review.user_rating != null,
+        ),
       );
       setReviews(filteredReviews);
       setLoading(false);
@@ -109,9 +113,9 @@ const Page = () => {
   const toggleNotifications = () => {
     const newState = !notificationsEnabled;
     setNotificationsEnabled(newState);
-    setCookie('notificationsEnabled', newState.toString(), { path: '/' });
-    
-    console.log(`Notifications are now ${newState ? 'enabled' : 'disabled'}`);
+    setCookie("notificationsEnabled", newState.toString(), { path: "/" });
+
+    console.log(`Notifications are now ${newState ? "enabled" : "disabled"}`);
   };
 
   return (
@@ -132,7 +136,9 @@ const Page = () => {
         </div>
       )}
       <div>
-        <h2 className="text-[#003C6C] font-medium text-xl">Your Food Reviews:</h2>
+        <h2 className="text-[#003C6C] font-medium text-xl">
+          Your Food Reviews:
+        </h2>
         {loading ? (
           <h1>Loading...</h1>
         ) : (
@@ -150,7 +156,9 @@ const Page = () => {
         onClick={toggleNotifications}
         className="hover:underline decoration-yellow-400 underline-offset-8 top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl"
       >
-        {notificationsEnabled ? "Disable Notifications" : "Enable Notifications"}
+        {notificationsEnabled
+          ? "Disable Notifications"
+          : "Enable Notifications"}
       </button>
       <button
         onClick={handleLogout}

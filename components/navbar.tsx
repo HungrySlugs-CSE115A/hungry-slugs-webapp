@@ -5,18 +5,18 @@ import { useCookies } from "react-cookie";
 
 export default function Navbar({ height }: { height: string }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cookies] = useCookies(['authToken']);
+  const [cookies] = useCookies(["authToken"]);
   /*useEffect(() => {
     // Check if sessionStorage is available and if token exists
     const token = sessionStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);*/
-  
-    useEffect(() => {
-      // Check if the authToken exists in cookies
-      const token = cookies.authToken;
-      setIsLoggedIn(!!token);
-    }, [cookies]);
+
+  useEffect(() => {
+    // Check if the authToken exists in cookies
+    const token = cookies.authToken;
+    setIsLoggedIn(!!token);
+  }, [cookies]);
 
   return (
     <nav className="bg-white fixed w-full  top-0 start-0 ">
