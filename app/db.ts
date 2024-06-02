@@ -21,7 +21,7 @@ export async function fetchLocations(): Promise<Location[]> {
 
 export async function fetchFoodReviewsBulk(data: {
   food_names: string[];
-  user_id: string | null;
+  user_id: string;
 }): Promise<FrontEndReviews> {
   const res = await api.post(`/get_ratings_bulk/`, data).catch((err) => {
     console.error(err);

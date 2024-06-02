@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
