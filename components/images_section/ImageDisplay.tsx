@@ -1,23 +1,21 @@
-import React from "react";
+import React from 'react';
 
 interface ImageDisplayProps {
+  imageName: string;
   userId: string;
   date: string;
   imageUrl: string;
 }
 
-const ImageDisplay: React.FC<ImageDisplayProps> = ({ userId, date, imageUrl }) => {
+const ImageDisplay: React.FC<ImageDisplayProps> = ({ imageName, userId, date, imageUrl }) => {
   return (
     <div className="image-display">
-      <h2>Uploaded Image Details</h2>
-      <div>
-        {/* Display uploaded image */}
-        <img src={imageUrl} alt="Uploaded" style={{ maxWidth: "300px" }} />
+      <div className="image-details">
+        <p><strong>Name:</strong> {imageName}</p>
+        <p><strong>Uploaded by:</strong> {userId}</p>
+        <p><strong>Date:</strong> {date}</p>
       </div>
-      <div>
-        <p>User ID: {userId}</p>
-        <p>Date: {date}</p>
-      </div>
+      <img src={imageUrl} alt={imageName} className="uploaded-image" />
     </div>
   );
 };
