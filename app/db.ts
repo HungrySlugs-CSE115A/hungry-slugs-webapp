@@ -1,32 +1,37 @@
+import axios from "axios";
+
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
 
-const backend = "http://localhost:8000";
+const api = axios.create({
+  baseURL: "http://localhost:8000/api",
+});
 
 export async function fetchLocations(): Promise<Location[]> {
-  const res = await fetch("http://localhost:8000/api/locations", {
-    next: {
-      revalidate: 1800, // every 30 minutes
-    },
+  const res = await api.get(`/locations/`).catch((err) => {
+    console.error(err);
   });
-  const data: { locations: Location[] } = await res.json();
-  return data.locations;
+
+  if (!res) {
+    return [];
+  }
+
+  return res.data.locations;
 }
 
 export async function fetchFoodReviewsBulk(data: {
   food_names: string[];
-  user_id: string | null;
+  user_id: string;
 }): Promise<FrontEndReviews> {
-  const res = await fetch("http://localhost:8000/api/get_ratings_bulk/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-    cache: "no-store",
+  const res = await api.post(`/get_ratings_bulk/`, data).catch((err) => {
+    console.error(err);
   });
-  const response_json = await res.json();
-  return response_json;
+
+  if (!res) {
+    return {};
+  }
+
+  return res.data;
 }
 
 export async function updateReview(data: {
@@ -34,13 +39,13 @@ export async function updateReview(data: {
   user_id: string;
   food_rating: number;
 }): Promise<{ average: number | null }> {
-  const res = await fetch("http://localhost:8000/api/rating_update/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
+  const res = await api.post(`/rating_update/`, data).catch((err) => {
+    console.error(err);
   });
-  const response_json = await res.json();
-  return response_json;
+
+  if (!res) {
+    return { average: null };
+  }
+
+  return res.data;
 }

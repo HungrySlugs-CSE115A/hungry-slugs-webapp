@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
@@ -66,13 +67,13 @@ export default function Comments({ food }: { food: Food }) {
     setComments(updatedComments);
     setEditIndex(null);
     setEditTextField(""); // Clear the textarea
-  
+
     // Make Axios call to update the comment on the backend
     const editedComment = {
       id: commentId, // Use the provided commentId
       comment: editTextField,
     };
-    
+
     axios
       .put(`http://localhost:8000/api/comments/${commentId}/`, editedComment)
       .then((response) => {
@@ -81,24 +82,41 @@ export default function Comments({ food }: { food: Food }) {
       .catch((error) => {
         console.error("Failed to update comment:", error);
       });
-  };  
+  };
 
   return (
     <div>
-      <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">{food && food.name}</h1>
-      <div>
+
+      <div className="pt-5">
         {comments.map((comment, i) => (
-          <div key={comment.id} className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3">
+          <div
+            key={comment.id}
+            className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3"
+          >
             <div className="flex-row items-center mb-1">
-              <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">{comment.user_id}</span>
-              <span className="text-gray-500 text-sm">{pythonDatetimeToJsDatetime(comment.date).toLocaleString()}</span>
+              <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">
+                {comment.user_id}
+              </span>
+              <span className="text-gray-500 text-sm">
+                {pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
+              </span>
               {user_id === comment.user_id && (
                 <>
                   {editIndex !== i ? (
-                    <button onClick={() => editComment(i)} className="mr-2 px-4">Edit</button>
+                    <button
+                      onClick={() => editComment(i)}
+                      className="mr-2 px-4"
+                    >
+                      Edit
+                    </button>
                   ) : (
                     <>
-                      <button onClick={() => saveEditedComment(comments[i].id)} className="ml-4 mr-2 px-2 py-1 bg-blue-500 text-white rounded-md">Save</button>
+                      <button
+                        onClick={() => saveEditedComment(comments[i].id)}
+                        className="ml-4 mr-2 px-2 py-1 bg-blue-500 text-white rounded-md"
+                      >
+                        Save
+                      </button>
                       <button onClick={() => setEditIndex(null)}>Cancel</button>
                     </>
                   )}
@@ -106,7 +124,9 @@ export default function Comments({ food }: { food: Food }) {
               )}
             </div>
             <p className="px-2 break-words">
-              {editIndex !== i ? comment.comment : (
+              {editIndex !== i ? (
+                comment.comment
+              ) : (
                 <input
                   type="text"
                   value={editTextField}
@@ -136,9 +156,10 @@ export default function Comments({ food }: { food: Food }) {
               comment: textField,
             })
           }
-          className={`ml-2 text-white ${
-            textField.length === 0 ? "bg-gray-300 cursor-default" : "bg-blue-500 hover:bg-blue-700"
-          } rounded-md px-4 py-2`}
+          className={`ml-2 text-white ${textField.length === 0
+            ? "bg-gray-300 cursor-default"
+            : "bg-blue-500 hover:bg-blue-700"
+            } rounded-md px-4 py-2`}
           disabled={textField.length === 0}
         >
           Post

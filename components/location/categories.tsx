@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import LocationFood from "@/components/location/food";
 
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
+import { fetchUserInfo } from "@/app/user_info";
 
 export default function LocationCategories({
   location,
@@ -28,30 +29,25 @@ export default function LocationCategories({
         default:
           return false;
       }
-    })
+    }),
   );
 
-  interface RestrictionImageMap {
-    [key: string]: string;
-  }
+  const [userId, setUserId] = useState<string>("anonymous");
 
-  const restrictionImageMap: RestrictionImageMap = {
-    eggs: "/Images/egg.jpg",
-    vegan: "/Images/vegan.jpg",
-    fish: "/Images/fish.jpg",
-    veggie: "/Images/veggie.jpg",
-    gluten: "/Images/gluten.jpg",
-    pork: "/Images/pork.jpg",
-    milk: "/Images/milk.jpg",
-    beef: "/Images/beef.jpg",
-    nuts: "/Images/nuts.jpg",
-    halal: "/Images/halal.jpg",
-    soy: "/Images/soy.jpg",
-    shellfish: "/Images/shellfish.jpg",
-    treenut: "/Images/treenut.jpg",
-    sesame: "/Images/sesame.jpg",
-    alcohol: "/Images/alcohol.jpg",
-  };
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const userInfo = await fetchUserInfo();
+        const username = userInfo.email ? userInfo.email : "anonymous";
+        setUserId(username);
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+        setUserId("anonymous");
+      }
+    };
+    getUserInfo();
+    //console.log("userId =", userId);
+  }, [userId]);
 
   const menuArrow = (rotate180: boolean) => (
     <svg
@@ -99,15 +95,14 @@ export default function LocationCategories({
                     {subCategory.name}
                   </h3>
                   {subCategory.foods.map((food, k) => (
+                    //this is where user_id is actually set for the reviews smh
                     <LocationFood
                       key={k}
                       food_average={reviews[food.name]?.average}
                       food_name={food.name}
                       user_rating={reviews[food.name]?.user_rating}
-                      restriction_images={food.restrictions.map(
-                        (restriction) => restrictionImageMap[restriction]
-                      )}
-                      user_id={null}
+                      restrictions={food.restrictions}
+                      user_id={userId}
                     />
                   ))}
                 </div>

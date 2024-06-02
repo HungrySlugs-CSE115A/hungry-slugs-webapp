@@ -9,14 +9,14 @@ export default function LocationFood({
   food_name,
   food_average,
   user_rating,
-  restriction_images,
+  restrictions,
   user_id,
 }: {
   food_name: string;
   food_average: number | null;
   user_rating: number | null;
-  restriction_images: string[];
-  user_id: string | null;
+  restrictions: string[];
+  user_id: string;
 }) {
   const ratings = [1, 2, 3, 4, 5];
   const [average, setAverage] = useState(food_average);
@@ -29,40 +29,47 @@ export default function LocationFood({
         </Link>
         <div className="flex flex-row mr-3">
           <ul className="flex flex-row px-1">
-            {restriction_images.map((image, index) => (
+            {restrictions.map((image_name, index) => (
               <li key={index} className="px-1">
-                <Image src={image} height={20} width={20} alt={image} />{" "}
+                <Image
+                  src={`/images/restrictions/${image_name}.jpg`}
+                  height={20}
+                  width={20}
+                  alt={image_name}
+                />
                 {/* Display the image */}
               </li>
             ))}
           </ul>
 
-          <div>
-            <h4 className="flex justify-center"> {average ? average : "?"} </h4>
+          <div className="bg-gray-200 ">
+
+            <h4 className="flex justify-center px-2">Score: {average ? average : "?"} </h4>
           </div>
           <div>
-            <h4 className="flex justify-center">
-              <form>
-                <select
+            <h4 className="flex justify-center pl-2">
+              <form className="text-center">
+                <select className=" text-center py-0.5 px-2 w-20"
                   name="rating"
                   id="rating"
                   onChange={(e) =>
                     updateReview({
                       food_name: food_name,
-                      user_id: user_id || "anonymous",
+                      user_id: user_id,
                       food_rating: parseInt(e.target.value),
                     }).then((data) => {
                       const newAverage = data.average;
+                      food_average = newAverage;
                       setAverage(newAverage);
                     })
                   }
                 >
-                  <option value={user_rating ? user_rating : 5}>
-                    {user_rating ? user_rating : "Rate"}
+                  <option className="font-sans" value={user_rating ? user_rating : 5}>
+                    {user_rating ? user_rating : "Rating"}
                   </option>
                   {ratings.map((rating, index) => (
                     <option
-                      className="flex justify-center"
+                      className="flex justify-center font-sans"
                       key={index}
                       value={rating}
                     >

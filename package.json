@@ -11,15 +11,21 @@
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
     "axios": "^1.6.8",
+    "cookie": "^0.6.0",
+    "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "next": "14.2.3",
+    "next-client-cookies": "^1.1.1",
+    "next-cookies": "^2.0.3",
     "npm": "^10.6.0",
     "prettier": "^3.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "react-router-dom": "^6.23.0"
+    "react-router-dom": "^6.23.0",
+    "supports-color": "8.1.1"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

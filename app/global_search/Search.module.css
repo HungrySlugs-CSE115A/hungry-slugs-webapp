@@ -1,17 +1,74 @@
-.filterText {
-  font-size: 3rem; /* Adjust the font size as needed */
-  color: #003c6c; /* Set the text color */
-  font-weight: 600; /* Set the font weight */
-  padding-top: 1.25rem; /* Match the py-5 padding top */
-  display: center; /* Match the flex display */
-  align-items: center; /* Match the items-center alignment */
-  justify-content: center; /* Match the justify-center alignment */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.filterTopLeft {
-  position: absolute;
+.title {
+  font-size: 60px;
+  margin-bottom: 20px;
+  color: #003c6c;
+  font-weight: 600;
+  text-align: center;
+}
+
+.searchBar {
+  display: flex;
   align-items: center;
-  top: 3rem; /* Adjust the top position as needed */
-  left: 80 rem; /* Adjust the left position as needed */
-  margin: 0; /* Remove the margin */
+  margin-top: 20px;
+}
+
+.searchInput {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.searchButton {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filterButton {
+  margin-left: 10px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.results {
+  margin-top: 20px;
+}
+
+.resultList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.resultItem {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.restrictionIcons {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.restrictionIcon {
+  margin: 5px;
+}
+
+.noResults {
+  margin-top: 20px;
+  font-size: 18px;
+  color: red;
 }
