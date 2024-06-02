@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-
 import { GOOGLE_CLIENT_ID } from "@/private/secrets";
 
 interface User {
@@ -19,8 +18,6 @@ const LoginPage = () => {
 };
 
 const LoginComponent = () => {
-  const [user, setUser] = useState<User | null>(null);
-
   useEffect(() => {
     console.log("LoginPage component mounted");
   }, []);

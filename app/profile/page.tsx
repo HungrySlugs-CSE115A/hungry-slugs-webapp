@@ -35,7 +35,7 @@ const Page = () => {
       .then((res) => console.log("Backend logout successful", res))
       .catch((err) => console.error("Backend logout failed", err));
 
-    // Remove the token from local storage
+    // Remove the token from sessionStorage
     sessionStorage.removeItem("token");
     // Redirect the user to the main page after logging out
     window.location.href = "/";
