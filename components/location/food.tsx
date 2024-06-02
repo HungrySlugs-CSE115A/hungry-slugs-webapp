@@ -64,12 +64,12 @@ export default function LocationFood({
                     })
                   }
                 >
-                  <option value={user_rating ? user_rating : 5}>
+                  <option className="font-sans" value={user_rating ? user_rating : 5}>
                     {user_rating ? user_rating : "Rating"}
                   </option>
                   {ratings.map((rating, index) => (
                     <option
-                      className="flex justify-center"
+                      className="flex justify-center font-sans"
                       key={index}
                       value={rating}
                     >
