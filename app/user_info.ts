@@ -24,7 +24,5 @@ export const fetchUserInfo = async () => {
       picture: userInfo.picture,
     };
   } catch (error) {
-    console.error("Error fetching user info:", error);
-    throw error; // Re-throw the error so it can be handled by the calling code
   }
 };

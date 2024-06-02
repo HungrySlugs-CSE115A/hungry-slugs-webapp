@@ -30,10 +30,14 @@ export default function Page({ params }: { params: { location: number } }) {
       let username = "";
       try {
         const userInfo = await fetchUserInfo();
-        username = userInfo.email ? userInfo.email : "anonymous";
+        if (userInfo && typeof userInfo.email === 'string') {
+          username = userInfo.email;
+        } else {
+          username = "anonymous";
+        }
+        //username = userInfo.email ? userInfo.email : "anonymous";
         //console.log("username is: ", username);
       } catch (error) {
-        console.error("Failed to fetch user info:", error);
       }
 
       fetchFoodReviewsBulk({
