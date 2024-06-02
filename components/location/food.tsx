@@ -16,7 +16,7 @@ export default function LocationFood({
   food_average: number | null;
   user_rating: number | null;
   restrictions: string[];
-  user_id: string | null;
+  user_id: string;
 }) {
   const ratings = [1, 2, 3, 4, 5];
   const [average, setAverage] = useState(food_average);
@@ -54,7 +54,7 @@ export default function LocationFood({
                   onChange={(e) =>
                     updateReview({
                       food_name: food_name,
-                      user_id: user_id || "anonymous",
+                      user_id: user_id,
                       food_rating: parseInt(e.target.value),
                     }).then((data) => {
                       const newAverage = data.average;

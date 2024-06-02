@@ -7,13 +7,14 @@ import { useState, useEffect } from "react";
 
 import LocationCategories from "@/components/location/categories";
 import Link from "next/link";
+import { fetchUserInfo } from "@/app/user_info";
 
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location | null>(null);
   const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
 
   useEffect(() => {
-    fetchLocations().then((locations: Location[]) => {
+    fetchLocations().then(async (locations: Location[]) => {
       if (params.location < 0 || params.location >= locations.length) {
         return <h1>Location not found</h1>;
       }
@@ -25,9 +26,19 @@ export default function Page({ params }: { params: { location: number } }) {
         ),
       );
 
+      //get username and set it
+      let username = "";
+      try {
+        const userInfo = await fetchUserInfo();
+        username = userInfo.email ? userInfo.email : "anonymous";
+        //console.log("username is: ", username);
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+      }
+
       fetchFoodReviewsBulk({
         food_names: food_names,
-        user_id: "anonymous",
+        user_id: username,
       }).then((reviews: FrontEndReviews) => {
         setLocation(location);
         setFoodReviews(reviews);
