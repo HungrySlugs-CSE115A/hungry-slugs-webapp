@@ -1,23 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
 import LoginPage from "./login"; // Used if not logged in
-import { useCookies } from "react-cookie";
 import Link from "next/link";
 
 export default function Navbar({ height }: { height: string }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cookies] = useCookies(["authToken"]);
-  /*useEffect(() => {
+
+  useEffect(() => {
     // Check if sessionStorage is available and if token exists
     const token = sessionStorage.getItem("token");
     setIsLoggedIn(!!token);
-  }, []);*/
-
-  useEffect(() => {
-    // Check if the authToken exists in cookies
-    const token = cookies.authToken;
-    setIsLoggedIn(!!token);
-  }, [cookies]);
+  }, []);
 
   return (
     <nav className="bg-white fixed w-full  top-0 start-0 ">
