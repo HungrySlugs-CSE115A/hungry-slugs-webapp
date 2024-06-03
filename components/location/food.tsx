@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { updateReview } from "@/app/db";
+import { updateReview } from "@/app/requests";
 
 export default function LocationFood({
   food_name,

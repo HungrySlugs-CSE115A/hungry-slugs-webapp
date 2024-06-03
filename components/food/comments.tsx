@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
-import { fetchUserInfo } from "@/app/user_info";
+import { fetchUserInfo } from "@/app/requests";
 
 function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
   const [date, time] = pythonDatetime.split("T");
@@ -14,7 +14,7 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
     parseInt(day),
     parseInt(hour),
     parseInt(minute),
-    parseInt(second),
+    parseInt(second)
   );
 }
 
@@ -92,7 +92,7 @@ export default function Comments({ food }: { food: Food }) {
       <div>
         {comments.map((comment, i) => (
           <div
-            key={comment.id}
+            key={i}
             className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3"
           >
             <div className="flex-row items-center mb-1">

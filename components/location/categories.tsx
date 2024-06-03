@@ -5,7 +5,7 @@ import LocationFood from "@/components/location/food";
 
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
-import { fetchUserInfo } from "@/app/user_info";
+import { fetchUserInfo } from "@/app/requests";
 
 export default function LocationCategories({
   location,

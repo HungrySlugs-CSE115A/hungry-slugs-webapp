@@ -4,7 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Search.module.css";
-import { fetchLocations } from "@/app/db";
+import { fetchLocations } from "@/app/requests";
 import { Location, Food } from "@/interfaces/Location";
 
 interface FoodWithCategory {
@@ -109,7 +109,7 @@ const GlobalSearch = () => {
             Global Search
           </h1>
         </div>
-  
+
         <div className={styles.flexCenter}>
           <div className="search-bar flex justify-center items-center mb-2">
             <input
@@ -126,7 +126,7 @@ const GlobalSearch = () => {
             </button>
           </div>
         </div>
-  
+
         <div className={styles.flexCenter}>
           <button
             onClick={toggleFilterPopup}
@@ -215,7 +215,7 @@ const GlobalSearch = () => {
                         />
                       </li>
                     )
-                  )}                
+                  )}
                    </ul>
                   </div>
                 ))
@@ -225,6 +225,6 @@ const GlobalSearch = () => {
         </main>
       );
     };
-    
+
     export default GlobalSearch;
-    
+
