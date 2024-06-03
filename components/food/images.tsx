@@ -46,7 +46,7 @@ const Images: React.FC<ImagesProps> = ({ food }) => {
       // Send image data to backend
       const response = await axios.post(
         "http://localhost:8000/api/upload_image/",
-        formData
+        formData,
       );
 
       // Log the response to debug

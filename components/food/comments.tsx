@@ -13,7 +13,7 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
     parseInt(day),
     parseInt(hour),
     parseInt(minute),
-    parseInt(second)
+    parseInt(second),
   );
 }
 
@@ -44,7 +44,7 @@ export default function Comments({ food }: { food: Food }) {
     try {
       const response = await axios.post(
         "http://localhost:8000/api/comments/",
-        comment
+        comment,
       );
       const updatedFood: Food = response.data;
       const updatedComments = updatedFood.comments;
@@ -76,7 +76,7 @@ export default function Comments({ food }: { food: Food }) {
     try {
       const response = await axios.put(
         `http://localhost:8000/api/comments/${commentId}/`,
-        editedComment
+        editedComment,
       );
       console.log("Comment updated successfully:", response.data);
     } catch (error) {
