@@ -37,17 +37,8 @@ export default function LocationCategories({
   useEffect(() => {
     const getUserInfo = async () => {
       //get username and set it
-      try {
-        const userInfo = await fetchUserInfo();
-        if (userInfo && typeof userInfo.email === 'string') {
-          setUserId(userInfo.email);
-        } else {
-          setUserId("anonymous");
-        }
-        //username = userInfo.email ? userInfo.email : "anonymous";
-        //console.log("username is: ", username);
-      } catch (error) {
-      }
+      const userInfo = await fetchUserInfo();
+      setUserId(userInfo.email);
     };
     getUserInfo();
     //console.log("userId =", userId);

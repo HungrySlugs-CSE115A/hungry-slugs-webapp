@@ -28,17 +28,8 @@ export default function Page({ params }: { params: { location: number } }) {
 
       //get username and set it
       let username = "";
-      try {
-        const userInfo = await fetchUserInfo();
-        if (userInfo && typeof userInfo.email === 'string') {
-          username = userInfo.email;
-        } else {
-          username = "anonymous";
-        }
-        //username = userInfo.email ? userInfo.email : "anonymous";
-        //console.log("username is: ", username);
-      } catch (error) {
-      }
+      const userInfo = await fetchUserInfo();
+      username = userInfo.email;
 
       fetchFoodReviewsBulk({
         food_names: food_names,

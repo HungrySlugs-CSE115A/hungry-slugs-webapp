@@ -24,5 +24,8 @@ export const fetchUserInfo = async () => {
       picture: userInfo.picture,
     };
   } catch (error) {
+    return {
+      email: "anonymous"
+    };
   }
 };
