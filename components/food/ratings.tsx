@@ -2,7 +2,7 @@ import { Food } from "@/interfaces/Food";
 import { Doppio_One } from "next/font/google";
 
 export default function Ratings({ food }: { food: Food }) {
-  console.log(food);
+  // console.log(food);
   return (
     <div className="w-screen ">
       {" "}
@@ -15,7 +15,7 @@ export default function Ratings({ food }: { food: Food }) {
         {
           /* convert ratings obj to array and map */
           Object.entries(food.ratings).map(([user_id, rating]) => (
-            <p
+            <div
               key={user_id}
               className="flex flex-row justify-center pb-2  my-1 text-med"
             >
@@ -25,7 +25,7 @@ export default function Ratings({ food }: { food: Food }) {
               <div className="px-5 flex w-3/2 border-white border bg-[#F9F9F9] font-medium text-gray-700">
                 {rating.rating}
               </div>
-            </p>
+            </div>
           ))
         }
       </div>

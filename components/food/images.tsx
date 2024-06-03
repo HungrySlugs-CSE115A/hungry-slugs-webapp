@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Food } from "@/interfaces/Food";
-import ImageDisplay from "@/components/images_section/ImageDisplay"; // Import ImageDisplay component
-import { fetchUserInfo } from "@/app/user_info"; // Import fetchUserInfo function
+import { fetchUserInfo } from "@/app/requests"; // Import fetchUserInfo function
 import "@/components/food/Images.css"; // Import the CSS file
 
 interface ImagesProps {
