@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { fetchLocations, fetchFoodReviewsBulk } from "../db";
-//import { fetchUserInfo } from "@/app/user_info";
+import {
+  fetchLocations,
+  fetchFoodReviewsBulk,
+  fetchUserInfo,
+} from "@/app/requests";
 import Image from "next/image";
 import { FrontEndReviews } from "@/interfaces/Review";
-import { Location } from "@/interfaces/Location";
-import { fetchUserInfo } from "@/app/requests";
 
 interface User {
   name: string;
@@ -28,7 +29,7 @@ const Page = () => {
   ]);
   const [reviews, setReviews] = useState<FrontEndReviews>({});
   const [notificationsEnabled, setNotificationsEnabled] = useState(
-    cookies.notificationsEnabled === "true",
+    cookies.notificationsEnabled === "true"
   );
   const [foodNames, setFoodNames] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,9 +65,9 @@ const Page = () => {
         const allFoodNames = locations.flatMap((location) =>
           location.categories.flatMap((category) =>
             category.sub_categories.flatMap((sub_category) =>
-              sub_category.foods.map((food) => food.name),
-            ),
-          ),
+              sub_category.foods.map((food) => food.name)
+            )
+          )
         );
         setFoodNames(allFoodNames);
         console.log("Food Names:", allFoodNames);
@@ -100,8 +101,8 @@ const Page = () => {
       });
       const filteredReviews = Object.fromEntries(
         Object.entries(reviews).filter(
-          ([_, review]) => review.user_rating != null,
-        ),
+          ([_, review]) => review.user_rating != null
+        )
       );
       setReviews(filteredReviews);
       setLoading(false);
