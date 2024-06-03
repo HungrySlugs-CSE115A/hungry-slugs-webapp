@@ -4,7 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Search.module.css";
-import { fetchLocations } from "@/app/db";
+import { fetchLocations } from "@/app/requests";
 import { Location, Food } from "@/interfaces/Location";
 
 interface FoodWithCategory {

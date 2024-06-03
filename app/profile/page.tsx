@@ -4,10 +4,11 @@ import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { fetchLocations, fetchFoodReviewsBulk } from "../db";
-import { fetchUserInfo } from "@/app/user_info";
+//import { fetchUserInfo } from "@/app/user_info";
 import Image from "next/image";
 import { FrontEndReviews } from "@/interfaces/Review";
 import { Location } from "@/interfaces/Location";
+import { fetchUserInfo } from "@/app/requests";
 
 interface User {
   name: string;

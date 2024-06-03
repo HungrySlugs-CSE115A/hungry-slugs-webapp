@@ -65,7 +65,7 @@ def get_food(request, name: str):
 @api_view(["POST"])
 def return_ratings_bulk(request):
     food_names: list[str] = request.data.get("food_names")
-    user_id: str | None = request.data.get("user_id")
+    user_id: str = request.data.get("user_id")
 
     if food_names == None:
         print("food_names is None")
