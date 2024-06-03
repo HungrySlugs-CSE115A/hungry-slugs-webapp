@@ -1,7 +1,8 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
-import { fetchUserInfo } from "@/app/user_info";
+import { fetchUserInfo } from "@/app/requests";
 
 function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
   const [date, time] = pythonDatetime.split("T");
@@ -85,13 +86,10 @@ export default function Comments({ food }: { food: Food }) {
 
   return (
     <div>
-      <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">
-        {food && food.name}
-      </h1>
-      <div>
+      <div className="pt-5">
         {comments.map((comment, i) => (
           <div
-            key={comment.id}
+            key={i}
             className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3"
           >
             <div className="flex-row items-center mb-1">

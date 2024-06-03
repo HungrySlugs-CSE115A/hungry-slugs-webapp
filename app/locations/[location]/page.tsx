@@ -1,5 +1,9 @@
 "use client";
-import { fetchLocations, fetchFoodReviewsBulk } from "@/app/db";
+import {
+  fetchLocations,
+  fetchFoodReviewsBulk,
+  fetchUserInfo,
+} from "@/app/requests";
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
 
@@ -20,7 +24,7 @@ export default function Page({ params }: { params: { location: number } }) {
   const user_email = cookies.userEmail || "anonymous";
 
   useEffect(() => {
-    fetchLocations().then((locations: Location[]) => {
+    fetchLocations().then(async (locations: Location[]) => {
       if (params.location < 0 || params.location >= locations.length) {
         return <h1>Location not found</h1>;
       }
@@ -31,6 +35,16 @@ export default function Page({ params }: { params: { location: number } }) {
           sub_category.foods.map((food) => food.name),
         ),
       );
+
+      //get username and set it
+      let username = "";
+      try {
+        const userInfo = await fetchUserInfo();
+        username = userInfo.email ? userInfo.email : "anonymous";
+        //console.log("username is: ", username);
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+      }
 
       fetchFoodReviewsBulk({
         food_names: food_names,
