@@ -1,60 +1,59 @@
 .images-container {
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-  }
-  
-  .food-name {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 10px;
-  }
-  
-  .section-title {
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-  }
-  
-  .upload-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .file-input {
-    margin-bottom: 10px;
-  }
-  
-  .upload-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .upload-button:hover {
-    background-color: #45a049;
-  }
-  
-  .uploaded-image-details {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .image-details {
-    margin-bottom: 10px;
-  }
-  
-  .uploaded-image {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px;
-    margin-top: 10px;
-  }
-  
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.food-name {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.file-input {
+  margin-bottom: 10px;
+}
+
+.upload-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #45a049;
+}
+
+.uploaded-image-details {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.image-details {
+  margin-bottom: 10px;
+}
+
+.uploaded-image {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  margin-top: 10px;
+}

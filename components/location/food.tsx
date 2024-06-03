@@ -43,13 +43,15 @@ export default function LocationFood({
           </ul>
 
           <div className="bg-gray-200 ">
-
-            <h4 className="flex justify-center px-2">Score: {average ? average : "?"} </h4>
+            <h4 className="flex justify-center px-2">
+              Score: {average ? average : "?"}{" "}
+            </h4>
           </div>
           <div>
             <h4 className="flex justify-center pl-2">
               <form className="text-center">
-                <select className=" text-center py-0.5 px-2 w-20"
+                <select
+                  className=" text-center py-0.5 px-2 w-20"
                   name="rating"
                   id="rating"
                   onChange={(e) =>
@@ -64,7 +66,10 @@ export default function LocationFood({
                     })
                   }
                 >
-                  <option className="font-sans" value={user_rating ? user_rating : 5}>
+                  <option
+                    className="font-sans"
+                    value={user_rating ? user_rating : 5}
+                  >
                     {user_rating ? user_rating : "Rating"}
                   </option>
                   {ratings.map((rating, index) => (

@@ -14,7 +14,7 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
     parseInt(day),
     parseInt(hour),
     parseInt(minute),
-    parseInt(second)
+    parseInt(second),
   );
 }
 
@@ -86,7 +86,6 @@ export default function Comments({ food }: { food: Food }) {
 
   return (
     <div>
-
       <div className="pt-5">
         {comments.map((comment, i) => (
           <div
@@ -156,10 +155,11 @@ export default function Comments({ food }: { food: Food }) {
               comment: textField,
             })
           }
-          className={`ml-2 text-white ${textField.length === 0
-            ? "bg-gray-300 cursor-default"
-            : "bg-blue-500 hover:bg-blue-700"
-            } rounded-md px-4 py-2`}
+          className={`ml-2 text-white ${
+            textField.length === 0
+              ? "bg-gray-300 cursor-default"
+              : "bg-blue-500 hover:bg-blue-700"
+          } rounded-md px-4 py-2`}
           disabled={textField.length === 0}
         >
           Post
