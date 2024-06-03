@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
-import { fetchUserInfo } from "@/app/user_info";
+import { fetchUserInfo } from "@/app/requests";
 
 function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
   const [date, time] = pythonDatetime.split("T");
@@ -86,11 +86,10 @@ export default function Comments({ food }: { food: Food }) {
 
   return (
     <div>
-
       <div className="pt-5">
         {comments.map((comment, i) => (
           <div
-            key={comment.id}
+            key={i}
             className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3"
           >
             <div className="flex-row items-center mb-1">
@@ -156,10 +155,11 @@ export default function Comments({ food }: { food: Food }) {
               comment: textField,
             })
           }
-          className={`ml-2 text-white ${textField.length === 0
-            ? "bg-gray-300 cursor-default"
-            : "bg-blue-500 hover:bg-blue-700"
-            } rounded-md px-4 py-2`}
+          className={`ml-2 text-white ${
+            textField.length === 0
+              ? "bg-gray-300 cursor-default"
+              : "bg-blue-500 hover:bg-blue-700"
+          } rounded-md px-4 py-2`}
           disabled={textField.length === 0}
         >
           Post

@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
-import { fetchUserInfo } from "@/app/user_info";
+import { fetchUserInfo } from "@/app/requests";
 
 interface User {
   name: string;

@@ -199,6 +199,7 @@ def upload_image(request):
         # Return a JSON response with an error message if no image is provided or method is not POST
         return JsonResponse({"success": False, "message": "Image upload failed"})
 
+
 # @api_view(["GET"])
 # def get_user_rating(request):
 #     user = get_rating(request.user_ids)
