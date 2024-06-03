@@ -58,4 +58,4 @@ pnpm-lock.yaml
 
 # image folder
 /public/uploaded_images/*
-!/public/uploaded_images/
+
