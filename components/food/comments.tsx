@@ -22,8 +22,8 @@ export default function Comments({ food }: { food: Food }) {
   const [textField, setTextField] = useState("");
   const [userId, setUserId] = useState("anonymous");
   const [userInfoLoaded, setUserInfoLoaded] = useState(false); // Track if user info is loaded
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editTextField, setEditTextField] = useState("");
+  //const [editIndex, setEditIndex] = useState<number | null>(null);
+  //const [editTextField, setEditTextField] = useState("");
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -53,7 +53,7 @@ export default function Comments({ food }: { food: Food }) {
     }
   };
 
-  const editComment = (index: number) => {
+/*   const editComment = (index: number) => {
     setEditIndex(index);
     setEditTextField(comments[index].comment); // Set textarea value to the comment text
   };
@@ -77,18 +77,18 @@ export default function Comments({ food }: { food: Food }) {
     } catch (error) {
       console.error("Failed to update comment:", error);
     }
-  };
+  }; */
 
   return (
     <div>
       <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">{food && food.name}</h1>
       <div>
         {comments.map((comment, i) => (
-          <div key={comment.id} className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3">
+          <div className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3">
             <div className="flex-row items-center mb-1">
               <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">{comment.user_id}</span>
               <span className="text-gray-500 text-sm">{pythonDatetimeToJsDatetime(comment.date).toLocaleString()}</span>
-              {userId === comment.user_id && (
+              {/* {userId === comment.user_id && (
                 <>
                   {editIndex !== i ? (
                     <button onClick={() => editComment(i)} className="mr-2 px-4">Edit</button>
@@ -99,18 +99,10 @@ export default function Comments({ food }: { food: Food }) {
                     </>
                   )}
                 </>
-              )}
+              )} */}
             </div>
             <p className="px-2 break-words">
-              {editIndex !== i ? comment.comment : (
-                <input
-                  type="text"
-                  value={editTextField}
-                  onChange={(e) => setEditTextField(e.target.value)}
-                  className="w-full border border-gray-300 p-2 mb-2 mt-2 break-all max-w-full"
-                  style={{ borderColor: "rgb(107, 114, 128)" }}
-                />
-              )}
+              {comment.comment}
             </p>
           </div>
         ))}
