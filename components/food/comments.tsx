@@ -102,7 +102,8 @@ export default function Comments({ food }: { food: Food }) {
               <span className="text-gray-500 text-sm">
                 {pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
               </span>
-              {userId === comment.user_id && (
+              {/* disable editing for now */}
+              {/* {userId === comment.user_id && (
                 <>
                   {editIndex !== i ? (
                     <button
@@ -123,7 +124,7 @@ export default function Comments({ food }: { food: Food }) {
                     </>
                   )}
                 </>
-              )}
+              )} */}
             </div>
             <p className="px-2 break-words">
               {editIndex !== i ? (
