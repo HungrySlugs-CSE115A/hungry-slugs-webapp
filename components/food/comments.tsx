@@ -30,9 +30,10 @@ export default function Comments({ food }: { food: Food }) {
       const userInfo = await fetchUserInfo();
       setUserId(userInfo.email);
       setUserInfoLoaded(true); // Set to true
+      //console.log("comments userid:", userId);
     };
     getUserInfo(); // Call the function to fetch user info
-  }, []);
+  }, [userId]);
 
   const postComment = async (comment: {
     food_name: string;

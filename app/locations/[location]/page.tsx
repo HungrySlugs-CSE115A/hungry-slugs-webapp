@@ -30,6 +30,7 @@ export default function Page({ params }: { params: { location: number } }) {
       let username = "";
       const userInfo = await fetchUserInfo();
       username = userInfo.email;
+      //console.log("username is:", username);
 
       fetchFoodReviewsBulk({
         food_names: food_names,
