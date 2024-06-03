@@ -12,7 +12,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
-from private.private_settings import DJANGO_SECRET_KEY, IS_DEV
+from private.private_settings import (
+    DJANGO_SECRET_KEY,
+    IS_DEV,
+    DJANGO_GOOGLE_CLIENT_ID,
+    DJANGO_GOOGLE_CLIENT_SECRET,
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = (
@@ -28,6 +33,9 @@ SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = IS_DEV
+
+GOOGLE_CLIENT_ID = DJANGO_GOOGLE_CLIENT_ID
+GOOGLE_SECRET_KEY = DJANGO_GOOGLE_CLIENT_SECRET
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -61,6 +69,12 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "authorization",
+    "content-type",
+    "Access-Control-Allow-Origin",
+]
 
 ROOT_URLCONF = "backend.urls"
 

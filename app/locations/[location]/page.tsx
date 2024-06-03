@@ -7,7 +7,8 @@ import {
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useCookies } from "react-cookie";
 
 import LocationCategories from "@/components/location/categories";
 import Link from "next/link";
@@ -15,6 +16,12 @@ import Link from "next/link";
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location | null>(null);
   const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
+  const [cookies] = useCookies(["userEmail", "notificationsEnabled"]);
+  const alertShown = useRef(false);
+
+  const notificationsEnabled = cookies.notificationsEnabled === true;
+
+  const user_email = cookies.userEmail || "anonymous";
 
   useEffect(() => {
     fetchLocations().then(async (locations: Location[]) => {
@@ -41,13 +48,31 @@ export default function Page({ params }: { params: { location: number } }) {
 
       fetchFoodReviewsBulk({
         food_names: food_names,
-        user_id: username,
+        user_id: user_email,
       }).then((reviews: FrontEndReviews) => {
         setLocation(location);
         setFoodReviews(reviews);
       });
     });
   }, [params.location]);
+  useEffect(() => {
+    if (
+      location &&
+      foodReviews &&
+      notificationsEnabled &&
+      !alertShown.current
+    ) {
+      Object.keys(foodReviews).forEach((foodName) => {
+        const review = foodReviews[foodName];
+        if (user_email !== "anonymous" && review.user_rating === 5) {
+          alert(
+            `One of your favorite foods is being served! Food: ${foodName}`,
+          );
+          alertShown.current = true;
+        }
+      });
+    }
+  }, [location, foodReviews, notificationsEnabled, user_email]);
 
   if (!location || !foodReviews) {
     return <h1>Loading...</h1>;
