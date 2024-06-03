@@ -57,5 +57,5 @@ yarn.lock
 pnpm-lock.yaml
 
 # image folder
-/uploaded_images/*
-!/uploaded_images/
+/public/uploaded_images/*
+!/public/uploaded_images/
