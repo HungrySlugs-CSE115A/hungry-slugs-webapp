@@ -21,7 +21,7 @@ export async function fetchLocations(): Promise<Location[]> {
 
 export async function fetchFoodReviewsBulk(data: {
   food_names: string[];
-  user_id: string | null;
+  user_id: string;
 }): Promise<FrontEndReviews> {
   const res = await api.post(`/get_ratings_bulk/`, data).catch((err) => {
     console.error(err);
@@ -49,3 +49,34 @@ export async function updateReview(data: {
 
   return res.data;
 }
+
+export const fetchUserInfo = async () => {
+  try {
+    const access_token = sessionStorage.getItem("token");
+
+    if (!access_token) {
+      throw new Error("No access token found in session storage.");
+    }
+
+    const response = await axios.get(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        headers: { Authorization: `Bearer ${access_token}` },
+      }
+    );
+
+    const userInfo = response.data;
+
+    return {
+      name: userInfo.name,
+      email: userInfo.email,
+      picture: userInfo.picture,
+    };
+  } catch (error) {
+    return {
+      email: "anonymous",
+      name: "anonymous",
+      picture: "",
+    };
+  }
+};

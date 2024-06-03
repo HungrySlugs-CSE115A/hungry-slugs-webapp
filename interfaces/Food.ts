@@ -6,9 +6,11 @@ export interface Comment {
 }
 
 export interface Rating {
-  user_id: string;
   rating: number;
-  date: string;
+}
+
+export interface Ratings {
+  [user_id: string]: Rating;
 }
 
 export interface Image {
@@ -21,6 +23,6 @@ export interface Food {
   name: string;
   restrictions: Array<string> | never[];
   comments: Array<Comment> | never[];
-  ratings: Array<Rating> | never[];
+  ratings: Ratings | never[];
   images: Array<Image> | never[];
 }

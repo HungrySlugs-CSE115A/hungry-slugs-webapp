@@ -1,5 +1,7 @@
 import json
 from .model_logic.foods.actions import get_food, set_food, update_food
+from django.http import JsonResponse
+
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -183,6 +185,19 @@ def current_logout(request):
 
     print("Current session after logout:", request.session.get("current_user"))
     return JsonResponse({"message": "User has been logged out"})
+
+
+@api_view(["POST"])
+def upload_image(request):
+    if request.method == "POST" and request.FILES.get("image"):
+        # Handle image upload logic here
+        uploaded_image = request.FILES["image"]
+        # Process the uploaded image (e.g., save it to a storage location)
+        # Return a JSON response indicating success
+        return JsonResponse({"success": True, "message": "Image uploaded successfully"})
+    else:
+        # Return a JSON response with an error message if no image is provided or method is not POST
+        return JsonResponse({"success": False, "message": "Image upload failed"})
 
 
 # @api_view(["GET"])

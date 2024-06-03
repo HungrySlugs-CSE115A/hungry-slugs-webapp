@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import LocationFood from "@/components/location/food";
 
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
+import { fetchUserInfo } from "@/app/requests";
 
 export default function LocationCategories({
   location,
@@ -14,22 +15,35 @@ export default function LocationCategories({
   reviews: FrontEndReviews;
 }) {
   const currentHour = new Date().getHours();
+  console.log(currentHour);
   const [showCategories, setShowCategories] = useState<boolean[]>(
     new Array(location.categories.length).fill(false).map((_, index) => {
       switch (index) {
         case 0: // Breakfast (6 AM - 11 AM)
-          return currentHour < 11;
-        case 1: // Lunch (11 AM - 1 PM)
-          return currentHour < 15;
+          return  currentHour < 11 && currentHour >= 6;
+        case 1: // Lunch (11 AM - 3 PM)
+          return currentHour < 15 && currentHour >= 11;
         case 2: // Dinner (6 PM - 9 PM)
-          return currentHour < 20;
+          return currentHour < 21 && currentHour >= 18;
         case 3: // Late Night (9 PM - 11 PM)
-          return currentHour < 23;
+          return currentHour < 23 && currentHour >= 21;
         default:
           return false;
       }
     }),
   );
+
+  const [userId, setUserId] = useState<string>("anonymous");
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      //get username and set it
+      const userInfo = await fetchUserInfo();
+      setUserId(userInfo.email);
+    };
+    getUserInfo();
+    //console.log("userId =", userId);
+  }, [userId]);
 
   const menuArrow = (rotate180: boolean) => (
     <svg
@@ -77,13 +91,14 @@ export default function LocationCategories({
                     {subCategory.name}
                   </h3>
                   {subCategory.foods.map((food, k) => (
+                    //this is where user_id is actually set for the reviews smh
                     <LocationFood
                       key={k}
                       food_average={reviews[food.name]?.average}
                       food_name={food.name}
                       user_rating={reviews[food.name]?.user_rating}
                       restrictions={food.restrictions}
-                      user_id={null}
+                      user_id={userId}
                     />
                   ))}
                 </div>

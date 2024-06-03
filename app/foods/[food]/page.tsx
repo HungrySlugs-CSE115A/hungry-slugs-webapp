@@ -53,7 +53,8 @@ export default function Page({ params }: { params: { food: string } }) {
 
   return (
     <main className="flex flex-col items-center">
-      <ul className="flex font-medium text-2xl text-[#003C6C] items-center justify-center py-5">
+      <h1 className="font-normal py-4 text-2xl text-[#003C6C]">{food.name}</h1>
+      <ul className="flex font-medium text-2xl text-[#003C6C] items-center justify-center pb-5">
         {tabs.map(([category, _]: Array<string | JSX.Element>, i) => (
           <li key={i} className="">
             <button

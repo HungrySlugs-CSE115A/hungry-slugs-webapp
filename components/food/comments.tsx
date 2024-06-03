@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
-import { fetchUserInfo } from "@/app/user_info";
+import { fetchUserInfo } from "@/app/requests";
 
 function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
   const [date, time] = pythonDatetime.split("T");
@@ -20,39 +20,39 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
 export default function Comments({ food }: { food: Food }) {
   const [comments, setComments] = useState<Comment[]>(food.comments);
   const [textField, setTextField] = useState("");
-  const [user_id, setUserId] = useState("anonymous");
+  const [userId, setUserId] = useState("anonymous");
+  const [userInfoLoaded, setUserInfoLoaded] = useState(false); // Track if user info is loaded
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editTextField, setEditTextField] = useState("");
 
   useEffect(() => {
     const getUserInfo = async () => {
-      try {
-        const userInfo = await fetchUserInfo();
-        const email = userInfo.email;
-        setUserId(email ? email : "anonymous");
-      } catch (error) {
-        console.error("Failed to fetch user info:", error);
-      }
+      const userInfo = await fetchUserInfo();
+      setUserId(userInfo.email);
+      setUserInfoLoaded(true); // Set to true
     };
     getUserInfo(); // Call the function to fetch user info
   }, []);
 
-  const postComment = (comment: {
+  const postComment = async (comment: {
     food_name: string;
     user_id: string;
     comment: string;
   }) => {
-    axios
-      .post("http://localhost:8000/api/comments/", comment)
-      .then((response) => {
-        const updatedFood: Food = response.data;
-        const updatedComments = updatedFood.comments;
-        setComments(updatedComments);
-        setTextField(""); // Clear the textarea after submission
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (!userInfoLoaded) return; // Ensure user info is loaded before posting
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/comments/",
+        comment,
+      );
+      const updatedFood: Food = response.data;
+      const updatedComments = updatedFood.comments;
+      setComments(updatedComments);
+      setTextField(""); // Clear the textarea after submission
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const editComment = (index: number) => {
@@ -60,7 +60,7 @@ export default function Comments({ food }: { food: Food }) {
     setEditTextField(comments[index].comment); // Set textarea value to the comment text
   };
 
-  const saveEditedComment = (commentId: number) => {
+  const saveEditedComment = async (commentId: number) => {
     const updatedComments = [...comments];
     updatedComments[editIndex!].comment = editTextField; // Update the comment text
     setComments(updatedComments);
@@ -73,14 +73,15 @@ export default function Comments({ food }: { food: Food }) {
       comment: editTextField,
     };
 
-    axios
-      .put(`http://localhost:8000/api/comments/${commentId}/`, editedComment)
-      .then((response) => {
-        console.log("Comment updated successfully:", response.data);
-      })
-      .catch((error) => {
-        console.error("Failed to update comment:", error);
-      });
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/comments/${commentId}/`,
+        editedComment,
+      );
+      console.log("Comment updated successfully:", response.data);
+    } catch (error) {
+      console.error("Failed to update comment:", error);
+    }
   };
 
   return (
@@ -91,7 +92,7 @@ export default function Comments({ food }: { food: Food }) {
       <div>
         {comments.map((comment, i) => (
           <div
-            key={comment.id}
+            key={i}
             className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3"
           >
             <div className="flex-row items-center mb-1">
@@ -101,7 +102,8 @@ export default function Comments({ food }: { food: Food }) {
               <span className="text-gray-500 text-sm">
                 {pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
               </span>
-              {user_id === comment.user_id && (
+              {/* disable editing for now */}
+              {/* {userId === comment.user_id && (
                 <>
                   {editIndex !== i ? (
                     <button
@@ -122,7 +124,7 @@ export default function Comments({ food }: { food: Food }) {
                     </>
                   )}
                 </>
-              )}
+              )} */}
             </div>
             <p className="px-2 break-words">
               {editIndex !== i ? (
@@ -153,16 +155,16 @@ export default function Comments({ food }: { food: Food }) {
           onClick={() =>
             postComment({
               food_name: food.name,
-              user_id: user_id,
+              user_id: userId,
               comment: textField,
             })
           }
           className={`ml-2 text-white ${
-            textField.length === 0
+            textField.length === 0 || !userInfoLoaded
               ? "bg-gray-300 cursor-default"
               : "bg-blue-500 hover:bg-blue-700"
           } rounded-md px-4 py-2`}
-          disabled={textField.length === 0}
+          disabled={textField.length === 0 || !userInfoLoaded}
         >
           Post
         </button>

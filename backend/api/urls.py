@@ -10,4 +10,6 @@ urlpatterns = [
     path("comments/", foods_views.add_comment, name="comments"),
     path("rating_update/", foods_views.user_rating_update, name="rating_update"),
     path("get_ratings_bulk/", foods_views.return_ratings_bulk, name="get_ratings_bulk"),
+    # Add the new endpoint for image uploads
+    path("upload_image/", views.upload_image, name="upload_image"),
 ]
