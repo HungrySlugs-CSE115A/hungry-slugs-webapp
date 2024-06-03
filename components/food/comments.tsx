@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
-import { fetchUserInfo } from "@/app/user_info";
+import { fetchUserInfo } from "@/app/requests";
 
 function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
   const [date, time] = pythonDatetime.split("T");
@@ -13,7 +13,7 @@ function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
     parseInt(day),
     parseInt(hour),
     parseInt(minute),
-    parseInt(second),
+    parseInt(second)
   );
 }
 
@@ -42,7 +42,10 @@ export default function Comments({ food }: { food: Food }) {
     if (!userInfoLoaded) return; // Ensure user info is loaded before posting
 
     try {
-      const response = await axios.post("http://localhost:8000/api/comments/", comment);
+      const response = await axios.post(
+        "http://localhost:8000/api/comments/",
+        comment
+      );
       const updatedFood: Food = response.data;
       const updatedComments = updatedFood.comments;
       setComments(updatedComments);
@@ -71,7 +74,10 @@ export default function Comments({ food }: { food: Food }) {
     };
 
     try {
-      const response = await axios.put(`http://localhost:8000/api/comments/${commentId}/`, editedComment);
+      const response = await axios.put(
+        `http://localhost:8000/api/comments/${commentId}/`,
+        editedComment
+      );
       console.log("Comment updated successfully:", response.data);
     } catch (error) {
       console.error("Failed to update comment:", error);
@@ -80,20 +86,39 @@ export default function Comments({ food }: { food: Food }) {
 
   return (
     <div>
-      <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">{food && food.name}</h1>
+      <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">
+        {food && food.name}
+      </h1>
       <div>
         {comments.map((comment, i) => (
-          <div key={comment.id} className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3">
+          <div
+            key={i}
+            className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3"
+          >
             <div className="flex-row items-center mb-1">
-              <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">{comment.user_id}</span>
-              <span className="text-gray-500 text-sm">{pythonDatetimeToJsDatetime(comment.date).toLocaleString()}</span>
+              <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">
+                {comment.user_id}
+              </span>
+              <span className="text-gray-500 text-sm">
+                {pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
+              </span>
               {userId === comment.user_id && (
                 <>
                   {editIndex !== i ? (
-                    <button onClick={() => editComment(i)} className="mr-2 px-4">Edit</button>
+                    <button
+                      onClick={() => editComment(i)}
+                      className="mr-2 px-4"
+                    >
+                      Edit
+                    </button>
                   ) : (
                     <>
-                      <button onClick={() => saveEditedComment(comments[i].id)} className="ml-4 mr-2 px-2 py-1 bg-blue-500 text-white rounded-md">Save</button>
+                      <button
+                        onClick={() => saveEditedComment(comments[i].id)}
+                        className="ml-4 mr-2 px-2 py-1 bg-blue-500 text-white rounded-md"
+                      >
+                        Save
+                      </button>
                       <button onClick={() => setEditIndex(null)}>Cancel</button>
                     </>
                   )}
@@ -101,7 +126,9 @@ export default function Comments({ food }: { food: Food }) {
               )}
             </div>
             <p className="px-2 break-words">
-              {editIndex !== i ? comment.comment : (
+              {editIndex !== i ? (
+                comment.comment
+              ) : (
                 <input
                   type="text"
                   value={editTextField}
@@ -132,7 +159,9 @@ export default function Comments({ food }: { food: Food }) {
             })
           }
           className={`ml-2 text-white ${
-            textField.length === 0 || !userInfoLoaded ? "bg-gray-300 cursor-default" : "bg-blue-500 hover:bg-blue-700"
+            textField.length === 0 || !userInfoLoaded
+              ? "bg-gray-300 cursor-default"
+              : "bg-blue-500 hover:bg-blue-700"
           } rounded-md px-4 py-2`}
           disabled={textField.length === 0 || !userInfoLoaded}
         >

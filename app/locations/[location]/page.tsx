@@ -1,5 +1,9 @@
 "use client";
-import { fetchLocations, fetchFoodReviewsBulk } from "@/app/db";
+import {
+  fetchLocations,
+  fetchFoodReviewsBulk,
+  fetchUserInfo,
+} from "@/app/requests";
 import { Location } from "@/interfaces/Location";
 import { FrontEndReviews } from "@/interfaces/Review";
 
@@ -7,7 +11,6 @@ import { useState, useEffect } from "react";
 
 import LocationCategories from "@/components/location/categories";
 import Link from "next/link";
-import { fetchUserInfo } from "@/app/user_info";
 
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location | null>(null);

@@ -25,10 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={monst.className}>
-        <Navbar height={navbarHeight} />
-        <div className="" style={{ paddingTop: navbarHeight }}>
-          {children}
+      <body className="font-sans">
+        <div className={`${monst.className}`}>
+          <Navbar height={navbarHeight} />
+          <div className="" style={{ paddingTop: navbarHeight }}>
+            {children}
+          </div>
         </div>
       </body>
     </html>

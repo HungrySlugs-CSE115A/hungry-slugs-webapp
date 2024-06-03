@@ -4,7 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Search.module.css";
-import { fetchLocations } from "@/app/db";
+import { fetchLocations } from "@/app/requests";
 import { Location, Food } from "@/interfaces/Location";
 
 interface FoodWithCategory {
@@ -41,7 +41,7 @@ const GlobalSearch = () => {
     () => {
       const storedRestrictions = localStorage.getItem("selectedRestrictions");
       return storedRestrictions ? JSON.parse(storedRestrictions) : [];
-    }
+    },
   );
   const [filterApplied, setFilterApplied] = useState<boolean>(false);
 
@@ -49,32 +49,32 @@ const GlobalSearch = () => {
     fetchLocations().then((locations: Location[]) => {
       setLocations(locations);
 
-      const allFoods = locations.flatMap(location =>
-        location.categories.flatMap(category =>
-          category.sub_categories.flatMap(subCategory =>
-            subCategory.foods.map(food => ({
+      const allFoods = locations.flatMap((location) =>
+        location.categories.flatMap((category) =>
+          category.sub_categories.flatMap((subCategory) =>
+            subCategory.foods.map((food) => ({
               food: food,
               category: category.name,
-              diningHall: location.name // Added dining hall name
-            }))
-          )
-        )
+              diningHall: location.name, // Added dining hall name
+            })),
+          ),
+        ),
       );
       setFoods(allFoods);
     });
   }, []);
 
   const searchForFood = (food_name: string) => {
-    const foundFoods = foods.filter(foodWithCategory =>
+    const foundFoods = foods.filter((foodWithCategory) =>
       foodWithCategory.food.name
         .toLowerCase()
-        .includes(food_name.toLowerCase())
+        .includes(food_name.toLowerCase()),
     );
 
     const filteredFoods = foundFoods.filter(({ food }) =>
-      selectedRestrictions.every(restriction =>
-        food.restrictions.includes(restriction)
-      )
+      selectedRestrictions.every((restriction) =>
+        food.restrictions.includes(restriction),
+      ),
     );
 
     setFoundFoods(filteredFoods);
@@ -87,11 +87,11 @@ const GlobalSearch = () => {
   const handleRestrictionChange = (restriction: string, checked: boolean) => {
     const newRestrictions = checked
       ? [...selectedRestrictions, restriction]
-      : selectedRestrictions.filter(r => r !== restriction);
+      : selectedRestrictions.filter((r) => r !== restriction);
     setSelectedRestrictions(newRestrictions);
     localStorage.setItem(
       "selectedRestrictions",
-      JSON.stringify(newRestrictions)
+      JSON.stringify(newRestrictions),
     );
   };
 
@@ -109,14 +109,14 @@ const GlobalSearch = () => {
             Global Search
           </h1>
         </div>
-  
+
         <div className={styles.flexCenter}>
           <div className="search-bar flex justify-center items-center mb-2">
             <input
               type="text"
               placeholder="Search foods..."
               className="border border-gray-400 p-2 rounded"
-              onChange={e => setSearchInput(e.target.value)}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
             <button
               onClick={() => searchForFood(searchInput)}
@@ -126,7 +126,7 @@ const GlobalSearch = () => {
             </button>
           </div>
         </div>
-  
+
         <div className={styles.flexCenter}>
           <button
             onClick={toggleFilterPopup}
@@ -143,7 +143,7 @@ const GlobalSearch = () => {
                 Filter by Restrictions
               </h2>
               <div className="flex flex-wrap">
-                {restrictions.map(restriction => (
+                {restrictions.map((restriction) => (
                   <div
                     key={restriction}
                     className="flex items-center mr-4 mb-2"
@@ -153,7 +153,7 @@ const GlobalSearch = () => {
                       id={restriction}
                       className="mr-2"
                       checked={selectedRestrictions.includes(restriction)}
-                      onChange={e =>
+                      onChange={(e) =>
                         handleRestrictionChange(restriction, e.target.checked)
                       }
                     />
@@ -200,7 +200,8 @@ const GlobalSearch = () => {
                 >
                   <h4 className="px-2">{foodWithCategory.food.name}</h4>
                   <h5 className="font-normal text-gray-400 px-2">
-                    {foodWithCategory.category} @ {foodWithCategory.diningHall} {/* Added dining hall name */}
+                    {foodWithCategory.category} @ {foodWithCategory.diningHall}{" "}
+                    {/* Added dining hall name */}
                   </h5>
                 </Link>
                 <ul className="flex flex-row mr-3">
@@ -214,17 +215,16 @@ const GlobalSearch = () => {
                           height={25}
                         />
                       </li>
-                    )
-                  )}                
-                   </ul>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </main>
-      );
-    };
-    
-    export default GlobalSearch;
-    
+                    ),
+                  )}
+                </ul>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default GlobalSearch;

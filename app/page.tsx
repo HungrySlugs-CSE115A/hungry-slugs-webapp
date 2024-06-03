@@ -1,6 +1,6 @@
 "use server";
 
-import { fetchLocations } from "@/app/db";
+import { fetchLocations } from "@/app/requests";
 import LocationsClient from "@/components/LocationsClient";
 import { Location } from "@/interfaces/Location";
 
