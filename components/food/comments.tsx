@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Food, Comment } from "@/interfaces/Food";
 import axios from "axios";
-import { fetchUserInfo } from "@/app/user_info";
+import { fetchUserInfo } from "@/app/requests";
 
 function pythonDatetimeToJsDatetime(pythonDatetime: string): Date {
   const [date, time] = pythonDatetime.split("T");
@@ -81,13 +81,22 @@ export default function Comments({ food }: { food: Food }) {
 
   return (
     <div>
-      <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">{food && food.name}</h1>
+      <h1 className="text-2xl text-[#003C6C] flex items-center justify-center py-3 mr-2 mb-1">
+        {food && food.name}
+      </h1>
       <div>
         {comments.map((comment, i) => (
-          <div className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3">
+          <div
+            key={i}
+            className="max-w-[600px] mx-auto border border-gray-300 p-3 mb-3"
+          >
             <div className="flex-row items-center mb-1">
-              <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">{comment.user_id}</span>
-              <span className="text-gray-500 text-sm">{pythonDatetimeToJsDatetime(comment.date).toLocaleString()}</span>
+              <span className="text-[#003C6C] items-center justify-center py-5 font-bold mr-2">
+                {comment.user_id}
+              </span>
+              <span className="text-gray-500 text-sm">
+                {pythonDatetimeToJsDatetime(comment.date).toLocaleString()}
+              </span>
               {/* {userId === comment.user_id && (
                 <>
                   {editIndex !== i ? (
@@ -101,9 +110,7 @@ export default function Comments({ food }: { food: Food }) {
                 </>
               )} */}
             </div>
-            <p className="px-2 break-words">
-              {comment.comment}
-            </p>
+            <p className="px-2 break-words">{comment.comment}</p>
           </div>
         ))}
       </div>
@@ -125,7 +132,9 @@ export default function Comments({ food }: { food: Food }) {
             })
           }
           className={`ml-2 text-white ${
-            textField.length === 0 || !userInfoLoaded ? "bg-gray-300 cursor-default" : "bg-blue-500 hover:bg-blue-700"
+            textField.length === 0 || !userInfoLoaded
+              ? "bg-gray-300 cursor-default"
+              : "bg-blue-500 hover:bg-blue-700"
           } rounded-md px-4 py-2`}
           disabled={textField.length === 0 || !userInfoLoaded}
         >

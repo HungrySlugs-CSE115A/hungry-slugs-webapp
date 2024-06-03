@@ -1,53 +1,55 @@
 "use client";
 import { useState, useEffect } from "react";
 import LoginPage from "./login"; // Used if not logged in
+import { useCookies } from "react-cookie";
+import Link from "next/link";
 
 export default function Navbar({ height }: { height: string }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
+  const [cookies] = useCookies(["authToken"]);
+  /*useEffect(() => {
     // Check if sessionStorage is available and if token exists
     const token = sessionStorage.getItem("token");
     setIsLoggedIn(!!token);
-  }, []);
+  }, []);*/
+
+  useEffect(() => {
+    // Check if the authToken exists in cookies
+    const token = cookies.authToken;
+    setIsLoggedIn(!!token);
+  }, [cookies]);
 
   return (
     <nav className="bg-white fixed w-full  top-0 start-0 ">
       <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-2.5">
-        <a href="/" className="flex items-center">
-          <span className="pl-5 self-left font-bold text-4xl text-[#003C6C]">
+        <Link href="/" className="flex items-center">
+          <h1 className="pl-5 self-left font-bold text-4xl text-[#003C6C]">
             Hungry Slugs
-          </span>
-        </a>
+          </h1>
+        </Link>
 
         <div className="" id="navbar-sticky">
           <ul className="flex flex-col  md:p-0  md:flex-row md:border-0 font-medium text-2xl  pl-10  text-[#003C6C]">
             <li>
-              {" "}
-              {/* replace the pound sign with actual link */}
-              <a href="/" className="px-4">
+              <Link href="/" className="px-4">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/global_search" className="px-4">
+              <Link href="/global_search" className="px-4">
                 Search
-              </a>
+              </Link>
             </li>
             <li>
               {!isLoggedIn ? (
-                <a className="pl-4 pr-5">
+                <div className="pl-4 pr-5">
                   <LoginPage />
-                </a>
+                </div>
               ) : (
-                <a href="/profile" className="pl-4 pr-5">
+                <Link href="/profile" className="pl-4 pr-5">
                   Account
-                </a>
+                </Link>
               )}
-            </li>
-            <li>
-              <a href="/search" className="pl-4 pr-5"></a>
-              {/* pr-X dicates how far off right we want.  */}
             </li>
           </ul>
         </div>

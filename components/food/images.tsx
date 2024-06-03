@@ -45,14 +45,22 @@ const Images: React.FC<ImagesProps> = ({ food }) => {
       formData.append("user_id", userId); // Use the state userId
 
       // Send image data to backend
-      const response = await axios.post("http://localhost:8000/api/upload_image/", formData);
+      const response = await axios.post(
+        "http://localhost:8000/api/upload_image/",
+        formData,
+      );
 
       // Log the response to debug
       console.log("API response:", response.data);
 
       // Handle success and set uploaded image details
       const { imageName, user_id, date, imageUrl } = response.data;
-      setUploadedImageDetails({ imageName, uploadedBy: user_id, date, imageUrl });
+      setUploadedImageDetails({
+        imageName,
+        uploadedBy: user_id,
+        date,
+        imageUrl,
+      });
     } catch (error) {
       // Handle error
       console.error("Failed to upload image:", error);
@@ -87,11 +95,21 @@ const Images: React.FC<ImagesProps> = ({ food }) => {
       {uploadedImageDetails && (
         <div className="uploaded-image-details">
           <div className="image-details">
-            <p><strong>Name:</strong> {uploadedImageDetails.imageName}</p>
-            <p><strong>Uploaded by:</strong> {uploadedImageDetails.uploadedBy}</p>
-            <p><strong>Date:</strong> {formatDateTime(uploadedImageDetails.date)}</p>
+            <p>
+              <strong>Name:</strong> {uploadedImageDetails.imageName}
+            </p>
+            <p>
+              <strong>Uploaded by:</strong> {uploadedImageDetails.uploadedBy}
+            </p>
+            <p>
+              <strong>Date:</strong> {formatDateTime(uploadedImageDetails.date)}
+            </p>
           </div>
-          <img src={uploadedImageDetails.imageUrl} alt={uploadedImageDetails.imageName} className="uploaded-image" />
+          <img
+            src={uploadedImageDetails.imageUrl}
+            alt={uploadedImageDetails.imageName}
+            className="uploaded-image"
+          />
         </div>
       )}
     </div>

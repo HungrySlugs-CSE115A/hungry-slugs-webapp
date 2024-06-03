@@ -1,5 +1,3 @@
-
-
 export interface Comment {
   // id: number;
   user_id: string;
@@ -9,7 +7,6 @@ export interface Comment {
 
 export interface Rating {
   rating: number;
-
 }
 
 export interface Ratings {

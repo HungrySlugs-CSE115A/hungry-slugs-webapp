@@ -169,8 +169,8 @@ def validate_user(request):
         # add user_info to database using get or create possibly
 
         # add current user
-        current_user = CurrentUser(request.session)
-        request.session["current_user"] = user_info["email"]
+        # current_user = CurrentUser(request.session)
+        # request.session["current_user"] = user_info["email"]
 
     except requests.RequestException as e:
         return JsonResponse({"error": "Failed to validate access token"}, status=500)
@@ -198,6 +198,7 @@ def upload_image(request):
     else:
         # Return a JSON response with an error message if no image is provided or method is not POST
         return JsonResponse({"success": False, "message": "Image upload failed"})
+
 
 # @api_view(["GET"])
 # def get_user_rating(request):
