@@ -4,19 +4,22 @@ import axios from "axios";
 import { Food } from "@/interfaces/Food";
 import { fetchUserInfo } from "@/app/requests"; // Import fetchUserInfo function
 import "@/components/food/Images.css"; // Import the CSS file
+import Image from "next/image";
 
 interface ImagesProps {
   food: Food;
 }
 
+interface ImageDetails {
+  imageName: string;
+  uploadedBy: string;
+  date: string;
+  imageUrl: string;
+}
+
 const Images: React.FC<ImagesProps> = ({ food }) => {
   const [image, setImage] = useState<File | null>(null);
-  const [uploadedImageDetails, setUploadedImageDetails] = useState<{
-    imageName: string;
-    uploadedBy: string; // Rename to avoid conflict
-    date: string;
-    imageUrl: string;
-  } | null>(null);
+  const [uploadedImages, setUploadedImages] = useState<ImageDetails[]>([]);
   const [userId, setUserId] = useState("anonymous");
 
   useEffect(() => {
@@ -37,6 +40,7 @@ const Images: React.FC<ImagesProps> = ({ food }) => {
       console.error("No image selected");
       return;
     }
+//still testing gitignore
 
     try {
       const formData = new FormData();
@@ -46,20 +50,29 @@ const Images: React.FC<ImagesProps> = ({ food }) => {
       // Send image data to backend
       const response = await axios.post(
         "http://localhost:8000/api/upload_image/",
-        formData,
+        formData
       );
 
       // Log the response to debug
       console.log("API response:", response.data);
 
       // Handle success and set uploaded image details
-      const { imageName, user_id, date, imageUrl } = response.data;
-      setUploadedImageDetails({
+      const { imageName, imageUrl } = response.data;
+      const date = new Date().toISOString();
+
+      // Remove "/public" from the imageUrl
+      const cleanImageUrl = imageUrl.replace("/public", "");
+
+      console.log("Uploaded image URL:", cleanImageUrl); // Log the cleaned image URL
+
+      const newImageDetails: ImageDetails = {
         imageName,
-        uploadedBy: user_id,
-        date,
-        imageUrl,
-      });
+        uploadedBy: userId,
+        date: date,
+        imageUrl: cleanImageUrl,
+      };
+
+      setUploadedImages((prevImages) => [...prevImages, newImageDetails]);
     } catch (error) {
       // Handle error
       console.error("Failed to upload image:", error);
@@ -91,26 +104,29 @@ const Images: React.FC<ImagesProps> = ({ food }) => {
           Upload Image
         </button>
       </div>
-      {uploadedImageDetails && (
-        <div className="uploaded-image-details">
-          <div className="image-details">
-            <p>
-              <strong>Name:</strong> {uploadedImageDetails.imageName}
-            </p>
-            <p>
-              <strong>Uploaded by:</strong> {uploadedImageDetails.uploadedBy}
-            </p>
-            <p>
-              <strong>Date:</strong> {formatDateTime(uploadedImageDetails.date)}
-            </p>
+      <div className="uploaded-images-list">
+        {uploadedImages.map((details, index) => (
+          <div key={index} className="uploaded-image-details">
+            <div className="image-details">
+              <p>
+                <strong>Name:</strong> {details.imageName}
+              </p>
+              <p>
+                <strong>Uploaded by:</strong> {details.uploadedBy}
+              </p>
+              <p>
+                <strong>Date:</strong> {formatDateTime(details.date)}
+              </p>
+            </div>
+            <Image
+              src={details.imageUrl}
+              alt={details.imageName}
+              width={100}
+              height={100}
+            />
           </div>
-          <img
-            src={uploadedImageDetails.imageUrl}
-            alt={uploadedImageDetails.imageName}
-            className="uploaded-image"
-          />
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 };
