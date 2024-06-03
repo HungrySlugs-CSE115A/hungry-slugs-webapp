@@ -40,6 +40,7 @@ const Images: React.FC<ImagesProps> = ({ food }) => {
       console.error("No image selected");
       return;
     }
+//still testing gitignore
 
     try {
       const formData = new FormData();
