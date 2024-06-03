@@ -50,7 +50,7 @@ export async function updateReview(data: {
   return res.data;
 }
 
-export const fetchUserInfo = async () => {
+export async function fetchUserInfo() {
   try {
     const access_token = sessionStorage.getItem("token");
 
@@ -62,7 +62,7 @@ export const fetchUserInfo = async () => {
       "https://www.googleapis.com/oauth2/v3/userinfo",
       {
         headers: { Authorization: `Bearer ${access_token}` },
-      }
+      },
     );
 
     const userInfo = response.data;
@@ -73,8 +73,7 @@ export const fetchUserInfo = async () => {
       picture: userInfo.picture,
     };
   } catch (error) {
-    return {
-      email: "anonymous",
-    };
+    console.error("Error fetching user info:", error);
+    throw error; // Re-throw the error so it can be handled by the calling code
   }
-};
+}

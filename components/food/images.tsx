@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Food } from "@/interfaces/Food";
-import { fetchUserInfo } from "@/app/requests";
+import ImageDisplay from "@/components/images_section/ImageDisplay"; // Import ImageDisplay component
+import { fetchUserInfo } from "@/app/user_info"; // Import fetchUserInfo function
 import "@/components/food/Images.css"; // Import the CSS file
 
 interface ImagesProps {
@@ -46,7 +47,7 @@ const Images: React.FC<ImagesProps> = ({ food }) => {
       // Send image data to backend
       const response = await axios.post(
         "http://localhost:8000/api/upload_image/",
-        formData
+        formData,
       );
 
       // Log the response to debug
