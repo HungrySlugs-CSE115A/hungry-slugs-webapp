@@ -52,7 +52,7 @@ export async function updateReview(data: {
 
 export const fetchUserInfo = async () => {
   try {
-    const access_token = sessionStorage.getItem("token");
+    const access_token = localStorage.getItem("token");
 
     if (!access_token) {
       throw new Error("No access token found in session storage.");
@@ -62,7 +62,7 @@ export const fetchUserInfo = async () => {
       "https://www.googleapis.com/oauth2/v3/userinfo",
       {
         headers: { Authorization: `Bearer ${access_token}` },
-      }
+      },
     );
 
     const userInfo = response.data;
