@@ -16,10 +16,12 @@ import Link from "next/link";
 export default function Page({ params }: { params: { location: number } }) {
   const [location, setLocation] = useState<Location | null>(null);
   const [foodReviews, setFoodReviews] = useState<FrontEndReviews | null>(null);
-  const [cookies] = useCookies(["userEmail", "notificationsEnabled"]);
+  const [cookies] = useCookies(["userEmail"]);
   const alertShown = useRef(false);
 
-  const notificationsEnabled = cookies.notificationsEnabled === true;
+  //const notificationsEnabled = cookies.notificationsEnabled === "true";
+  const notificationsEnabled =
+    localStorage.getItem("notificationsEnabled") === "true";
 
   const user_email = cookies.userEmail || "anonymous";
 

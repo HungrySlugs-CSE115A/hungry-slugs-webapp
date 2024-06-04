@@ -15,7 +15,6 @@ from pathlib import Path
 from private.private_settings import (
     DJANGO_SECRET_KEY,
     IS_DEV,
-
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

@@ -25,11 +25,10 @@ const Page = () => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "authToken",
     "userEmail",
-    "notificationsEnabled",
   ]);
   const [reviews, setReviews] = useState<FrontEndReviews>({});
   const [notificationsEnabled, setNotificationsEnabled] = useState(
-    cookies.notificationsEnabled === "true",
+    localStorage.getItem("notificationsEnabled") === "true"
   );
   const [foodNames, setFoodNames] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +77,7 @@ const Page = () => {
     getUserInfo();
 
     getLocationsAndFoodNames();
-  }, [cookies.authToken, cookies.notificationsEnabled, setCookie]);
+  }, [cookies.authToken, setCookie]);
 
   const handleLogout = () => {
     googleLogout();
@@ -115,16 +114,16 @@ const Page = () => {
   const toggleNotifications = () => {
     const newState = !notificationsEnabled;
     setNotificationsEnabled(newState);
-    setCookie("notificationsEnabled", newState.toString(), { path: "/" });
+    localStorage.setItem("notificationsEnabled", newState.toString());
 
     console.log(`Notifications are now ${newState ? "enabled" : "disabled"}`);
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <h1 className="text-[#003C6C] font-medium text-xl">Profile</h1>
       {user && (
-        <div>
+        <div className="flex flex-col items-center">
           <Image
             src={user.picture}
             alt="User profile"
@@ -132,19 +131,19 @@ const Page = () => {
             height={imageHeight}
             className="rounded-full border-4 border-[#003C6C]"
           />
-          <h2>
+          <h2 className="mt-2 text-center">
             Welcome, {user.name} - {user.email}
           </h2>
         </div>
       )}
-      <div>
-        <h2 className="text-[#003C6C] font-medium text-xl">
+      <div className="w-full mt-5">
+        <h2 className="text-[#003C6C] font-medium text-xl text-center">
           Your Food Reviews:
         </h2>
         {loading ? (
-          <h1>Loading...</h1>
+          <h1 className="text-center">Loading...</h1>
         ) : (
-          <ul className="bg-gray-100 p-4 rounded-lg">
+          <ul className="text-center bg-gray-100 p-4 rounded-lg">
             {Object.entries(reviews).map(([food_name, review]) => (
               <li key={food_name} className="mb-2 text-[#003C6C]">
                 <h3 className="font-bold">{food_name}</h3>
@@ -156,7 +155,7 @@ const Page = () => {
       </div>
       <button
         onClick={toggleNotifications}
-        className="hover:underline decoration-yellow-400 underline-offset-8 top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl"
+        className="hover:underline decoration-yellow-400 underline-offset-8 m-5 p-2 text-[#003C6C] font-medium text-xl"
       >
         {notificationsEnabled
           ? "Disable Notifications"
@@ -164,12 +163,11 @@ const Page = () => {
       </button>
       <button
         onClick={handleLogout}
-        className="hover:underline decoration-yellow-400 underline-offset-8 top-0 right-0 m-5 p-2 text-[#003C6C] font-medium text-xl"
+        className="hover:underline decoration-yellow-400 underline-offset-8 m-5 p-2 text-[#003C6C] font-medium text-xl"
       >
         Logout
       </button>
     </div>
   );
 };
-
 export default Page;
