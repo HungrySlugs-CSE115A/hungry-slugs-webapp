@@ -83,7 +83,7 @@ const Page = () => {
     googleLogout();
     removeCookie("authToken", { path: "/" });
     removeCookie("userEmail", { path: "/" });
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     window.location.href = "/";
     console.log("Logged out successfully");
   };
