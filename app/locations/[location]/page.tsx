@@ -61,15 +61,19 @@ export default function Page({ params }: { params: { location: number } }) {
       notificationsEnabled &&
       !alertShown.current
     ) {
-      Object.keys(foodReviews).forEach((foodName) => {
-        const review = foodReviews[foodName];
-        if (user_email !== "anonymous" && review.user_rating === 5) {
-          alert(
-            `One of your favorite foods is being served! Food: ${foodName}`,
-          );
-          alertShown.current = true;
-        }
-      });
+      const favoriteFoods = Object.keys(foodReviews).filter(
+        (foodName) =>
+          user_email !== "anonymous" && foodReviews[foodName].user_rating === 5
+      );
+
+      if (favoriteFoods.length > 0) {
+        alert(
+          `One or more of your favorite foods are being served! Foods: ${favoriteFoods.join(
+            ", "
+          )}`
+        );
+        alertShown.current = true;
+      }
     }
   }, [location, foodReviews, notificationsEnabled, user_email]);
 
