@@ -28,7 +28,7 @@ const Page = () => {
   ]);
   const [reviews, setReviews] = useState<FrontEndReviews>({});
   const [notificationsEnabled, setNotificationsEnabled] = useState(
-    localStorage.getItem("notificationsEnabled") === "true"
+    localStorage.getItem("notificationsEnabled") === "true",
   );
   const [foodNames, setFoodNames] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
