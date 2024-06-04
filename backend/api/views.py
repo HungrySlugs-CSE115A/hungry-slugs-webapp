@@ -8,6 +8,15 @@ from rest_framework.decorators import api_view
 import requests
 from django.http import JsonResponse
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import logging
+import os
+logger = logging.getLogger(__name__)
+
+
 
 from .model_logic.locations.actions import (
     get_locations as get_locations_db,
@@ -37,6 +46,7 @@ GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
 # Get the list of locations at UCSC and their information
 @api_view(["GET"])
+@csrf_exempt
 def get_locations(request):
     # Get the last update time of the locations
     last_update: datetime | None = get_last_update_time(task_name="locations")
@@ -187,23 +197,36 @@ def current_logout(request):
     return JsonResponse({"message": "User has been logged out"})
 
 
-@api_view(["POST"])
+
+
+@csrf_exempt
 def upload_image(request):
-    if request.method == "POST" and request.FILES.get("image"):
-        # Handle image upload logic here
-        uploaded_image = request.FILES["image"]
-        # Process the uploaded image (e.g., save it to a storage location)
-        # Return a JSON response indicating success
-        return JsonResponse({"success": True, "message": "Image uploaded successfully"})
-    else:
-        # Return a JSON response with an error message if no image is provided or method is not POST
-        return JsonResponse({"success": False, "message": "Image upload failed"})
+    try:
+        if request.method == "POST" and request.FILES.get("image"):
+            uploaded_image = request.FILES["image"]
+            
+            # Define the folder path to save the image
+            folder_path = 'public/uploaded_images'
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+            
+            # Save the image to the specific folder
+            file_name = default_storage.save(os.path.join(folder_path, uploaded_image.name), ContentFile(uploaded_image.read()))
+            file_url = default_storage.url(file_name)
+
+            return JsonResponse({
+                "success": True,
+                "message": "Image uploaded successfully",
+                "imageName": uploaded_image.name,
+                "imageUrl": file_url
+            })
+        else:
+            return JsonResponse({"success": False, "message": "No image provided or incorrect request method"})
+    except Exception as e:
+        logger.error(f"Error during image upload: {e}")
+        return JsonResponse({"success": False, "message": f"Image upload failed: {str(e)}"})
+    
 
 
-# @api_view(["GET"])
-# def get_user_rating(request):
-#     user = get_rating(request.user_ids)
-#     if(user==None):
-#         return Response({"message": "No user found"})
-#     else:
-#         return Response({"message": "User found: {user}", "user data": user})
+
+    
