@@ -23,7 +23,8 @@ export default function Page({ params }: { params: { location: number } }) {
   const notificationsEnabled =
     localStorage.getItem("notificationsEnabled") === "true";
 
-  const user_email = cookies.userEmail || "anonymous";
+  const user_email = cookies.userEmail || 'anonymous';
+  console.log(user_email);
 
   useEffect(() => {
     fetchLocations().then(async (locations: Location[]) => {
@@ -42,6 +43,7 @@ export default function Page({ params }: { params: { location: number } }) {
       let username = "";
       const userInfo = await fetchUserInfo();
       username = userInfo.email;
+      console.log(username);
 
       fetchFoodReviewsBulk({
         food_names: food_names,

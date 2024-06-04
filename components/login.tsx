@@ -34,7 +34,7 @@ const LoginComponent = () => {
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse);
       // Store authentication token in the browser's storage for navigation bar use
-      //sessionStorage.setItem("token", tokenResponse.access_token);
+      sessionStorage.setItem("token", tokenResponse.access_token);
       const expires = new Date();
       expires.setHours(expires.getHours() + 3);
       setCookie("authToken", tokenResponse.access_token, {
