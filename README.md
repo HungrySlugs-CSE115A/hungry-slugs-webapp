@@ -195,6 +195,7 @@ This runs all the tests found in the back-end api folder. This also shuffles the
 - Some fonts and minor styling may vary depending on the OS or browser of the user.
 - The food data for the locations can be inaccurate if the location does not have anything currently offered.
 - GET request for favicon occasionally fails, but still loads image.
+- The profile page takes a very long time to load the ratings for the user (30 seconds).
 
 ## Technologies Used
 
