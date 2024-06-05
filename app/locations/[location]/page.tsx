@@ -23,7 +23,7 @@ export default function Page({ params }: { params: { location: number } }) {
   const notificationsEnabled =
     localStorage.getItem("notificationsEnabled") === "true";
 
-  const user_email = cookies.userEmail || 'anonymous';
+  const user_email = cookies.userEmail || "anonymous";
   console.log(user_email);
 
   useEffect(() => {
@@ -63,14 +63,14 @@ export default function Page({ params }: { params: { location: number } }) {
     ) {
       const favoriteFoods = Object.keys(foodReviews).filter(
         (foodName) =>
-          user_email !== "anonymous" && foodReviews[foodName].user_rating === 5
+          user_email !== "anonymous" && foodReviews[foodName].user_rating === 5,
       );
 
       if (favoriteFoods.length > 0) {
         alert(
           `One or more of your favorite foods are being served! Foods: ${favoriteFoods.join(
-            ", "
-          )}`
+            ", ",
+          )}`,
         );
         alertShown.current = true;
       }

@@ -14,8 +14,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import logging
 import os
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 
 from .model_logic.locations.actions import (
@@ -197,36 +197,41 @@ def current_logout(request):
     return JsonResponse({"message": "User has been logged out"})
 
 
-
-
 @csrf_exempt
 def upload_image(request):
     try:
         if request.method == "POST" and request.FILES.get("image"):
             uploaded_image = request.FILES["image"]
-            
+
             # Define the folder path to save the image
-            folder_path = 'public/uploaded_images'
+            folder_path = "public/uploaded_images"
             if not os.path.exists(folder_path):
                 os.makedirs(folder_path)
-            
+
             # Save the image to the specific folder
-            file_name = default_storage.save(os.path.join(folder_path, uploaded_image.name), ContentFile(uploaded_image.read()))
+            file_name = default_storage.save(
+                os.path.join(folder_path, uploaded_image.name),
+                ContentFile(uploaded_image.read()),
+            )
             file_url = default_storage.url(file_name)
 
-            return JsonResponse({
-                "success": True,
-                "message": "Image uploaded successfully",
-                "imageName": uploaded_image.name,
-                "imageUrl": file_url
-            })
+            return JsonResponse(
+                {
+                    "success": True,
+                    "message": "Image uploaded successfully",
+                    "imageName": uploaded_image.name,
+                    "imageUrl": file_url,
+                }
+            )
         else:
-            return JsonResponse({"success": False, "message": "No image provided or incorrect request method"})
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "No image provided or incorrect request method",
+                }
+            )
     except Exception as e:
         logger.error(f"Error during image upload: {e}")
-        return JsonResponse({"success": False, "message": f"Image upload failed: {str(e)}"})
-    
-
-
-
-    
+        return JsonResponse(
+            {"success": False, "message": f"Image upload failed: {str(e)}"}
+        )
