@@ -20,13 +20,13 @@ export default function LocationCategories({
     new Array(location.categories.length).fill(false).map((_, index) => {
       switch (index) {
         case 0: // Breakfast (6 AM - 11 AM)
-          return currentHour < 11;
+          return currentHour < 11 && currentHour >= 6;
         case 1: // Lunch (11 AM - 3 PM)
-          return currentHour < 15;
+          return currentHour < 15 && currentHour >= 11;
         case 2: // Dinner (6 PM - 9 PM)
-          return currentHour < 21;
+          return currentHour < 21 && currentHour >= 15;
         case 3: // Late Night (9 PM - 11 PM)
-          return currentHour < 23;
+          return currentHour < 23 && currentHour >= 21;
         default:
           return false;
       }
